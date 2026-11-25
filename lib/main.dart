@@ -33,6 +33,8 @@ import 'screens/full_day_search.dart';
 import 'screens/full_day_results.dart';
 import 'screens/payment_failed.dart';
 import 'screens/splash.dart';
+import 'screens/policy_doc.dart';
+import 'screens/credits_history.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +66,8 @@ class CheckdinApp extends StatelessWidget {
       initialRoute: '/splash',
       routes: {
         '/splash': (_) => const SplashScreen(),
+        '/policy': (_) => const PolicyDocScreen(),
+        '/credits': (_) => const CreditsHistoryScreen(),
         '/': (_) => const LoginScreen(),
         '/otp': (_) => const OtpScreen(),
         '/profile-setup': (_) => const ProfileSetupScreen(),

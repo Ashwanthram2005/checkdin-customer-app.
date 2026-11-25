@@ -426,9 +426,9 @@ class _Policies extends StatelessWidget {
         'The hotel may refuse check-in if ID rules are not met.',
       ],
       'Cancellation': [
-        'Free cancellation up to 2 hours before check-in.',
+        '50% refund if you cancel more than 5 hrs before check-in, 25% between 5 and 3 hrs, none after that.',
         'No refund for no-shows or for leaving early.',
-        'Refunds reach your account in 5–7 working days.',
+        'Approved refunds reach you in 3–5 working days.',
       ],
     };
     return WhiteCard(

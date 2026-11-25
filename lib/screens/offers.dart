@@ -109,7 +109,7 @@ class _OffersScreenState extends State<OffersScreen> {
                 Text('Used automatically at checkout', style: TextStyle(fontSize: 12.5, color: C.faint)),
               ]),
             ),
-            PillBtn('History', height: 38, fontSize: 13, onTap: () => toast(context, 'No credit history yet')),
+            PillBtn('History', height: 38, fontSize: 13, onTap: () => Navigator.pushNamed(context, '/credits')),
           ]),
         ),
         const SizedBox(height: 14),

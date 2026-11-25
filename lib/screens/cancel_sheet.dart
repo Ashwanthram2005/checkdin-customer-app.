@@ -16,12 +16,17 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
   ];
 
   final now = DateTime.now();
-  final d = app.fullDay ? app.inDate : app.date;
-  final checkIn = DateTime(d.year, d.month, d.day, app.fullDay ? 12 : app.checkInHour % 24);
-  final freeTill = checkIn.subtract(Duration(hours: app.fullDay ? 24 : 2));
-  final free = now.isBefore(freeTill);
-  final refund = free ? app.total : 0;
+  final checkIn = checkInTime();
+  final left = checkIn.difference(now);
+  final started = !left.isNegative ? false : true;
+  final pct = refundPercent(left);
+  final refund = (app.total * pct / 100).round();
   String fmt(DateTime t) => '${hourLabel(t.hour)}, ${dateLabel(t)}';
+  final nextStep = left > const Duration(hours: 5)
+      ? 'Cancel before ${fmt(checkIn.subtract(const Duration(hours: 5)))} to keep 50% back.'
+      : left > const Duration(hours: 3)
+          ? 'Cancel before ${fmt(checkIn.subtract(const Duration(hours: 3)))} to keep 25% back.'
+          : 'Cancellations less than 3 hours before check-in get no refund.';
 
   String? picked;
   final other = TextEditingController();
@@ -31,7 +36,7 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
     backgroundColor: Colors.transparent,
     builder: (ctx) => StatefulBuilder(builder: (ctx, setSheet) {
       final isOther = picked == 'Other reason';
-      final ready = picked != null && (!isOther || other.text.trim().isNotEmpty);
+      final ready = !started && picked != null && (!isOther || other.text.trim().isNotEmpty);
       return Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
         child: Container(
@@ -49,19 +54,17 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
               // refund preview
               Container(
                 padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(color: free ? C.limeSoft : C.redSoft, borderRadius: BorderRadius.circular(16)),
+                decoration: BoxDecoration(color: refund > 0 ? C.limeSoft : C.redSoft, borderRadius: BorderRadius.circular(16)),
                 child: Row(children: [
-                  Icon(free ? Icons.account_balance_wallet_outlined : Icons.info_outline_rounded, color: free ? C.ink : C.red),
+                  Icon(refund > 0 ? Icons.account_balance_wallet_outlined : Icons.info_outline_rounded, color: refund > 0 ? C.ink : C.red),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(free ? 'You\'ll get ${inr(refund)} back' : 'No refund for this booking',
+                      Text(refund > 0 ? 'You\'ll get ${inr(refund)} back ($pct%)' : 'No refund for this booking',
                           style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                       const SizedBox(height: 2),
                       Text(
-                          free
-                              ? 'Free cancellation till ${fmt(freeTill)}. Refund to your UPI in 5–7 working days.'
-                              : 'Free cancellation ended at ${fmt(freeTill)}.',
+                          refund > 0 ? '$nextStep Approved refunds reach you in 3–5 working days.' : nextStep,
                           style: const TextStyle(fontSize: 12.5, color: C.muted, height: 1.4)),
                     ]),
                   ),
@@ -78,6 +81,14 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                       style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
                 ),
               ),
+              if (started)
+                Container(
+                  margin: const EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(14)),
+                  child: const Text('Your slot has started, so this booking can no longer be cancelled in the app. Tap Get help in Help for support.',
+                      style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFFA3241A), height: 1.4)),
+                ),
               const SizedBox(height: 16),
               const Text('Why are you cancelling?', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
               const SizedBox(height: 10),
@@ -159,7 +170,20 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
     app.cancelRefund = refund;
   });
   if (context.mounted) {
-    toast(context, refund > 0 ? 'Booking cancelled. ${inr(refund)} refund started.' : 'Booking cancelled.');
+    toast(context, refund > 0 ? 'Booking cancelled. ${inr(refund)} refund requested.' : 'Booking cancelled.');
   }
   return true;
+}
+
+/// Scheduled check-in of the current booking.
+DateTime checkInTime() {
+  final d = app.fullDay ? app.inDate : app.date;
+  return DateTime(d.year, d.month, d.day, app.fullDay ? 12 : app.checkInHour % 24);
+}
+
+/// Refund % from the Cancellation & Refund Policy: 50% more than 5 hrs before, 25% between 5 and 3 hrs, else none.
+int refundPercent(Duration beforeCheckIn) {
+  if (beforeCheckIn > const Duration(hours: 5)) return 50;
+  if (beforeCheckIn >= const Duration(hours: 3)) return 25;
+  return 0;
 }

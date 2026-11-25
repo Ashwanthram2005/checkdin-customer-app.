@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../policies.dart';
 import '../theme.dart';
+import 'policy_doc.dart';
 
 /// Terms of use + Privacy policy. Pass 'privacy' as the route argument to open the second tab.
 class LegalScreen extends StatefulWidget {
@@ -17,21 +19,21 @@ class _LegalScreenState extends State<LegalScreen> {
   static const _tSummary = [
     'Checkdin connects you with partner hotels; the hotel provides your stay.',
     'Carry an original photo ID for every guest.',
-    'Free cancellation up to 2 hours before check-in.',
+    'Cancel 5+ hrs before check-in for a 50% refund.',
   ];
   static const _tSections = [
     ['Who we are', 'Checkdin is an online platform that lets you book hotel rooms by the hour or by the day in partner hotels. The hotel is responsible for your stay, rooms and services.'],
     ['Your account', 'You sign in with your mobile number and a one-time code sent on WhatsApp. Keep your phone secure. You are responsible for bookings made from your account.'],
     ['Bookings and payment', 'Prices shown include taxes unless stated. Your booking is confirmed only after payment succeeds and you receive a Booking ID.'],
     ['Check-in rules', 'Every guest must show an original government photo ID. Hotels may refuse check-in if their rules are not met, including age and local ID rules shown on the hotel page.'],
-    ['Cancellations and refunds', 'You can cancel for free up to 2 hours before check-in. Late cancellations, no-shows and early check-outs are not refunded. See the Cancellation policy for details.'],
+    ['Cancellations and refunds', 'Cancel more than 5 hours before check-in for a 50% refund, or between 5 and 3 hours for 25%. Later cancellations and no-shows are not refunded. See the Cancellation & Refund Policy for details.'],
     ['Fair use', 'Do not misuse the app, share false details, or use the hotel for illegal activity. We may suspend accounts that break these terms.'],
     ['Changes to these terms', 'We may update these terms. We will tell you in the app when we make important changes.'],
   ];
   static const _pSummary = [
-    'We collect only what we need to book your stay.',
-    'We share your details only with the hotel you book.',
-    'You can delete your account and data anytime.',
+    'We never see your card number, UPI PIN or bank password.',
+    'We share your details only with the hotel you book and partners who run the service.',
+    'We do not sell your data. Email dpo@checkdin.in to access or delete it.',
   ];
   static const _pSections = [
     ['What we collect', 'Your name, mobile number, optional email and gender, your bookings, and payment status. Card details are stored by our payment partner, not by Checkdin.'],
@@ -97,7 +99,7 @@ class _LegalScreenState extends State<LegalScreen> {
           Text(_terms ? 'Terms of use' : 'Privacy policy',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.7)),
           const SizedBox(height: 4),
-          const Text('Last updated 25 Nov 2026 · Draft', style: TextStyle(fontSize: 12.5, color: C.muted)),
+          Text(_terms ? 'Last updated 25 Nov 2026 · Draft' : 'From checkdin.in', style: const TextStyle(fontSize: 12.5, color: C.muted)),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(16),
@@ -117,7 +119,7 @@ class _LegalScreenState extends State<LegalScreen> {
             ]),
           ),
           const SizedBox(height: 16),
-          WhiteCard(
+          if (!_terms) const PolicyBody(privacyPolicy, showIntro: false) else WhiteCard(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
             child: Column(children: [
               for (var i = 0; i < sections.length; i++)

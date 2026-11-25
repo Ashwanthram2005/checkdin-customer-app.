@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../policies.dart';
 import '../theme.dart';
 
 class HelpScreen extends StatefulWidget {
@@ -12,17 +13,13 @@ class HelpScreen extends StatefulWidget {
 class _HelpScreenState extends State<HelpScreen> {
   int _open = 0;
 
-  static const _faqs = [
-    ['How do I extend my stay?', 'Open your booking and tap Extend hours. If the room is free, you pay only for the extra hours.'],
-    ['When will I get my refund?', 'Refunds go back to the payment method you used. The time it takes depends on your bank.'],
-    ['What ID do I need at check-in?', 'Carry a valid government photo ID, like Aadhaar, passport or driving licence, for every guest.'],
-  ];
+  static const _faqs = faqs;
 
-  Widget _topic(IconData icon, String title, String sub, bool lime) => Expanded(
+  Widget _topic(IconData icon, String title, String sub, bool lime, String route, [Object? arg]) => Expanded(
         child: WhiteCard(
           radius: 20,
           padding: const EdgeInsets.all(14),
-          onTap: () => toast(context, 'Opening $title…'),
+          onTap: () => Navigator.pushNamed(context, route, arguments: arg),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             IconTile(icon, bg: lime ? C.lime : C.bg, size: 40),
             const SizedBox(height: 10),
@@ -111,15 +108,15 @@ class _HelpScreenState extends State<HelpScreen> {
             ),
             const SectionLabel('Browse topics'),
             Row(children: [
-              _topic(Icons.key_outlined, 'Check-in & stay', 'Room, ID, late check-in', true),
+              _topic(Icons.key_outlined, 'Check-in & stay', 'ID rules, couples, local ID', true, '/policy', 'checkin'),
               const SizedBox(width: 10),
-              _topic(Icons.credit_card_rounded, 'Payments & refunds', 'Failed payment, refunds', false),
+              _topic(Icons.currency_rupee_rounded, 'Cancellation & refund', 'Refund %, no-shows', false, '/cancel-policy'),
             ]),
             const SizedBox(height: 10),
             Row(children: [
-              _topic(Icons.schedule_rounded, 'Change or cancel', 'Slot, extend, cancel', false),
+              _topic(Icons.shield_outlined, 'Privacy policy', 'Your data and rights', false, '/legal', 'privacy'),
               const SizedBox(width: 10),
-              _topic(Icons.person_outline_rounded, 'Account & login', 'OTP, profile, app issues', false),
+              _topic(Icons.account_balance_wallet_outlined, 'Payments & credits', 'Credits history', false, '/credits'),
             ]),
             const SectionLabel('Popular questions'),
             WhiteCard(

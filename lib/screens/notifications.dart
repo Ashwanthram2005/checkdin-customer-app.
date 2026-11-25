@@ -30,7 +30,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         'Yesterday', '/saved'),
     _Note(Icons.star_outline_rounded, 'How was Skyline Suites?', 'Rate your stay and help other guests pick the right room.', 'Yesterday',
         'Yesterday', '/rate'),
-    _Note(Icons.account_balance_wallet_outlined, 'Refund sent', '₹1,299 for Hotel Marina Inn is on its way to your UPI. 5–7 working days.',
+    _Note(Icons.account_balance_wallet_outlined, 'Refund sent', '₹1,299 for Hotel Marina Inn is on its way to your UPI. 3–5 working days.',
         '18 Nov', 'Earlier', '/bookings'),
     _Note(Icons.local_offer_outlined, '25% off your next stay', 'Use NEWSTAY at checkout. Valid till Sunday.', '16 Nov', 'Earlier', '/offers'),
   ];

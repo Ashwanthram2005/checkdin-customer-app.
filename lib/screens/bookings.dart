@@ -31,7 +31,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   List<_Past> get _pastAll => [
         if (app.bookingCancelled)
           _Past(app.hotel.name, '${app.whenShort} · ${app.stayLabel}', inr(app.total), 'Cancelled',
-              note: app.cancelRefund > 0 ? 'Refund of ${inr(app.cancelRefund)} started · 5–7 working days' : 'No refund · cancelled after the free window',
+              note: app.cancelRefund > 0 ? 'Refund of ${inr(app.cancelRefund)} requested · 3–5 working days' : 'No refund · cancelled less than 3 hrs before check-in',
               cancelled: true),
         ..._past,
       ];
@@ -45,7 +45,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
           const SizedBox(height: 6),
           Text(
               app.cancelRefund > 0
-                  ? 'Your booking was cancelled. ${inr(app.cancelRefund)} is on its way to your UPI.'
+                  ? 'Your booking was cancelled. A refund of ${inr(app.cancelRefund)} is on its way, usually in 3–5 working days.'
                   : 'Your booking was cancelled.',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 13.5, color: C.muted, height: 1.45)),

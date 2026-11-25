@@ -254,7 +254,7 @@ class _NightCardState extends State<_NightCard> {
           for (final r in [
             [Icons.login_rounded, 'Check-in from 12:00 PM · check-out by 11:00 AM'],
             [Icons.badge_outlined, 'Original photo ID needed for every guest'],
-            [Icons.event_available_outlined, 'Free cancellation till 24 hrs before check-in'],
+            [Icons.event_available_outlined, '50% refund if you cancel 5+ hrs before check-in'],
             [Icons.wifi_rounded, 'AC · Free Wi-Fi · Room service'],
           ])
             Padding(
@@ -396,7 +396,7 @@ class _NightCardState extends State<_NightCard> {
               Expanded(
                 child: app.nights > 1
                     ? Text('${inr(total)} for ${app.stayLabel}', style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.green))
-                    : const Text('Free cancellation till 24 hrs before', style: TextStyle(fontSize: 12, color: C.green, fontWeight: FontWeight.w600)),
+                    : const Text('50% refund till 5 hrs before', style: TextStyle(fontSize: 12, color: C.green, fontWeight: FontWeight.w600)),
               ),
               Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                 Text.rich(TextSpan(children: [
