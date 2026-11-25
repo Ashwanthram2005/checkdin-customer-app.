@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'states.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -78,7 +79,9 @@ class SearchScreen extends StatelessWidget {
                     radius: 18,
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     border: Border.all(color: place == 'Current location' ? C.ink : C.white, width: 1.5),
-                    onTap: () => app.set(() => app.place = 'Current location'),
+                    onTap: () async {
+                      if (await useMyLocation(context)) app.set(() => app.place = 'Current location');
+                    },
                     child: const Row(children: [
                       IconTile(Icons.near_me_rounded, bg: C.limeSoft, size: 38, radius: 19),
                       SizedBox(width: 12),

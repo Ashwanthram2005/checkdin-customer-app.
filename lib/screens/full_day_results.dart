@@ -4,6 +4,7 @@ import '../state.dart';
 import '../theme.dart';
 import 'filter_sort.dart';
 import 'full_day_search.dart';
+import 'maps.dart';
 
 const _allStays = [...hotels, ...fullDayOnly];
 
@@ -92,6 +93,17 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
       builder: (context, _) {
         final list = _list;
         return Scaffold(
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: list.isEmpty
+              ? null
+              : FloatingActionButton.extended(
+                  backgroundColor: C.ink,
+                  foregroundColor: C.lime,
+                  elevation: 4,
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StaysMapScreen(list: list, nightly: true))),
+                  icon: const Icon(Icons.map_outlined),
+                  label: const Text('Map', style: TextStyle(fontWeight: FontWeight.w800)),
+                ),
           body: Column(children: [
             SheetHeader(
               child: Column(children: [

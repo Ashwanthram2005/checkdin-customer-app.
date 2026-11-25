@@ -151,20 +151,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(height: 18),
             Center(
               child: TextButton(
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('Delete your account?'),
-                    content: const Text('This removes your profile and booking history. This cannot be undone.'),
-                    actions: [
-                      TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel', style: TextStyle(color: C.ink))),
-                      TextButton(
-                        onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false),
-                        child: const Text('Delete', style: TextStyle(color: C.red, fontWeight: FontWeight.w700)),
-                      ),
-                    ],
-                  ),
-                ),
+                onPressed: () => Navigator.pushNamed(context, '/delete-account'),
                 child: const Text('Delete my account', style: TextStyle(color: C.red, fontWeight: FontWeight.w700, fontSize: 14)),
               ),
             ),

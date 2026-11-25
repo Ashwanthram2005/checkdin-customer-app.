@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../voucher.dart';
+import 'maps.dart';
 import 'cancel_sheet.dart';
 
 class BookingSuccessScreen extends StatelessWidget {
@@ -119,10 +121,10 @@ class BookingSuccessScreen extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               Row(children: [
-                action(Icons.near_me_rounded, 'Directions', true, () => toast(context, 'Opening Maps…')),
-                action(Icons.call_outlined, 'Call hotel', false, () => toast(context, 'Calling the hotel…')),
+                action(Icons.near_me_rounded, 'Directions', true, () => openDirections(context, app.hotel)),
+                action(Icons.call_outlined, 'Call hotel', false, () => callHotel(context)),
                 action(Icons.event_outlined, 'Calendar', false, () => toast(context, 'Added to your calendar')),
-                action(Icons.download_rounded, 'Voucher', false, () => toast(context, 'Voucher downloaded')),
+                action(Icons.download_rounded, 'Voucher', false, () => shareVoucher(context)),
               ]),
               const SizedBox(height: 10),
               Center(

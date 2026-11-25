@@ -185,6 +185,29 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   : null),
           const SizedBox(height: 14),
+          const Row(children: [
+            Expanded(child: Divider(color: C.border)),
+            Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('or', style: TextStyle(fontSize: 13, color: C.muted))),
+            Expanded(child: Divider(color: C.border)),
+          ]),
+          const SizedBox(height: 14),
+          Material(
+            color: C.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999), side: const BorderSide(color: C.border, width: 1.5)),
+            child: InkWell(
+              customBorder: const StadiumBorder(),
+              onTap: () => _google(context),
+              child: const SizedBox(
+                height: 54,
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  _GoogleMark(),
+                  SizedBox(width: 10),
+                  Text('Continue with Google', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w700)),
+                ]),
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
           const LegalLine(),
         ]),
       ]),
@@ -216,4 +239,122 @@ class AuthSheet extends StatelessWidget {
   const AuthSheet({super.key, required this.children});
   @override
   Widget build(BuildContext context) => _Sheet(children: children);
+}
+
+
+/// Four-colour ring mark for the Google button.
+class _GoogleMark extends StatelessWidget {
+  const _GoogleMark();
+  @override
+  Widget build(BuildContext context) => SizedBox(width: 22, height: 22, child: CustomPaint(painter: _GPainter()));
+}
+
+class _GPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size s) {
+    final r = Rect.fromLTWH(3, 3, s.width - 6, s.height - 6);
+    final p = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4;
+    const cols = [Color(0xFF4285F4), Color(0xFF34A853), Color(0xFFFBBC05), Color(0xFFEA4335)];
+    const starts = [-0.25, 0.55, 1.05, 1.55];
+    const sweeps = [0.8, 0.5, 0.5, 0.45];
+    for (var i = 0; i < 4; i++) {
+      canvas.drawArc(r, starts[i] * 3.14159, sweeps[i] * 3.14159, false, p..color = cols[i]);
+    }
+    canvas.drawLine(Offset(s.width / 2, s.height / 2), Offset(s.width - 3, s.height / 2), p..color = cols[0]);
+  }
+
+  @override
+  bool shouldRepaint(_) => false;
+}
+
+/// Google account picker. Real sign-in needs a Google Cloud OAuth client (see README).
+Future<void> _google(BuildContext context) async {
+  final emailCtrl = TextEditingController();
+  final picked = await showModalBottomSheet<List<String>>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (ctx) => StatefulBuilder(builder: (ctx, set) {
+      final other = emailCtrl.text.trim();
+      final validOther = RegExp(r'^[\w.+-]+@gmail\.com$').hasMatch(other) || RegExp(r'^[\w.+-]+@[\w-]+\.[\w.]+$').hasMatch(other);
+      return Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(20, 14, 20, 20 + MediaQuery.of(ctx).padding.bottom),
+          decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2)))),
+            const SizedBox(height: 16),
+            const Row(children: [_GoogleMark(), SizedBox(width: 10), Text('Sign in with Google', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700))]),
+            const SizedBox(height: 14),
+            const Text('Choose an account', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            const Text('to continue to Checkdin', style: TextStyle(fontSize: 13.5, color: C.muted)),
+            const SizedBox(height: 14),
+            InkWell(
+              borderRadius: BorderRadius.circular(14),
+              onTap: () => Navigator.pop(ctx, ['Ashwanth', 'ashwanth@gmail.com']),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(color: C.ink, shape: BoxShape.circle),
+                    child: const Text('A', style: TextStyle(color: C.lime, fontWeight: FontWeight.w800, fontSize: 16)),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text('Ashwanth', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                      Text('ashwanth@gmail.com', style: TextStyle(fontSize: 13, color: C.muted)),
+                    ]),
+                  ),
+                  const Icon(Icons.chevron_right_rounded),
+                ]),
+              ),
+            ),
+            const Divider(color: C.line),
+            const SizedBox(height: 6),
+            const Text('Use another account', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted)),
+            const SizedBox(height: 8),
+            Row(children: [
+              Expanded(
+                child: TextField(
+                  controller: emailCtrl,
+                  keyboardType: TextInputType.emailAddress,
+                  onChanged: (_) => set(() {}),
+                  decoration: InputDecoration(
+                    hintText: 'you@gmail.com',
+                    isDense: true,
+                    filled: true,
+                    fillColor: C.bg,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              PillBtn('Next', kind: BtnKind.dark, height: 48, fontSize: 14,
+                  onTap: validOther ? () => Navigator.pop(ctx, [other.split('@').first, other]) : null),
+            ]),
+            const SizedBox(height: 14),
+            const Text('Google will share your name and email address with Checkdin. Checkdin never sees your Google password.',
+                style: TextStyle(fontSize: 12, color: C.muted2, height: 1.45)),
+          ]),
+        ),
+      );
+    }),
+  );
+  emailCtrl.dispose();
+  if (picked == null || !context.mounted) return;
+  app.set(() {
+    app.name = picked[0].isEmpty ? '' : picked[0][0].toUpperCase() + picked[0].substring(1);
+    app.email = picked[1];
+    app.googleAccount = true;
+  });
+  toast(context, 'Signed in as ${picked[1]}');
+  Navigator.pushNamed(context, '/profile-setup');
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'maps.dart';
 import 'cancel_sheet.dart';
 
 class BookingsScreen extends StatefulWidget {
@@ -106,11 +107,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
           ],
           const SizedBox(height: 14),
           Row(children: [
-            Expanded(child: PillBtn('Directions', height: 46, fontSize: 14, icon: Icons.near_me_rounded, trailingIcon: false, onTap: () => toast(context, 'Opening Maps…'))),
+            Expanded(child: PillBtn('Directions', height: 46, fontSize: 14, icon: Icons.near_me_rounded, trailingIcon: false, onTap: () => openDirections(context, app.hotel))),
             const SizedBox(width: 10),
             Expanded(
                 child: PillBtn('Call hotel',
-                    kind: BtnKind.outline, height: 46, fontSize: 14, icon: Icons.call_outlined, trailingIcon: false, onTap: () => toast(context, 'Calling the hotel…'))),
+                    kind: BtnKind.outline, height: 46, fontSize: 14, icon: Icons.call_outlined, trailingIcon: false, onTap: () => callHotel(context))),
           ]),
           const SizedBox(height: 10),
           GestureDetector(
@@ -137,8 +138,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
         child: Row(children: [
           Expanded(child: Text('${inr(app.total)} paid via ${app.paidWith}', style: const TextStyle(fontSize: 13, color: C.muted))),
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/help'),
-            child: const Text('Need help?', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+            onTap: () => Navigator.pushNamed(context, '/report'),
+            child: const Text('Report an issue', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
           ),
         ]),
       ),

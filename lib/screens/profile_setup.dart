@@ -10,8 +10,8 @@ class ProfileSetupScreen extends StatefulWidget {
 }
 
 class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
-  final _name = TextEditingController();
-  final _email = TextEditingController();
+  late final _name = TextEditingController(text: app.name);
+  late final _email = TextEditingController(text: app.email);
   bool _wa = true;
 
   @override

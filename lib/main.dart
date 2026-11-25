@@ -35,6 +35,11 @@ import 'screens/payment_failed.dart';
 import 'screens/splash.dart';
 import 'screens/policy_doc.dart';
 import 'screens/credits_history.dart';
+import 'screens/states.dart';
+import 'screens/gallery.dart';
+import 'screens/reviews.dart';
+import 'screens/report_issue.dart';
+import 'screens/delete_account.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,11 +68,16 @@ class CheckdinApp extends StatelessWidget {
         textTheme: GoogleFonts.plusJakartaSansTextTheme(base.textTheme).apply(bodyColor: C.ink, displayColor: C.ink),
         textSelectionTheme: const TextSelectionThemeData(cursorColor: C.ink, selectionColor: C.limeSoft, selectionHandleColor: C.ink),
       ),
+      builder: (context, child) => OfflineGate(child: child ?? const SizedBox()),
       initialRoute: '/splash',
       routes: {
         '/splash': (_) => const SplashScreen(),
         '/policy': (_) => const PolicyDocScreen(),
         '/credits': (_) => const CreditsHistoryScreen(),
+        '/gallery': (_) => const GalleryScreen(),
+        '/reviews': (_) => const ReviewsScreen(),
+        '/report': (_) => const ReportIssueScreen(),
+        '/delete-account': (_) => const DeleteAccountScreen(),
         '/': (_) => const LoginScreen(),
         '/otp': (_) => const OtpScreen(),
         '/profile-setup': (_) => const ProfileSetupScreen(),

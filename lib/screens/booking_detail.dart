@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../voucher.dart';
+import 'maps.dart';
 import 'hotel_detail.dart' show billRow, totalBox;
 
 class BookingDetailScreen extends StatefulWidget {
@@ -90,7 +92,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 Text(h.address, style: const TextStyle(fontSize: 13.5, color: C.muted, height: 1.5)),
                 const SizedBox(height: 14),
                 PillBtn('Get directions',
-                    kind: BtnKind.outline, height: 48, expand: true, icon: Icons.near_me_outlined, trailingIcon: false, onTap: () => toast(context, 'Opening Maps…')),
+                    kind: BtnKind.outline, height: 48, expand: true, icon: Icons.near_me_outlined, trailingIcon: false, onTap: () => openDirections(context, app.hotel)),
                 const SizedBox(height: 20),
                 Container(
                   padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
@@ -103,7 +105,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                         borderRadius: BorderRadius.circular(999),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(999),
-                          onTap: () => toast(context, 'Voucher downloaded'),
+                          onTap: () => shareVoucher(context),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                             child: Row(children: [
@@ -128,7 +130,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 ),
                 const SizedBox(height: 12),
                 Row(children: [
-                  contact(Icons.call_outlined, 'Call hotel', 'Front desk', () => toast(context, 'Calling the hotel…')),
+                  contact(Icons.call_outlined, 'Call hotel', 'Front desk', () => callHotel(context)),
                   const SizedBox(width: 12),
                   contact(Icons.mail_outline_rounded, 'Email us', 'hello@checkdin.in', () => toast(context, 'Opening email…')),
                 ]),
@@ -169,6 +171,22 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                         ]),
                       ),
                     ),
+                  ]),
+                ),
+                const SizedBox(height: 12),
+                WhiteCard(
+                  onTap: () => Navigator.pushNamed(context, '/report'),
+                  child: const Row(children: [
+                    IconTile(Icons.report_gmailerrorred_rounded, bg: C.redSoft, size: 40),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text('Report an issue', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                        SizedBox(height: 2),
+                        Text('Room, check-in, extra charges or safety', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                      ]),
+                    ),
+                    Icon(Icons.chevron_right_rounded),
                   ]),
                 ),
                 const SectionLabel('Guest details'),

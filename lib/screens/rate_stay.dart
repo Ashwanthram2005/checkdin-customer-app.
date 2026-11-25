@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../state.dart';
 import '../theme.dart';
 
 /// Arguments: {'hotel': String, 'when': String, 'rating': int}. Pops with the overall rating (int) when posted.
@@ -306,6 +307,10 @@ class _RateStayScreenState extends State<RateStayScreen> {
             onTap: canPost
                 ? () {
                     FocusScope.of(context).unfocus();
+                    final all = [...hotels, ...fullDayOnly];
+                    final h = all.where((x) => x.name == _hotel);
+                    app.set(() => app.myReview = MyReview(h.isEmpty ? app.hotel.id : h.first.id, _overall, _text.text.trim(),
+                        _tags.toList(), _photos.length, _anon, 'Just now'));
                     toast(context, 'Review posted. Thanks for helping other guests!');
                     Navigator.pop(context, _overall);
                   }

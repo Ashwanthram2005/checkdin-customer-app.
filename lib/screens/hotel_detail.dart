@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'gallery.dart';
+import 'maps.dart';
+import 'reviews.dart';
 
 class HotelDetailScreen extends StatefulWidget {
   const HotelDetailScreen({super.key});
@@ -56,7 +59,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
               child: CustomScrollView(slivers: [
                 SliverToBoxAdapter(
                   child: Stack(children: [
-                    const PhotoPlaceholder(height: 300),
+                    const GalleryStrip(height: 300),
                     Positioned(left: 16, top: MediaQuery.of(context).padding.top + 10, child: const BackBtn()),
                     Positioned(
                       right: 16,
@@ -72,19 +75,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         CircleBtn(icon: Icons.share_outlined, tooltip: 'Share', onTap: () => toast(context, 'Share link copied')),
                       ]),
                     ),
-                    Positioned(
-                      right: 16,
-                      bottom: 34,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(999)),
-                        child: const Row(children: [
-                          Icon(Icons.photo_library_outlined, size: 15),
-                          SizedBox(width: 6),
-                          Text('All photos', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700)),
-                        ]),
-                      ),
-                    ),
+                    
                   ]),
                 ),
                 SliverToBoxAdapter(
@@ -200,21 +191,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         borderRadius: BorderRadius.circular(22),
                         clipBehavior: Clip.antiAlias,
                         child: Column(children: [
-                          SizedBox(
-                            height: 150,
-                            width: double.infinity,
-                            child: CustomPaint(
-                              painter: _MapPainter(),
-                              child: Center(
-                                child: Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: const BoxDecoration(color: C.ink, shape: BoxShape.circle),
-                                  child: Center(child: Container(width: 14, height: 14, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle))),
-                                ),
-                              ),
-                            ),
-                          ),
+                          HotelMiniMap(h, height: 150),
                           Padding(
                             padding: const EdgeInsets.all(16),
                             child: Row(children: [
@@ -224,7 +201,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                 ]),
                               ),
                               const SizedBox(width: 10),
-                              PillBtn('Map', kind: BtnKind.outline, height: 38, fontSize: 13, onTap: () => toast(context, 'Opening Maps…')),
+                              PillBtn('Directions', kind: BtnKind.outline, height: 38, fontSize: 13, onTap: () => openDirections(context, h)),
                             ]),
                           ),
                         ]),
@@ -269,14 +246,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                     child: Text('${b[1]}', textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),
                               ]),
                             ),
-                          const Divider(color: C.line, height: 20),
-                          const Row(children: [
-                            Expanded(child: Text('Priya', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
-                            Text('★ 5 · 3-hr stay', style: TextStyle(fontSize: 12, color: C.muted2)),
-                          ]),
-                          const SizedBox(height: 6),
-                          const Text('Clean room and quick check-in. Perfect for a few hours between trains.',
-                              style: TextStyle(fontSize: 13.5, color: Color(0xFF3F3F38), height: 1.5)),
+                          const ReviewsPreview(),
                         ]),
                       ),
                       SectionLabel('Good to know', key: _keys['Policies']),

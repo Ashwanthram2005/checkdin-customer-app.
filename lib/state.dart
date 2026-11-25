@@ -13,6 +13,8 @@ class Hotel {
   final List<int?> prices;
   /// Price per night for full-day stays.
   final int night;
+  /// Map position.
+  final double lat, lng;
   const Hotel({
     required this.id,
     required this.name,
@@ -25,6 +27,8 @@ class Hotel {
     required this.tags,
     required this.prices,
     this.night = 1999,
+    this.lat = 13.0418,
+    this.lng = 80.2341,
   });
 
   int? priceFor(int slot) => prices[[3, 6, 9, 12].indexOf(slot)];
@@ -43,6 +47,8 @@ const hotels = <Hotel>[
     tags: ['Couple friendly', 'Local ID accepted', 'AC'],
     prices: [849, 1299, 1599, 1899],
     night: 2499,
+    lat: 13.0405,
+    lng: 80.2337,
   ),
   Hotel(
     id: 'ls',
@@ -56,6 +62,8 @@ const hotels = <Hotel>[
     tags: ['Couple friendly', 'Free Wi-Fi'],
     prices: [699, 999, null, 1499],
     night: 1899,
+    lat: 13.0425,
+    lng: 80.229,
   ),
   Hotel(
     id: 'mi',
@@ -69,6 +77,8 @@ const hotels = <Hotel>[
     tags: ['Local ID accepted', 'Parking'],
     prices: [749, 1099, 1349, 1649],
     night: 2199,
+    lat: 13.0716,
+    lng: 80.2585,
   ),
 ];
 
@@ -86,6 +96,8 @@ const fullDayOnly = <Hotel>[
     tags: ['Couple friendly', 'Local ID accepted', 'Pool'],
     prices: [null, null, null, null],
     night: 2899,
+    lat: 12.901,
+    lng: 80.2279,
   ),
   Hotel(
     id: 'ph',
@@ -99,6 +111,8 @@ const fullDayOnly = <Hotel>[
     tags: ['Local ID accepted', 'Parking'],
     prices: [null, null, null, null],
     night: 1499,
+    lat: 13.0359,
+    lng: 80.1567,
   ),
 ];
 
@@ -138,6 +152,10 @@ class AppState extends ChangeNotifier {
   // cards the guest chose to save (shared by checkout and Manage payments)
   final List<SavedCard> cards = [];
   String paidWith = 'UPI';
+  // the guest's own posted review (shown on the hotel page)
+  MyReview? myReview;
+  // logged in with Google (demo)
+  bool googleAccount = false;
   int cancelRefund = 0;
 
   void set(VoidCallback fn) {
@@ -186,6 +204,14 @@ class AppState extends ChangeNotifier {
 }
 
 final app = AppState();
+
+class MyReview {
+  final String hotelId, text, when;
+  final int rating, photos;
+  final List<String> tags;
+  final bool anonymous;
+  const MyReview(this.hotelId, this.rating, this.text, this.tags, this.photos, this.anonymous, this.when);
+}
 
 class SavedCard {
   final String brand, last4, expiry, name;

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'maps.dart';
+import 'states.dart';
 import 'filter_sort.dart';
 
 class ResultsScreen extends StatefulWidget {
@@ -28,6 +30,17 @@ class _ResultsScreenState extends State<ResultsScreen> {
         }).toList();
         final place = app.place ?? 'Chennai';
         return Scaffold(
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: list.isEmpty
+              ? null
+              : FloatingActionButton.extended(
+                  backgroundColor: C.ink,
+                  foregroundColor: C.lime,
+                  elevation: 4,
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StaysMapScreen(list: list))),
+                  icon: const Icon(Icons.map_outlined),
+                  label: const Text('Map', style: TextStyle(fontWeight: FontWeight.w800)),
+                ),
           body: Column(children: [
             Container(
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 14, bottom: 14),
@@ -130,9 +143,17 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 const SizedBox(height: 14),
                 for (final h in list) ...[_HotelCard(h), const SizedBox(height: 16)],
                 if (list.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.all(40),
-                    child: Text('No stays match these filters. Try removing one.', textAlign: TextAlign.center, style: TextStyle(color: C.muted)),
+                  EmptyState(
+                    icon: Icons.search_off_rounded,
+                    title: 'No stays match',
+                    body: 'Nothing near $place fits ${_on.length > 1 ? 'all ${_on.length} filters' : 'this filter'} for ${app.slot} hrs. Remove a filter or try a longer slot.',
+                    primary: 'Clear filters',
+                    onPrimary: () => setState(() => _on.clear()),
+                    secondary: 'Try a full-day stay',
+                    onSecondary: () {
+                      app.set(() => app.fullDay = true);
+                      Navigator.pushNamed(context, '/fullday');
+                    },
                   ),
               ]),
             ),
