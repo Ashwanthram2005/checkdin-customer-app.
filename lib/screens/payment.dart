@@ -67,7 +67,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     if (!mounted) return;
     Navigator.of(context).pop();
     if (!_willFail) {
-      Navigator.pushNamedAndRemoveUntil(context, '/success', ModalRoute.withName('/home'));
+      app.set(() => app.bookingCancelled = false);
+    Navigator.pushNamedAndRemoveUntil(context, '/success', ModalRoute.withName('/home'));
       return;
     }
     final r = await Navigator.pushNamed(context, '/payment-failed', arguments: {'method': _labels[_sel] ?? 'UPI', 'left': _left});

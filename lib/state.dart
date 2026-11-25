@@ -133,6 +133,9 @@ class AppState extends ChangeNotifier {
   bool coupon = false;
   final Set<String> saved = {'gr', 'ls'};
   bool priceAlerts = true;
+  // upcoming booking cancelled by the guest
+  bool bookingCancelled = false;
+  int cancelRefund = 0;
 
   void set(VoidCallback fn) {
     fn();

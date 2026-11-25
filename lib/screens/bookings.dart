@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'cancel_sheet.dart';
 
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({super.key});
@@ -27,7 +28,34 @@ class _BookingsScreenState extends State<BookingsScreen> {
   bool _incog = false;
   int _rating = 0;
 
+  List<_Past> get _pastAll => [
+        if (app.bookingCancelled)
+          _Past(app.hotel.name, '${app.whenShort} · ${app.stayLabel}', inr(app.total), 'Cancelled',
+              note: app.cancelRefund > 0 ? 'Refund of ${inr(app.cancelRefund)} started · 5–7 working days' : 'No refund · cancelled after the free window',
+              cancelled: true),
+        ..._past,
+      ];
+
+  Widget _noUpcoming() => Padding(
+        padding: const EdgeInsets.only(top: 30),
+        child: Column(children: [
+          const IconTile(Icons.event_busy_outlined, bg: C.lime, size: 72, radius: 24),
+          const SizedBox(height: 16),
+          const Text('No upcoming stays', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 6),
+          Text(
+              app.cancelRefund > 0
+                  ? 'Your booking was cancelled. ${inr(app.cancelRefund)} is on its way to your UPI.'
+                  : 'Your booking was cancelled.',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 13.5, color: C.muted, height: 1.45)),
+          const SizedBox(height: 18),
+          PillBtn('Book a stay', kind: BtnKind.dark, height: 48, onTap: () => goHome(context)),
+        ]),
+      );
+
   Widget _upcoming() {
+    if (app.bookingCancelled) return _noUpcoming();
     final h = app.hotel;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SectionLabel('Today'),
@@ -84,6 +112,23 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 child: PillBtn('Call hotel',
                     kind: BtnKind.outline, height: 46, fontSize: 14, icon: Icons.call_outlined, trailingIcon: false, onTap: () => toast(context, 'Calling the hotel…'))),
           ]),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: () async {
+              final done = await showCancelBookingSheet(context);
+              if (done && mounted) setState(() {});
+            },
+            child: Container(
+              height: 46,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(999), border: Border.all(color: const Color(0xFFF2C4BF), width: 1.5)),
+              child: const Row(mainAxisSize: MainAxisSize.min, children: [
+                Icon(Icons.event_busy_outlined, size: 18, color: C.red),
+                SizedBox(width: 8),
+                Text('Cancel booking', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: C.red)),
+              ]),
+            ),
+          ),
         ]),
       ),
       const SizedBox(height: 12),
@@ -183,12 +228,15 @@ class _BookingsScreenState extends State<BookingsScreen> {
       body: ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 32), children: [
         const TitleBar(title: 'My bookings'),
         const SizedBox(height: 20),
-        SegmentPill(options: const ['Upcoming · 1', 'Past · 3'], selected: _tab, onChanged: (i) => setState(() => _tab = i)),
+        SegmentPill(
+            options: [app.bookingCancelled ? 'Upcoming · 0' : 'Upcoming · 1', 'Past · ${_pastAll.length}'],
+            selected: _tab,
+            onChanged: (i) => setState(() => _tab = i)),
         if (_tab == 0)
           _upcoming()
         else ...[
           const SectionLabel('November 2026'),
-          ..._past.map(_pastCard),
+          ..._pastAll.map(_pastCard),
         ],
       ]),
     );
