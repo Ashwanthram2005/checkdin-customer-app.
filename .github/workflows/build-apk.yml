@@ -34,11 +34,10 @@ jobs:
             sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$MANIFEST"
           # Skip release lint on plugins (AGP lint crashes on some plugins, e.g. image_picker)
           cat >> android/build.gradle.kts <<'KTS'
-
-subprojects {
-    tasks.matching { it.name.startsWith("lintVital") }.configureEach { enabled = false }
-}
-KTS
+          subprojects {
+              tasks.matching { it.name.startsWith("lintVital") }.configureEach { enabled = false }
+          }
+          KTS
 
       - name: Install packages
         run: flutter pub get
