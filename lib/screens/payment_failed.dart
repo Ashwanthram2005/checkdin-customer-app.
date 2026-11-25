@@ -43,6 +43,111 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
 
   String get _clock => '${(_left ~/ 60).toString().padLeft(2, '0')}:${(_left % 60).toString().padLeft(2, '0')}';
 
+  static const _methods = [
+    ['anyupi', Icons.phone_android_rounded, 'Any UPI app', 'GPay, PhonePe, Paytm & more'],
+    ['card', Icons.credit_card_rounded, 'Credit / Debit card', 'Visa •••• 4417'],
+    ['netbank', Icons.account_balance_outlined, 'Net banking', 'All major Indian banks'],
+  ];
+
+  Future<void> _retry() async {
+    var sel = _method == 'Net banking' ? 'anyupi' : 'card';
+    final go = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheet) => Container(
+          padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(ctx).padding.bottom),
+          decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2)))),
+            const SizedBox(height: 16),
+            const Text('Choose how to pay', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+            const SizedBox(height: 4),
+            Text('Last try with $_method didn\'t go through.', style: const TextStyle(fontSize: 13.5, color: C.muted)),
+            const SizedBox(height: 14),
+            for (final m in _methods)
+              GestureDetector(
+                onTap: () => setSheet(() => sel = m[0] as String),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: sel == m[0] ? C.limeSoft : C.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: sel == m[0] ? C.ink : C.border, width: 1.5),
+                  ),
+                  child: Row(children: [
+                    IconTile(m[1] as IconData, bg: sel == m[0] ? C.lime : C.bg, size: 40),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Row(children: [
+                          Text(m[2] as String, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
+                          if (m[2] == _method) ...[
+                            const SizedBox(width: 6),
+                            const Tag('Failed', bg: C.redSoft, fg: C.red),
+                          ],
+                        ]),
+                        Text(m[3] as String, style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                      ]),
+                    ),
+                    Container(
+                      width: 22,
+                      height: 22,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: sel == m[0] ? C.ink : C.white,
+                        border: Border.all(color: sel == m[0] ? C.ink : C.border, width: 2),
+                      ),
+                      child: sel == m[0]
+                          ? Center(child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)))
+                          : null,
+                    ),
+                  ]),
+                ),
+              ),
+            const SizedBox(height: 8),
+            PillBtn('Pay ${inr(app.total)}',
+                kind: BtnKind.dark, height: 56, expand: true, icon: Icons.lock_outline_rounded, trailingIcon: false, onTap: () => Navigator.pop(ctx, sel)),
+          ]),
+        ),
+      ),
+    );
+    if (go == null || !mounted) return;
+    _t?.cancel();
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: const Color(0x99111111),
+      builder: (_) => PopScope(
+        canPop: false,
+        child: Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: 260,
+              padding: const EdgeInsets.fromLTRB(20, 26, 20, 22),
+              decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(24)),
+              child: const Column(mainAxisSize: MainAxisSize.min, children: [
+                SizedBox(width: 40, height: 40, child: CircularProgressIndicator(strokeWidth: 3.5, color: C.ink, backgroundColor: C.limeSoft)),
+                SizedBox(height: 16),
+                Text('Confirming payment…', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                SizedBox(height: 4),
+                Text('Don\'t press back or close the app',
+                    textAlign: TextAlign.center, style: TextStyle(fontSize: 12.5, color: C.muted, fontWeight: FontWeight.w500)),
+              ]),
+            ),
+          ),
+        ),
+      ),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 2200));
+    if (!mounted) return;
+    Navigator.of(context).pop();
+    Navigator.pushNamedAndRemoveUntil(context, '/success', ModalRoute.withName('/home'));
+  }
+
   static const _reasons = [
     'Payment keeps failing',
     'Found a better price elsewhere',
@@ -273,7 +378,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
           BottomBar(
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               PillBtn('Retry payment',
-                  kind: BtnKind.dark, height: 56, expand: true, icon: Icons.refresh_rounded, trailingIcon: false, onTap: () => Navigator.pop(context, 'retry')),
+                  kind: BtnKind.dark, height: 56, expand: true, icon: Icons.refresh_rounded, trailingIcon: false, onTap: _retry),
               const SizedBox(height: 10),
               PillBtn('Cancel booking', kind: BtnKind.outline, height: 50, expand: true, onTap: _cancel),
             ]),

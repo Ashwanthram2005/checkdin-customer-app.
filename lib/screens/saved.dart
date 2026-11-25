@@ -39,7 +39,9 @@ class _SavedScreenState extends State<SavedScreen> {
         return Scaffold(
           extendBody: true,
           bottomNavigationBar: const BottomNav(current: 'Saved'),
-          body: ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 22, 20, 120), children: [
+          body: ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 120), children: [
+            const Align(alignment: Alignment.centerLeft, child: BackBtn()),
+            const SizedBox(height: 14),
             Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -89,7 +89,9 @@ class _OffersScreenState extends State<OffersScreen> {
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: const BottomNav(current: 'Offers'),
-      body: ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 22, 20, 120), children: [
+      body: ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 120), children: [
+        const Align(alignment: Alignment.centerLeft, child: BackBtn()),
+        const SizedBox(height: 14),
         const Text('Offers', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: -1)),
         const Text('Save more on every stay', style: TextStyle(fontSize: 13.5, color: C.muted)),
         const SizedBox(height: 18),
