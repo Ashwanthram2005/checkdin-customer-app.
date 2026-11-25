@@ -1,4 +1,5 @@
 import 'state.dart';
+import 'theme.dart';
 
 /// Coupon rules. Discounts come off the booking amount (room + fees).
 class CouponDef {
