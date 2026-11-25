@@ -43,39 +43,122 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
 
   String get _clock => '${(_left ~/ 60).toString().padLeft(2, '0')}:${(_left % 60).toString().padLeft(2, '0')}';
 
+  static const _reasons = [
+    'Payment keeps failing',
+    'Found a better price elsewhere',
+    'My plans changed',
+    'Booked the wrong date or time',
+    'Want a different hotel',
+    'Other reason',
+  ];
+
   Future<void> _cancel() async {
+    String? picked;
+    final other = TextEditingController();
     final yes = await showModalBottomSheet<bool>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-        decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Cancel this booking?', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
-          Text('We\'ll release your room at ${app.hotel.name}. No money has been charged.',
-              style: const TextStyle(fontSize: 14, color: C.muted, height: 1.45)),
-          const SizedBox(height: 20),
-          Row(children: [
-            Expanded(child: PillBtn('Keep booking', kind: BtnKind.outline, expand: true, onTap: () => Navigator.pop(ctx, false))),
-            const SizedBox(width: 12),
-            Expanded(
-              child: GestureDetector(
-                onTap: () => Navigator.pop(ctx, true),
-                child: Container(
-                  height: 52,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(color: C.red, borderRadius: BorderRadius.circular(999)),
-                  child: const Text('Yes, cancel', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: C.white)),
-                ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheet) {
+          final isOther = picked == 'Other reason';
+          final ok = picked != null && (!isOther || other.text.trim().isNotEmpty);
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
+            child: Container(
+              constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.9),
+              padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(ctx).padding.bottom),
+              decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+              child: SingleChildScrollView(
+                child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Center(
+                    child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2))),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Why are you cancelling?', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 4),
+                  Text('Your room at ${app.hotel.name} will be released. No money has been charged.',
+                      style: const TextStyle(fontSize: 13.5, color: C.muted, height: 1.45)),
+                  const SizedBox(height: 14),
+                  for (final r in _reasons)
+                    GestureDetector(
+                      onTap: () => setSheet(() => picked = r),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+                        decoration: BoxDecoration(
+                          color: picked == r ? C.limeSoft : C.white,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: picked == r ? C.ink : C.border, width: 1.5),
+                        ),
+                        child: Row(children: [
+                          Expanded(
+                            child: Text(r, style: TextStyle(fontSize: 14.5, fontWeight: picked == r ? FontWeight.w800 : FontWeight.w600)),
+                          ),
+                          Container(
+                            width: 22,
+                            height: 22,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: picked == r ? C.ink : C.white,
+                              border: Border.all(color: picked == r ? C.ink : C.border, width: 2),
+                            ),
+                            child: picked == r
+                                ? Center(child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)))
+                                : null,
+                          ),
+                        ]),
+                      ),
+                    ),
+                  if (isOther)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: TextField(
+                        controller: other,
+                        autofocus: true,
+                        maxLength: 100,
+                        maxLines: 2,
+                        minLines: 2,
+                        onChanged: (_) => setSheet(() {}),
+                        style: const TextStyle(fontSize: 14.5),
+                        decoration: InputDecoration(
+                          hintText: 'Tell us in a few words',
+                          hintStyle: const TextStyle(color: Color(0xFF8A8A82)),
+                          filled: true,
+                          fillColor: C.bg,
+                          contentPadding: const EdgeInsets.all(14),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 10),
+                  Row(children: [
+                    Expanded(child: PillBtn('Keep booking', kind: BtnKind.outline, expand: true, onTap: () => Navigator.pop(ctx, false))),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: ok ? () => Navigator.pop(ctx, true) : null,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 150),
+                          height: 52,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(color: ok ? C.red : const Color(0xFFEFEFEA), borderRadius: BorderRadius.circular(999)),
+                          child: Text('Cancel booking',
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: ok ? C.white : C.muted2)),
+                        ),
+                      ),
+                    ),
+                  ]),
+                ]),
               ),
             ),
-          ]),
-        ]),
+          );
+        },
       ),
     );
+    other.dispose();
     if (yes == true && mounted) {
-      app.set(() => app.coupon = null);
       toast(context, 'Booking cancelled. No money was charged.');
       goHome(context);
     }
