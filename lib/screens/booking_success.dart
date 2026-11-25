@@ -10,7 +10,7 @@ class BookingSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final h = app.hotel;
-    void home() => Navigator.popUntil(context, ModalRoute.withName('/search'));
+    void home() => goHome(context);
     Widget action(IconData icon, String label, bool lime, VoidCallback onTap) => Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),

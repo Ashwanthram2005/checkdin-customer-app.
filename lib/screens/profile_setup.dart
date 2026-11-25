@@ -110,7 +110,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                                 app.email = _email.text.trim();
                                 app.whatsappUpdates = _wa;
                               });
-                              Navigator.pushNamedAndRemoveUntil(context, '/search', (_) => false);
+                              Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
                             }
                           : null),
                 ]),

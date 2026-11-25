@@ -220,7 +220,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 height: 56,
                 expand: true,
                 icon: Icons.arrow_forward_rounded,
-                onTap: _left == 0 ? null : () => Navigator.pushNamedAndRemoveUntil(context, '/success', ModalRoute.withName('/search'))),
+                onTap: _left == 0 ? null : () => Navigator.pushNamedAndRemoveUntil(context, '/success', ModalRoute.withName('/home'))),
           ]),
         ),
       ]),

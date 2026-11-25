@@ -44,7 +44,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     Expanded(
                       child: InkWell(
                         borderRadius: BorderRadius.circular(16),
-                        onTap: () => Navigator.popUntil(context, ModalRoute.withName('/search')),
+                        onTap: () => popTo(context, '/search'),
                         child: Container(
                           height: 52,
                           padding: const EdgeInsets.symmetric(horizontal: 14),

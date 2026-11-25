@@ -90,7 +90,8 @@ class AppState extends ChangeNotifier {
   Hotel hotel = hotels.first;
   int rooms = 1, adults = 2, kids = 0;
   bool coupon = false;
-  final Set<String> saved = {};
+  final Set<String> saved = {'gr', 'ls'};
+  bool priceAlerts = true;
 
   void set(VoidCallback fn) {
     fn();

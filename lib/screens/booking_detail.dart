@@ -200,7 +200,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
           child: Row(children: [
             Expanded(child: PillBtn('Rate stay', kind: BtnKind.outline, onTap: () => Navigator.pushNamed(context, '/bookings'))),
             const SizedBox(width: 10),
-            Expanded(child: PillBtn('Book again', onTap: () => Navigator.popUntil(context, ModalRoute.withName('/search')))),
+            Expanded(child: PillBtn('Book again', onTap: () => popTo(context, '/search'))),
           ]),
         ),
       ]),

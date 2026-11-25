@@ -24,7 +24,7 @@ class SearchScreen extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 24),
                 children: [
                   Row(children: [
-                    Image.asset('assets/logo.png', height: 32),
+                    const BackBtn(),
                     const Spacer(),
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(context, '/account'),

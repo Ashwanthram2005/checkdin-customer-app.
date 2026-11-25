@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
             marked: 'hour.',
             art: const KeyCard(),
             trailing: TextButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, '/search'),
+              onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false),
               child: const Row(mainAxisSize: MainAxisSize.min, children: [
                 Text('Skip', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700, fontSize: 15)),
                 Icon(Icons.chevron_right_rounded, color: C.ink),

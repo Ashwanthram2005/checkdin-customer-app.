@@ -21,6 +21,9 @@ import 'screens/bookings.dart';
 import 'screens/booking_detail.dart';
 import 'screens/payment_methods.dart';
 import 'screens/help.dart';
+import 'screens/home.dart';
+import 'screens/saved.dart';
+import 'screens/offers.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,6 +72,9 @@ class CheckdinApp extends StatelessWidget {
         '/booking-detail': (_) => const BookingDetailScreen(),
         '/payment-methods': (_) => const PaymentMethodsScreen(),
         '/help': (_) => const HelpScreen(),
+        '/home': (_) => const HomeScreen(),
+        '/saved': (_) => const SavedScreen(),
+        '/offers': (_) => const OffersScreen(),
       },
     );
   }

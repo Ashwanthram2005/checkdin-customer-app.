@@ -540,3 +540,93 @@ void toast(BuildContext context, String msg) {
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
     ));
 }
+
+
+/// Go back to [name] if it is in the stack, otherwise open it on top of Home.
+void popTo(BuildContext context, String name) {
+  var found = false;
+  Navigator.popUntil(context, (r) {
+    if (r.settings.name == name) found = true;
+    return found || r.isFirst;
+  });
+  if (!found) Navigator.pushNamed(context, name);
+}
+
+void goHome(BuildContext context) => Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+
+/// Floating bottom navigation used on Home, Saved and Offers.
+class BottomNav extends StatelessWidget {
+  final String current;
+  const BottomNav({super.key, required this.current});
+
+  static const _tabs = [
+    ['Home', '/home'],
+    ['Saved', '/saved'],
+    ['Bookings', '/bookings'],
+    ['Offers', '/offers'],
+    ['Account', '/account'],
+  ];
+  static const _icons = {
+    'Home': Icons.home_rounded,
+    'Saved': Icons.favorite_border_rounded,
+    'Bookings': Icons.calendar_month_outlined,
+    'Offers': Icons.confirmation_number_outlined,
+    'Account': Icons.person_outline_rounded,
+  };
+
+  void _go(BuildContext context, String label, String route) {
+    if (label == current) return;
+    if (route == '/bookings' || route == '/account') {
+      Navigator.pushNamed(context, route);
+    } else if (route == '/home') {
+      goHome(context);
+    } else {
+      Navigator.pushNamedAndRemoveUntil(context, route, ModalRoute.withName('/home'));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+        height: 68,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          color: C.white,
+          borderRadius: BorderRadius.circular(999),
+          boxShadow: const [BoxShadow(color: Color(0x24111111), blurRadius: 34, offset: Offset(0, 12))],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: _tabs.map((t) {
+            final on = t[0] == current;
+            final icon = _icons[t[0]]!;
+            return Semantics(
+              button: true,
+              selected: on,
+              label: t[0],
+              child: GestureDetector(
+                onTap: () => _go(context, t[0], t[1]),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  height: 50,
+                  padding: EdgeInsets.symmetric(horizontal: on ? 18 : 13),
+                  decoration: BoxDecoration(color: on ? C.ink : Colors.transparent, borderRadius: BorderRadius.circular(999)),
+                  child: Row(mainAxisSize: MainAxisSize.min, children: [
+                    Icon(icon, size: 22, color: on ? C.lime : C.ink),
+                    if (on) ...[
+                      const SizedBox(width: 8),
+                      Text(t[0], style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800, color: C.lime)),
+                    ],
+                  ]),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}

@@ -152,7 +152,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                         expand: true,
                         icon: Icons.edit_outlined,
                         trailingIcon: false,
-                        onTap: () => Navigator.popUntil(context, ModalRoute.withName('/date'))),
+                        onTap: () => popTo(context, '/date')),
                   ]),
                 ),
                 const SectionLabel('Rooms & guests'),
