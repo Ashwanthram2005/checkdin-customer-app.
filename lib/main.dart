@@ -28,6 +28,7 @@ import 'screens/cancel_policy.dart';
 import 'screens/legal.dart';
 import 'screens/add_card.dart';
 import 'screens/rate_stay.dart';
+import 'screens/notifications.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,6 +84,7 @@ class CheckdinApp extends StatelessWidget {
         '/legal': (_) => const LegalScreen(),
         '/add-card': (_) => const AddCardScreen(),
         '/rate': (_) => const RateStayScreen(),
+        '/notifications': (_) => const NotificationsScreen(),
       },
     );
   }

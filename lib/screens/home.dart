@@ -145,7 +145,18 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(children: [
               Image.asset('assets/logo.png', height: 34),
               const Spacer(),
-              CircleBtn(icon: Icons.percent_rounded, tooltip: 'Offers', onTap: () => Navigator.pushNamed(context, '/offers')),
+              Stack(clipBehavior: Clip.none, children: [
+                CircleBtn(icon: Icons.notifications_none_rounded, tooltip: 'Notifications', onTap: () => Navigator.pushNamed(context, '/notifications')),
+                Positioned(
+                  top: 9,
+                  right: 10,
+                  child: Container(
+                    width: 9,
+                    height: 9,
+                    decoration: BoxDecoration(color: C.red, shape: BoxShape.circle, border: Border.all(color: C.white, width: 1.5)),
+                  ),
+                ),
+              ]),
               const SizedBox(width: 8),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/account'),
