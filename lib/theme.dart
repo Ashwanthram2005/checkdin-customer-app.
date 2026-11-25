@@ -688,7 +688,7 @@ class LegalLine extends StatelessWidget {
     return Wrap(alignment: WrapAlignment.center, crossAxisAlignment: WrapCrossAlignment.center, children: [
       Text(lead, style: base),
       l(terms, 'terms'),
-      const Text(' & ', style: base),
+      Text(' & ', style: base),
       l('Privacy Policy', 'privacy'),
     ]);
   }
