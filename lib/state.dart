@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import 'theme.dart';
+
 /// Sample hotel. Replace with data from your backend.
 class Hotel {
   final String id, name, area, address, rating;
@@ -9,6 +11,8 @@ class Hotel {
   final List<String> tags;
   /// Price for 3, 6, 9, 12 hours. null = sold out.
   final List<int?> prices;
+  /// Price per night for full-day stays.
+  final int night;
   const Hotel({
     required this.id,
     required this.name,
@@ -20,6 +24,7 @@ class Hotel {
     required this.topRated,
     required this.tags,
     required this.prices,
+    this.night = 1999,
   });
 
   int? priceFor(int slot) => prices[[3, 6, 9, 12].indexOf(slot)];
@@ -37,6 +42,7 @@ const hotels = <Hotel>[
     topRated: true,
     tags: ['Couple friendly', 'Local ID accepted', 'AC'],
     prices: [849, 1299, 1599, 1899],
+    night: 2499,
   ),
   Hotel(
     id: 'ls',
@@ -49,6 +55,7 @@ const hotels = <Hotel>[
     topRated: false,
     tags: ['Couple friendly', 'Free Wi-Fi'],
     prices: [699, 999, null, 1499],
+    night: 1899,
   ),
   Hotel(
     id: 'mi',
@@ -61,6 +68,37 @@ const hotels = <Hotel>[
     topRated: false,
     tags: ['Local ID accepted', 'Parking'],
     prices: [749, 1099, 1349, 1649],
+    night: 2199,
+  ),
+];
+
+/// Extra stays that only take full-day (overnight) bookings.
+const fullDayOnly = <Hotel>[
+  Hotel(
+    id: 'sk',
+    name: 'Skyline Suites',
+    area: 'OMR',
+    address: '88, Rajiv Gandhi Salai, Sholinganallur, Chennai 600119',
+    rating: '4.5',
+    distanceKm: 12.4,
+    reviews: 45,
+    topRated: true,
+    tags: ['Couple friendly', 'Local ID accepted', 'Pool'],
+    prices: [null, null, null, null],
+    night: 2899,
+  ),
+  Hotel(
+    id: 'ph',
+    name: 'Porur Comfort Inn',
+    area: 'Porur',
+    address: '9, Mount Poonamallee Road, Porur, Chennai 600116',
+    rating: '4.0',
+    distanceKm: 8.2,
+    reviews: 22,
+    topRated: false,
+    tags: ['Local ID accepted', 'Parking'],
+    prices: [null, null, null, null],
+    night: 1499,
   ),
 ];
 
@@ -85,6 +123,9 @@ class AppState extends ChangeNotifier {
   int slot = 3;
   DateTime date = DateTime.now();
   int? hour;
+  // full-day (overnight) dates
+  DateTime inDate = DateTime.now();
+  DateTime outDate = DateTime.now().add(const Duration(days: 1));
 
   // booking
   Hotel hotel = hotels.first;
@@ -111,7 +152,26 @@ class AppState extends ChangeNotifier {
   int get checkInHour => hour ?? earliestHour;
   int get checkOutHour => checkInHour + slot;
 
-  int get gross => (hotel.priceFor(slot) ?? hotel.prices.whereType<int>().first) * rooms;
+  int get nights {
+    final a = DateTime(inDate.year, inDate.month, inDate.day);
+    final b = DateTime(outDate.year, outDate.month, outDate.day);
+    final n = b.difference(a).inDays;
+    return n < 1 ? 1 : n;
+  }
+
+  /// Price for one unit of the stay: a slot, or one night.
+  int? get unitPrice => fullDay ? hotel.night : hotel.priceFor(slot);
+  String get stayLabel => fullDay ? '$nights ${nights > 1 ? 'nights' : 'night'}' : '$slot hrs';
+  String get inTimeLabel => fullDay ? '12:00 PM' : hourLabel(checkInHour);
+  String get outTimeLabel => fullDay ? '11:00 AM' : hourLabel(checkOutHour);
+  String get inDateLabel => dateLabel(fullDay ? inDate : date);
+  String get outDateLabel =>
+      dateLabel(fullDay ? outDate : (checkOutHour >= 24 ? date.add(const Duration(days: 1)) : date));
+  String get whenShort => fullDay ? '${dateLabel(inDate)} – ${dateLabel(outDate)}' : '${dateLabel(date)} · ${hourLabel(checkInHour, short: true)}';
+
+  int get gross => fullDay
+      ? hotel.night * nights * rooms
+      : (hotel.priceFor(slot) ?? hotel.prices.whereType<int>().first) * rooms;
   int get fees => (gross * 0.106).round();
   int get total => gross - (coupon ? 40 : 0);
 

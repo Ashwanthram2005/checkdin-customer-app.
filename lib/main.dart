@@ -29,6 +29,8 @@ import 'screens/legal.dart';
 import 'screens/add_card.dart';
 import 'screens/rate_stay.dart';
 import 'screens/notifications.dart';
+import 'screens/full_day_search.dart';
+import 'screens/full_day_results.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -85,6 +87,8 @@ class CheckdinApp extends StatelessWidget {
         '/add-card': (_) => const AddCardScreen(),
         '/rate': (_) => const RateStayScreen(),
         '/notifications': (_) => const NotificationsScreen(),
+        '/fullday': (_) => const FullDaySearchScreen(),
+        '/fullday-results': (_) => const FullDayResultsScreen(),
       },
     );
   }

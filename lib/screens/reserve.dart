@@ -111,13 +111,14 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 WhiteCard(
                   child: Column(children: [
                     StayTimeline(
-                      inTime: hourLabel(app.checkInHour),
-                      outTime: hourLabel(app.checkOutHour),
-                      inDate: dateLabel(app.date),
-                      outDate: dateLabel(app.checkOutHour >= 24 ? app.date.add(const Duration(days: 1)) : app.date),
-                      slot: '${app.slot} hrs',
+                      inTime: app.inTimeLabel,
+                      outTime: app.outTimeLabel,
+                      inDate: app.inDateLabel,
+                      outDate: app.outDateLabel,
+                      slot: app.stayLabel,
                     ),
                     const SizedBox(height: 14),
+                    if (!app.fullDay)
                     Row(
                       children: [3, 6, 9, 12].map((hrs) {
                         final p = h.priceFor(hrs);
@@ -152,7 +153,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                         expand: true,
                         icon: Icons.edit_outlined,
                         trailingIcon: false,
-                        onTap: () => popTo(context, '/date')),
+                        onTap: () => popTo(context, app.fullDay ? '/fullday' : '/date')),
                   ]),
                 ),
                 const SectionLabel('Rooms & guests'),
@@ -234,7 +235,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 WhiteCard(
                   padding: const EdgeInsets.fromLTRB(18, 16, 18, 10),
                   child: Column(children: [
-                    billRow('Room price · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} × ${app.slot} hrs', inr(app.gross - app.fees)),
+                    billRow('Room price · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} × ${app.stayLabel}', inr(app.gross - app.fees)),
                     const SizedBox(height: 12),
                     billRow('Taxes & fees', inr(app.fees)),
                     if (app.coupon) ...[const SizedBox(height: 12), billRow('Coupon FIRST40', '−₹40', vColor: C.green)],
@@ -262,7 +263,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                     Text(inr(app.total), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
-                    Text('${app.slot} hrs · ${app.guestsLabel}', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                    Text('${app.stayLabel} · ${app.guestsLabel}', style: const TextStyle(fontSize: 12.5, color: C.muted)),
                   ]),
                 ),
                 PillBtn('Proceed to pay',

@@ -100,7 +100,12 @@ class SearchScreen extends StatelessWidget {
                         options: const ['Hourly stay', 'Full-day stay'],
                         selected: app.fullDay ? 1 : 0,
                         track: const Color(0xFFF0F0EA),
-                        onChanged: (i) => app.set(() => app.fullDay = i == 1),
+                        onChanged: (i) {
+                          if (i == 1) {
+                            app.set(() => app.fullDay = true);
+                            Navigator.pushReplacementNamed(context, '/fullday');
+                          }
+                        },
                       ),
                       const SizedBox(height: 12),
                       if (!app.fullDay)

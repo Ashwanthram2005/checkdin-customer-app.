@@ -116,10 +116,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       ]),
                     ),
                     Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                      Text('${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.slot} hrs',
+                      Text('${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.stayLabel}',
                           style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: C.white)),
                       const SizedBox(height: 3),
-                      Text('${dateLabel(app.date)} · ${hourLabel(app.checkInHour, short: true)}',
+                      Text(app.whenShort,
                           style: const TextStyle(fontSize: 13, color: C.faint)),
                     ]),
                   ]),

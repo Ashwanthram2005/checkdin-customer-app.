@@ -32,7 +32,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
             CircleBtn(icon: Icons.close_rounded, size: 36, bg: C.bg, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(context)),
           ]),
           const SizedBox(height: 16),
-          _billRow('Room price · ${app.slot} hrs', inr(app.gross - app.fees)),
+          _billRow('Room price · ${app.stayLabel}', inr(app.gross - app.fees)),
           const SizedBox(height: 12),
           _billRow('Taxes & fees', inr(app.fees)),
           const SizedBox(height: 14),
@@ -49,7 +49,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
       builder: (context, _) {
         final h = app.hotel;
         final saved = app.saved.contains(h.id);
-        final price = h.priceFor(app.slot);
+        final price = app.unitPrice;
         return Scaffold(
           body: Column(children: [
             Expanded(
@@ -116,11 +116,20 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         key: _keys['Slots'],
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Row(children: [
-                            const Expanded(child: Text('Choose your slot', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
-                            Text('${dateLabel(app.date)} · ${hourLabel(app.checkInHour, short: true)}',
+                            Expanded(child: Text(app.fullDay ? 'Your stay' : 'Choose your slot', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
+                            Text(app.whenShort,
                                 style: const TextStyle(fontSize: 12.5, color: C.muted)),
                           ]),
                           const SizedBox(height: 12),
+                          if (app.fullDay)
+                            StayTimeline(
+                              inTime: app.inTimeLabel,
+                              outTime: app.outTimeLabel,
+                              inDate: app.inDateLabel,
+                              outDate: app.outDateLabel,
+                              slot: app.stayLabel,
+                            )
+                          else
                           Row(
                             children: [3, 6, 9, 12].map((hrs) {
                               final p = h.priceFor(hrs);
@@ -160,7 +169,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                               Text.rich(TextSpan(style: const TextStyle(fontSize: 13, color: Color(0xFF3F3F38)), children: [
                                 const TextSpan(text: 'Check-out at '),
                                 TextSpan(
-                                    text: '${hourLabel(app.checkOutHour)}${app.checkOutHour >= 24 ? ' (next day)' : ''}',
+                                    text: app.fullDay ? '11:00 AM, ${dateLabel(app.outDate)}' : '${hourLabel(app.checkOutHour)}${app.checkOutHour >= 24 ? ' (next day)' : ''}',
                                     style: const TextStyle(fontWeight: FontWeight.w800, color: C.ink)),
                               ])),
                             ]),
@@ -298,7 +307,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                     Text.rich(TextSpan(children: [
                       TextSpan(text: price == null ? 'Full' : inr(price), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
-                      TextSpan(text: ' / ${app.slot} hrs', style: const TextStyle(fontSize: 13, color: C.muted)),
+                      TextSpan(text: app.fullDay ? ' / night' : ' / ${app.slot} hrs', style: const TextStyle(fontSize: 13, color: C.muted)),
                     ])),
                     GestureDetector(
                       onTap: _priceSheet,

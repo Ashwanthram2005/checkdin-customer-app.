@@ -26,7 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
       final on = app.fullDay == forFull;
       return Expanded(
         child: GestureDetector(
-          onTap: () => app.set(() => app.fullDay = forFull),
+          onTap: () {
+            app.set(() => app.fullDay = forFull);
+            if (forFull) Navigator.pushNamed(context, '/fullday');
+          },
           child: Stack(clipBehavior: Clip.none, children: [
             AnimatedContainer(
               duration: const Duration(milliseconds: 160),
@@ -185,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 elevation: 0,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(18),
-                  onTap: () => Navigator.pushNamed(context, '/search'),
+                  onTap: () => Navigator.pushNamed(context, app.fullDay ? '/fullday' : '/search'),
                   child: Container(
                     height: 58,
                     padding: const EdgeInsets.fromLTRB(18, 8, 8, 8),
