@@ -173,6 +173,7 @@ class AppState extends ChangeNotifier {
   MyReview? myReview;
   // logged in with Google (demo)
   bool googleAccount = false;
+  String? photoPath;
   // during the stay
   final String checkinOtp = '4827';
   bool checkedIn = false;
@@ -183,7 +184,12 @@ class AppState extends ChangeNotifier {
   final Set<String> notifyCities = {};
 
   int get stayHours => (fullDay ? nights * 23 : slot) + extraHours;
-  DateTime get stayEnd => (stayStart ?? DateTime.now()).add(Duration(hours: stayHours));
+  /// Scheduled check-in for the current booking.
+  DateTime get scheduledIn {
+    final d = fullDay ? inDate : date;
+    return DateTime(d.year, d.month, d.day, fullDay ? 12 : checkInHour % 24);
+  }
+  DateTime get stayEnd => (stayStart ?? scheduledIn).add(Duration(hours: stayHours));
   /// Price per extra hour (a little cheaper than the slot's hourly rate).
   int get extendRate {
     final p = hotel.priceFor(slot) ?? hotel.prices.whereType<int>().first;
@@ -207,7 +213,7 @@ class AppState extends ChangeNotifier {
   int get earliestHour => isToday ? DateTime.now().hour + 1 : 6;
 
   int get checkInHour => hour ?? earliestHour;
-  int get checkOutHour => checkInHour + slot;
+  int get checkOutHour => checkInHour + slot + extraHours;
 
   int get nights {
     final a = DateTime(inDate.year, inDate.month, inDate.day);
@@ -220,7 +226,7 @@ class AppState extends ChangeNotifier {
   int? get unitPrice => fullDay ? hotel.night : hotel.priceFor(slot);
   String get stayLabel => fullDay ? '$nights ${nights > 1 ? 'nights' : 'night'}' : '$slot hrs';
   String get inTimeLabel => fullDay ? '12:00 PM' : hourLabel(checkInHour);
-  String get outTimeLabel => fullDay ? '11:00 AM' : hourLabel(checkOutHour);
+  String get outTimeLabel => fullDay ? hourLabel(11 + extraHours) : hourLabel(checkOutHour);
   String get inDateLabel => dateLabel(fullDay ? inDate : date);
   String get outDateLabel =>
       dateLabel(fullDay ? outDate : (checkOutHour >= 24 ? date.add(const Duration(days: 1)) : date));

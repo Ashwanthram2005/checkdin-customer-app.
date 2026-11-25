@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../avatar.dart';
 import '../theme.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -53,13 +54,7 @@ class AccountScreen extends StatelessWidget {
             WhiteCard(
               radius: 24,
               child: Row(children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle),
-                  child: Text(app.name.isEmpty ? '?' : app.name[0].toUpperCase(), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
-                ),
+                const Avatar(size: 60),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

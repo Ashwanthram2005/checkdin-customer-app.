@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../avatar.dart';
 import '../theme.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -52,7 +53,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final ok = _changed && _name.text.trim().length > 1 && !_emailBad;
-    final initial = _name.text.trim().isEmpty ? '?' : _name.text.trim()[0].toUpperCase();
     const inputDeco = InputDecoration(border: InputBorder.none, isDense: true, contentPadding: EdgeInsets.only(top: 3));
     const inputStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
     return Scaffold(
@@ -63,16 +63,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(height: 22),
             Center(
               child: GestureDetector(
-                onTap: () => toast(context, 'Photo upload coming soon'),
+                onTap: () async {
+                  await changePhoto(context);
+                  if (mounted) setState(() {});
+                },
                 child: Stack(clipBehavior: Clip.none, children: [
-                  Container(
-                    width: 92,
-                    height: 92,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: C.lime, shape: BoxShape.circle, border: Border.all(color: C.white, width: 5)),
-                    child: Text(initial, style: const TextStyle(fontSize: 38, fontWeight: FontWeight.w800)),
-                  ),
-                  const Positioned(right: -2, bottom: -2, child: CircleBtn(icon: Icons.photo_camera_outlined, size: 32, tooltip: 'Change photo')),
+                  const Avatar(size: 92, border: 5),
+                  Positioned(
+                      right: -2,
+                      bottom: -2,
+                      child: CircleBtn(icon: Icons.photo_camera_outlined, size: 32, tooltip: 'Change photo', onTap: () async {
+                        await changePhoto(context);
+                        if (mounted) setState(() {});
+                      })),
                 ]),
               ),
             ),

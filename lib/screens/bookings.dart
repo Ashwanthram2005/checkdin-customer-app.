@@ -4,6 +4,7 @@ import '../state.dart';
 import '../theme.dart';
 import 'maps.dart';
 import 'cancel_sheet.dart';
+import 'stay.dart';
 
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({super.key});
@@ -131,6 +132,28 @@ class _BookingsScreenState extends State<BookingsScreen> {
               ]),
             ),
           ),
+          if (!app.checkedIn) ...[
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: () async {
+                await showExtendSheet(context);
+                if (mounted) setState(() {});
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(16)),
+                child: Row(children: [
+                  const Icon(Icons.more_time_rounded, size: 20),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(app.extraHours > 0 ? 'Extended · check-out ${app.outTimeLabel}' : 'Need more time? Extend before you arrive',
+                        style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                  ),
+                  const Text('Extend', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
+                ]),
+              ),
+            ),
+          ],
           const SizedBox(height: 10),
           Row(children: [
             Expanded(child: PillBtn('Directions', height: 46, fontSize: 14, icon: Icons.near_me_rounded, trailingIcon: false, onTap: () => openDirections(context, app.hotel))),

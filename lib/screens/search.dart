@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../avatar.dart';
 import '../theme.dart';
 import 'states.dart';
 
@@ -29,14 +30,7 @@ class SearchScreen extends StatelessWidget {
                     const Spacer(),
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(context, '/account'),
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle),
-                        child: Text(app.name.isEmpty ? 'A' : app.name[0].toUpperCase(),
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-                      ),
+                      child: const Avatar(size: 44),
                     ),
                   ]),
                   const SizedBox(height: 20),

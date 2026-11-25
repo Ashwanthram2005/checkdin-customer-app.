@@ -145,7 +145,13 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
     await Future<void>.delayed(const Duration(milliseconds: 2200));
     if (!mounted) return;
     Navigator.of(context).pop();
-    app.set(() => app.bookingCancelled = false);
+    app.set(() {
+      app.bookingCancelled = false;
+      app.checkedIn = false;
+      app.stayStart = null;
+      app.extraHours = 0;
+      app.extraPaid = 0;
+    });
     Navigator.pushNamedAndRemoveUntil(context, '/success', ModalRoute.withName('/home'));
   }
 

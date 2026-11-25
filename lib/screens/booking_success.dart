@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../state.dart';
 import '../theme.dart';
 import '../voucher.dart';
+import 'stay.dart';
 import 'maps.dart';
 import 'cancel_sheet.dart';
 
@@ -11,7 +12,9 @@ class BookingSuccessScreen extends StatelessWidget {
   const BookingSuccessScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => ListenableBuilder(listenable: app, builder: (context, _) => _content(context));
+
+  Widget _content(BuildContext context) {
     final h = app.hotel;
     void home() => goHome(context);
     Widget action(IconData icon, String label, bool lime, VoidCallback onTap) => Expanded(
@@ -117,6 +120,59 @@ class BookingSuccessScreen extends StatelessWidget {
                       ])),
                     ]),
                   ),
+                ]),
+              ),
+              const SizedBox(height: 14),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/checkin'),
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+                  decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(22)),
+                  child: Row(children: [
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        const Text('CHECK-IN OTP', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: C.faint)),
+                        const SizedBox(height: 4),
+                        Row(children: [
+                          for (final d in app.checkinOtp.split(''))
+                            Container(
+                              width: 38,
+                              height: 46,
+                              margin: const EdgeInsets.only(right: 6),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(color: const Color(0xFF2A2A2A), borderRadius: BorderRadius.circular(10)),
+                              child: Text(d, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: C.lime)),
+                            ),
+                        ]),
+                        const SizedBox(height: 6),
+                        const Text('Show this at the front desk', style: TextStyle(fontSize: 12, color: C.faint)),
+                      ]),
+                    ),
+                    const Icon(Icons.chevron_right_rounded, color: C.white),
+                  ]),
+                ),
+              ),
+              const SizedBox(height: 10),
+              WhiteCard(
+                radius: 20,
+                padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+                onTap: () async {
+                  await showExtendSheet(context);
+                },
+                child: Row(children: [
+                  const IconTile(Icons.more_time_rounded, bg: C.lime, size: 40),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(app.extraHours > 0 ? 'Extended by ${app.extraHours} hr${app.extraHours > 1 ? 's' : ''}' : 'Need more time?',
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                      Text(app.extraHours > 0 ? 'New check-out ${app.outTimeLabel} · add more' : 'Extend your stay now, before you check in',
+                          style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                    ]),
+                  ),
+                  PillBtn('Extend', kind: BtnKind.dark, height: 38, fontSize: 13, onTap: () async {
+                    await showExtendSheet(context);
+                  }),
                 ]),
               ),
               const SizedBox(height: 14),

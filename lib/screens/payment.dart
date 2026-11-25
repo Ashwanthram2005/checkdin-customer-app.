@@ -73,6 +73,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
     if (!_willFail) {
       app.set(() {
         app.bookingCancelled = false;
+        app.checkedIn = false;
+        app.stayStart = null;
+        app.extraHours = 0;
+        app.extraPaid = 0;
         app.paidWith = _sel == 'card'
             ? (_useNewCard ? '${cardBrand(_cDigits).isEmpty ? 'Card' : cardBrand(_cDigits)} •••• ${_cDigits.length >= 4 ? _cDigits.substring(_cDigits.length - 4) : ''}' : app.cards[_cardSel].label)
             : _sel == 'netbank'
