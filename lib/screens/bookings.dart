@@ -100,6 +100,12 @@ class _BookingsScreenState extends State<BookingsScreen> {
     ]);
   }
 
+  Future<void> _openRate(_Past b, int stars) async {
+    if (_rating > 0) return;
+    final r = await Navigator.pushNamed(context, '/rate', arguments: {'hotel': b.hotel, 'when': b.when, 'rating': stars});
+    if (r is int && mounted) setState(() => _rating = r);
+  }
+
   Widget _pastCard(_Past b) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
@@ -132,11 +138,20 @@ class _BookingsScreenState extends State<BookingsScreen> {
           ],
           if (b.canRate)
             Row(children: [
-              Expanded(child: Text(_rating > 0 ? 'Thanks for rating!' : 'How was your stay?', style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700))),
+              Expanded(
+                child: GestureDetector(
+                  onTap: _rating > 0 ? null : () => _openRate(b, 0),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(_rating > 0 ? 'Review posted' : 'How was your stay?', style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                    Text(_rating > 0 ? 'Thanks for helping other guests' : 'Rate & write a review',
+                        style: TextStyle(fontSize: 12, color: C.muted, decoration: _rating > 0 ? null : TextDecoration.underline)),
+                  ]),
+                ),
+              ),
               ...List.generate(
                 5,
                 (i) => GestureDetector(
-                  onTap: () => setState(() => _rating = i + 1),
+                  onTap: () => _openRate(b, i + 1),
                   child: Padding(
                     padding: const EdgeInsets.all(3),
                     child: Icon(i < _rating ? Icons.star_rounded : Icons.star_outline_rounded, size: 26, color: i < _rating ? C.gold : C.faint),

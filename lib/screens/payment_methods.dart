@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import 'add_card.dart';
 
 class PaymentMethodsScreen extends StatefulWidget {
   const PaymentMethodsScreen({super.key});
@@ -221,7 +222,13 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
               ),
             const Divider(color: C.line, height: 1),
             _addRow(Icons.credit_card_rounded, 'Credit or debit card', 'Visa, Mastercard, RuPay',
-                onTap: () => setState(() => _items.add(_Saved('Visa •••• 4417', 'Debit card · expires 08/29', 'VISA')))),
+                onTap: () async {
+                  final c = await Navigator.pushNamed(context, '/add-card');
+                  if (c is NewCard && mounted) {
+                    setState(() => _items.add(_Saved('${c.brand} •••• ${c.last4}', 'Card · expires ${c.expiry}', c.brand == 'Mastercard' ? 'MC' : c.brand.toUpperCase())));
+                    toast(context, 'Card saved');
+                  }
+                }),
           ]),
         ),
         const SizedBox(height: 18),
