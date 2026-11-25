@@ -1,0 +1,57 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate Android project files
+        run: |
+          flutter create --platforms=android --org in.checkdin --project-name checkdin .
+          rm -rf test
+          MANIFEST=android/app/src/main/AndroidManifest.xml
+          sed -i 's/android:label="checkdin"/android:label="Checkdin"/' "$MANIFEST"
+          grep -q 'android.permission.INTERNET' "$MANIFEST" || \
+            sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$MANIFEST"
+
+      - name: Install packages
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Rename APK
+        run: cp build/app/outputs/flutter-apk/app-release.apk checkdin.apk
+
+      - name: Upload APK (workflow artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkdin-apk
+          path: checkdin.apk
+
+      - name: Publish APK as a GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Checkdin build ${{ github.run_number }}
+          body: Test build of the Checkdin customer app. Download checkdin.apk below and install it on an Android phone.
+          files: checkdin.apk
