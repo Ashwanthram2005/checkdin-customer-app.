@@ -21,13 +21,13 @@ class Avatar extends StatelessWidget {
       alignment: Alignment.center,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: C.lime,
+        color: C.limeBg,
         shape: BoxShape.circle,
         border: border > 0 ? Border.all(color: C.white, width: border) : null,
       ),
       child: p != null
           ? Image.file(File(p), width: size, height: size, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Text(initial))
-          : Text(initial, style: TextStyle(fontSize: size * 0.41, fontWeight: FontWeight.w800, color: const Color(0xFF111111))),
+          : Text(initial, style: TextStyle(fontSize: size * 0.41, fontWeight: FontWeight.w800, color: C.ink)),
     );
   }
 }
@@ -39,7 +39,7 @@ Future<void> changePhoto(BuildContext context) async {
     backgroundColor: Colors.transparent,
     builder: (ctx) => Container(
       padding: EdgeInsets.fromLTRB(18, 18, 18, 18 + MediaQuery.of(ctx).padding.bottom),
-      decoration: BoxDecoration(color: C.white, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
+      decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
       child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text('Profile photo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: C.ink)),
         const SizedBox(height: 10),

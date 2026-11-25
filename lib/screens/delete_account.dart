@@ -51,10 +51,10 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
     Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
   }
 
-  Widget _point(IconData icon, String text, {Color tile = C.bg}) => Padding(
+  Widget _point(IconData icon, String text, {Color? tile}) => Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          IconTile(icon, bg: tile, size: 34, radius: 10),
+          IconTile(icon, bg: tile ?? C.bg, size: 34, radius: 10),
           const SizedBox(width: 12),
           Expanded(child: Padding(padding: const EdgeInsets.only(top: 6), child: Text(text, style: const TextStyle(fontSize: 13.5, height: 1.45)))),
         ]),
@@ -73,21 +73,21 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               const Text('We\'re sorry to see you go', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.8)),
               const SizedBox(height: 6),
               Text(app.phone.isEmpty ? 'This deletes your Checkdin account.' : 'This deletes the Checkdin account for +91 ${app.phone}.',
-                  style: const TextStyle(fontSize: 14, color: C.muted)),
+                  style: TextStyle(fontSize: 14, color: C.muted)),
               if (_hasUpcoming) ...[
                 const SizedBox(height: 16),
                 Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(16)),
                   child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const Icon(Icons.event_busy_outlined, color: C.red),
+                    Icon(Icons.event_busy_outlined, color: C.red),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         const Text('You have an upcoming stay', style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800)),
                         const SizedBox(height: 3),
                         Text('Finish or cancel your booking at ${app.hotel.name} before deleting your account.',
-                            style: const TextStyle(fontSize: 12.5, color: Color(0xFFA3241A), height: 1.4)),
+                            style: TextStyle(fontSize: 12.5, color: C.tx(Color(0xFFA3241A)), height: 1.4)),
                         const SizedBox(height: 10),
                         PillBtn('Go to My bookings', kind: BtnKind.dark, height: 38, fontSize: 13, onTap: () => Navigator.pushNamed(context, '/bookings')),
                       ]),
@@ -115,7 +115,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     margin: const EdgeInsets.only(bottom: 8),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
                     decoration: BoxDecoration(
-                      color: _reason == r ? C.limeSoft : C.white,
+                      color: _reason == r ? C.limeSoft : C.card,
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(color: _reason == r ? C.ink : C.white, width: 1.5),
                     ),
@@ -125,9 +125,9 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                         width: 22,
                         height: 22,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: _reason == r ? C.ink : C.white, border: Border.all(color: _reason == r ? C.ink : C.border, width: 2)),
+                            shape: BoxShape.circle, color: _reason == r ? C.inkBg : C.card, border: Border.all(color: _reason == r ? C.ink : C.border, width: 2)),
                         child: _reason == r
-                            ? Center(child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)))
+                            ? Center(child: Container(width: 8, height: 8, decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle)))
                             : null,
                       ),
                     ]),
@@ -143,7 +143,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   decoration: InputDecoration(
                     hintText: 'Tell us in a few words',
                     filled: true,
-                    fillColor: C.white,
+                    fillColor: C.card,
                     contentPadding: const EdgeInsets.all(14),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
                   ),
@@ -160,7 +160,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 ]),
               ),
               const SizedBox(height: 14),
-              const Text('Want only some data removed? Write to dpo@checkdin.in. We reply within 30 days.',
+              Text('Want only some data removed? Write to dpo@checkdin.in. We reply within 30 days.',
                   textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2, height: 1.45)),
             ],
           ),
@@ -176,7 +176,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   duration: const Duration(milliseconds: 150),
                   height: 52,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(color: _ok ? C.red : const Color(0xFFEFEFEA), borderRadius: BorderRadius.circular(999)),
+                  decoration: BoxDecoration(color: _ok ? C.red : C.tint(Color(0xFFEFEFEA)), borderRadius: BorderRadius.circular(999)),
                   child: Text(_working ? 'Deleting…' : 'Delete account',
                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: _ok ? C.white : C.muted2)),
                 ),

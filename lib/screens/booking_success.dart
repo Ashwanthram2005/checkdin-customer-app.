@@ -25,7 +25,7 @@ class BookingSuccessScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 12),
               onTap: onTap,
               child: Column(children: [
-                IconTile(icon, bg: lime ? C.lime : C.bg, size: 38, radius: 19),
+                IconTile(icon, bg: lime ? C.limeBg : C.bg, size: 38, radius: 19),
                 const SizedBox(height: 6),
                 Text(label, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700)),
               ]),
@@ -46,19 +46,19 @@ class BookingSuccessScreen extends StatelessWidget {
                 child: Container(
                   width: 92,
                   height: 92,
-                  decoration: BoxDecoration(color: C.lime, shape: BoxShape.circle, border: Border.all(color: C.ink, width: 3)),
-                  child: const Icon(Icons.check_rounded, size: 54, color: C.ink),
+                  decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle, border: Border.all(color: C.ink, width: 3)),
+                  child: Icon(Icons.check_rounded, size: 54, color: C.ink),
                 ),
               ),
               const SizedBox(height: 16),
               const Highlight(before: 'Booking ', marked: 'confirmed.', size: 30, align: TextAlign.center),
               const SizedBox(height: 8),
-              const Text("Your room is ready for you. We've sent the details to your WhatsApp.",
+              Text("Your room is ready for you. We've sent the details to your WhatsApp.",
                   textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: C.muted, height: 1.5)),
               const SizedBox(height: 14),
               Center(
                 child: Material(
-                  color: C.white,
+                  color: C.card,
                   borderRadius: BorderRadius.circular(999),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(999),
@@ -66,7 +66,7 @@ class BookingSuccessScreen extends StatelessWidget {
                       Clipboard.setData(const ClipboardData(text: 'CHK240204'));
                       toast(context, 'Booking ID copied');
                     },
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text('Booking ID ', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: C.muted)),
@@ -92,7 +92,7 @@ class BookingSuccessScreen extends StatelessWidget {
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text(h.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
-                            Text('Deluxe Room · ${h.area}', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                            Text('Deluxe Room · ${h.area}', style: TextStyle(fontSize: 12.5, color: C.muted)),
                           ]),
                         ),
                         const Tag('Paid'),
@@ -107,15 +107,15 @@ class BookingSuccessScreen extends StatelessWidget {
                       ),
                     ]),
                   ),
-                  const Divider(color: C.line, height: 1, indent: 18, endIndent: 18),
+                  Divider(color: C.line, height: 1, indent: 18, endIndent: 18),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(18, 12, 18, 16),
                     child: Row(children: [
                       Expanded(
                           child: Text('${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.guestsLabel}',
-                              style: const TextStyle(fontSize: 13, color: C.muted))),
+                              style: TextStyle(fontSize: 13, color: C.muted))),
                       Text.rich(TextSpan(children: [
-                        TextSpan(text: 'Paid via ${app.paidWith} ', style: const TextStyle(fontSize: 13, color: C.muted)),
+                        TextSpan(text: 'Paid via ${app.paidWith} ', style: TextStyle(fontSize: 13, color: C.muted)),
                         TextSpan(text: inr(app.total), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
                       ])),
                     ]),
@@ -127,11 +127,11 @@ class BookingSuccessScreen extends StatelessWidget {
                 onTap: () => Navigator.pushNamed(context, '/checkin'),
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
-                  decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(22)),
+                  decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(22)),
                   child: Row(children: [
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        const Text('CHECK-IN OTP', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: C.faint)),
+                        Text('CHECK-IN OTP', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: C.faint)),
                         const SizedBox(height: 4),
                         Row(children: [
                           for (final d in app.checkinOtp.split(''))
@@ -141,14 +141,14 @@ class BookingSuccessScreen extends StatelessWidget {
                               margin: const EdgeInsets.only(right: 6),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(color: const Color(0xFF2A2A2A), borderRadius: BorderRadius.circular(10)),
-                              child: Text(d, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: C.lime)),
+                              child: Text(d, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: C.lime)),
                             ),
                         ]),
                         const SizedBox(height: 6),
-                        const Text('Show this at the front desk', style: TextStyle(fontSize: 12, color: C.faint)),
+                        Text('Show this at the front desk', style: TextStyle(fontSize: 12, color: C.faint)),
                       ]),
                     ),
-                    const Icon(Icons.chevron_right_rounded, color: C.white),
+                    Icon(Icons.chevron_right_rounded, color: C.white),
                   ]),
                 ),
               ),
@@ -160,14 +160,14 @@ class BookingSuccessScreen extends StatelessWidget {
                   await showExtendSheet(context);
                 },
                 child: Row(children: [
-                  const IconTile(Icons.more_time_rounded, bg: C.lime, size: 40),
+                  IconTile(Icons.more_time_rounded, bg: C.limeBg, size: 40),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text(app.extraHours > 0 ? 'Extended by ${app.extraHours} hr${app.extraHours > 1 ? 's' : ''}' : 'Need more time?',
                           style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                       Text(app.extraHours > 0 ? 'New check-out ${app.outTimeLabel} · add more' : 'Extend your stay now, before you check in',
-                          style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                          style: TextStyle(fontSize: 12.5, color: C.muted)),
                     ]),
                   ),
                   PillBtn('Extend', kind: BtnKind.dark, height: 38, fontSize: 13, onTap: () async {
@@ -189,7 +189,7 @@ class BookingSuccessScreen extends StatelessWidget {
                     final done = await showCancelBookingSheet(context);
                     if (done && context.mounted) Navigator.pushNamedAndRemoveUntil(context, '/bookings', ModalRoute.withName('/home'));
                   },
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 6),
                     child: Text.rich(TextSpan(style: TextStyle(fontSize: 13), children: [
                       TextSpan(text: 'Need to cancel? ', style: TextStyle(color: C.muted)),
@@ -200,17 +200,17 @@ class BookingSuccessScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               WhiteCard(
-                color: const Color(0xFFFFF6DA),
+                color: C.tint(Color(0xFFFFF6DA)),
                 radius: 20,
-                child: const Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  IconTile(Icons.badge_outlined, bg: C.white, size: 34, radius: 10),
+                child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  IconTile(Icons.badge_outlined, bg: C.card, size: 34, radius: 10),
                   SizedBox(width: 12),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text('Before you go', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
                       SizedBox(height: 3),
                       Text('Carry an original photo ID for every guest. Show your Booking ID at the front desk.',
-                          style: TextStyle(fontSize: 12.5, color: Color(0xFF4A4030), height: 1.45)),
+                          style: TextStyle(fontSize: 12.5, color: C.tx(Color(0xFF4A4030)), height: 1.45)),
                     ]),
                   ),
                 ]),

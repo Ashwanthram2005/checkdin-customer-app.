@@ -49,28 +49,28 @@ class _ReviewCard extends StatelessWidget {
           width: 36,
           height: 36,
           alignment: Alignment.center,
-          decoration: BoxDecoration(color: r.stay == 'Your stay' ? C.lime : C.bg, shape: BoxShape.circle),
+          decoration: BoxDecoration(color: r.stay == 'Your stay' ? C.limeBg : C.bg, shape: BoxShape.circle),
           child: Icon(r.name.startsWith('Guest') || r.name.contains('anonymous') ? Icons.person_outline_rounded : Icons.person_rounded, size: 20),
         ),
         const SizedBox(width: 10),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(r.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-            Text('${r.stay} · ${r.when}', style: const TextStyle(fontSize: 12, color: C.muted)),
+            Text('${r.stay} · ${r.when}', style: TextStyle(fontSize: 12, color: C.muted)),
           ]),
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(color: r.rating >= 4 ? C.limeSoft : C.bg, borderRadius: BorderRadius.circular(8)),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            const Icon(Icons.star_rounded, size: 14, color: C.gold),
+            Icon(Icons.star_rounded, size: 14, color: C.gold),
             const SizedBox(width: 2),
             Text('${r.rating}', style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800)),
           ]),
         ),
       ]),
       const SizedBox(height: 10),
-      Text(r.text, style: const TextStyle(fontSize: 13.5, color: Color(0xFF3F3F38), height: 1.5)),
+      Text(r.text, style: TextStyle(fontSize: 13.5, color: C.tx(Color(0xFF3F3F38)), height: 1.5)),
       if (r.tags.isNotEmpty) ...[
         const SizedBox(height: 10),
         Wrap(spacing: 6, runSpacing: 6, children: [
@@ -90,7 +90,7 @@ class _ReviewCard extends StatelessWidget {
               width: 64,
               height: 64,
               margin: const EdgeInsets.only(right: 6),
-              decoration: BoxDecoration(color: i.isEven ? const Color(0xFFE6DDD0) : const Color(0xFFD6E0E6), borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(color: i.isEven ? C.tint(Color(0xFFE6DDD0)) : C.tint(Color(0xFFD6E0E6)), borderRadius: BorderRadius.circular(12)),
               child: const Icon(Icons.image_outlined, color: Color(0xFF8A8478)),
             ),
         ]),
@@ -104,7 +104,7 @@ class _ReviewCard extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const Text('Reply from the hotel', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
             const SizedBox(height: 3),
-            Text(r.reply, style: const TextStyle(fontSize: 12.5, color: C.muted, height: 1.45)),
+            Text(r.reply, style: TextStyle(fontSize: 12.5, color: C.muted, height: 1.45)),
           ]),
         ),
       ],
@@ -120,7 +120,7 @@ class ReviewsPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final list = _forHotel();
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      for (final r in list.take(2)) ...[const Divider(color: C.line, height: 24), _ReviewCard(r, flat: true)],
+      for (final r in list.take(2)) ...[Divider(color: C.line, height: 24), _ReviewCard(r, flat: true)],
       const SizedBox(height: 14),
       PillBtn('See all ${app.hotel.reviews + (list.length - _sample.length)} reviews',
           kind: BtnKind.soft, height: 44, fontSize: 14, expand: true, onTap: () => Navigator.pushNamed(context, '/reviews')),
@@ -173,7 +173,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                     children: List.generate(
                         5, (i) => Icon(Icons.star_rounded, size: 16, color: i < double.parse(h.rating).round() ? C.gold : const Color(0xFFE2E2DA)))),
                 const SizedBox(height: 4),
-                Text('${h.reviews} verified stays', style: const TextStyle(fontSize: 12, color: C.muted)),
+                Text('${h.reviews} verified stays', style: TextStyle(fontSize: 12, color: C.muted)),
               ]),
               const SizedBox(width: 20),
               Expanded(
@@ -191,7 +191,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                               value: [0.62, 0.24, 0.09, 0.03, 0.02][k],
                               minHeight: 7,
                               backgroundColor: C.line,
-                              valueColor: const AlwaysStoppedAnimation(C.ink),
+                              valueColor: AlwaysStoppedAnimation(C.ink),
                             ),
                           ),
                         ),
@@ -215,7 +215,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: _f == f ? C.ink : C.white,
+                        color: _f == f ? C.inkBg : C.card,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(color: _f == f ? C.ink : C.border, width: 1.5),
                       ),
@@ -227,13 +227,13 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           ),
           const SizedBox(height: 14),
           if (list.isEmpty)
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 30),
               child: Center(child: Text('No reviews match this filter yet', style: TextStyle(color: C.muted))),
             ),
           for (final r in list) Padding(padding: const EdgeInsets.only(bottom: 10), child: _ReviewCard(r)),
           const SizedBox(height: 6),
-          const Text('Only guests who completed a stay through Checkdin can review.',
+          Text('Only guests who completed a stay through Checkdin can review.',
               textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
         ],
       ),

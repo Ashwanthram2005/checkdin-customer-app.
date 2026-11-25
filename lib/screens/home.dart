@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
           Expanded(child: Text(t, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.4))),
           if (link != null)
-            GestureDetector(onTap: onLink, child: Text(link, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted))),
+            GestureDetector(onTap: onLink, child: Text(link, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted))),
         ]),
       );
 
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               duration: const Duration(milliseconds: 160),
               height: 64,
               decoration: BoxDecoration(
-                color: on ? C.lime : C.white,
+                color: on ? C.limeBg : C.card,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: on ? C.lime : C.border, width: 1.5),
               ),
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 6),
       padding: const EdgeInsets.all(20),
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(color: lime ? C.lime : C.ink, borderRadius: BorderRadius.circular(24)),
+      decoration: BoxDecoration(color: lime ? C.limeBg : C.inkBg, borderRadius: BorderRadius.circular(24)),
       child: Stack(clipBehavior: Clip.none, children: [
         Positioned(
           right: -60,
@@ -99,8 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 92,
                 height: 60,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(12)),
-                child: const Text('25%', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: C.lime)),
+                decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(12)),
+                child: Text('25%', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: C.lime)),
               ),
             ),
           ),
@@ -115,9 +115,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const Spacer(),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(color: lime ? C.white : C.lime, borderRadius: BorderRadius.circular(999)),
+              decoration: BoxDecoration(color: lime ? C.card : C.limeBg, borderRadius: BorderRadius.circular(999)),
               child: Text(lime ? 'CODE · NEWSTAY' : 'CODE · BACK8',
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 0.8, color: C.ink)),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 0.8, color: C.ink)),
             ),
           ]),
         ),
@@ -171,14 +171,14 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Hi ${app.name.isEmpty ? 'there' : app.name},', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: C.muted)),
+              Text('Hi ${app.name.isEmpty ? 'there' : app.name},', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: C.muted)),
               const SizedBox(height: 4),
               const Highlight(before: 'Need a room for ', marked: 'a few hours?', size: 28, height: 1.2),
               const SizedBox(height: 18),
               _stayToggle(app.fullDay),
               const SizedBox(height: 14),
               Material(
-                color: C.white,
+                color: C.card,
                 borderRadius: BorderRadius.circular(18),
                 elevation: 0,
                 child: InkWell(
@@ -196,13 +196,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(app.fullDay ? 'Search full-day hotels…' : 'Search hourly hotels…',
-                            style: const TextStyle(fontSize: 15.5, color: C.muted)),
+                            style: TextStyle(fontSize: 15.5, color: C.muted)),
                       ),
                       Container(
                         width: 42,
                         height: 42,
-                        decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(14)),
-                        child: const Icon(Icons.arrow_forward_rounded, color: C.lime, size: 20),
+                        decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(14)),
+                        child: Icon(Icons.arrow_forward_rounded, color: C.lime, size: 20),
                       ),
                     ]),
                   ),
@@ -214,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
               child: Material(
-                color: C.ink,
+                color: C.inkBg,
                 borderRadius: BorderRadius.circular(20),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
@@ -225,18 +225,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       Container(
                         width: 42,
                         height: 42,
-                        decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(14)),
+                        decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(14)),
                         child: const Icon(Icons.hotel_rounded),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('Staying at ${app.hotel.name}', style: const TextStyle(color: C.white, fontWeight: FontWeight.w800, fontSize: 14.5)),
+                          Text('Staying at ${app.hotel.name}', style: TextStyle(color: C.white, fontWeight: FontWeight.w800, fontSize: 14.5)),
                           const SizedBox(height: 2),
-                          Text('Check-out ${hourLabel(app.stayEnd.hour)} · tap to extend', style: const TextStyle(color: C.faint, fontSize: 12.5)),
+                          Text('Check-out ${hourLabel(app.stayEnd.hour)} · tap to extend', style: TextStyle(color: C.faint, fontSize: 12.5)),
                         ]),
                       ),
-                      const Icon(Icons.chevron_right_rounded, color: C.lime),
+                      Icon(Icons.chevron_right_rounded, color: C.lime),
                     ]),
                   ),
                 ),
@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(width: 10),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
                     Text(recent[i][0] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-                    Text(recent[i][1] as String, style: const TextStyle(fontSize: 12, color: C.muted)),
+                    Text(recent[i][1] as String, style: TextStyle(fontSize: 12, color: C.muted)),
                   ]),
                 ]),
               ),
@@ -291,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 2.5),
                 width: i == _offer ? 18 : 6,
                 height: 6,
-                decoration: BoxDecoration(color: i == _offer ? C.ink : const Color(0xFFCFCFC7), borderRadius: BorderRadius.circular(999)),
+                decoration: BoxDecoration(color: i == _offer ? C.inkBg : C.tint(Color(0xFFCFCFC7)), borderRadius: BorderRadius.circular(999)),
               ),
             ),
           ),
@@ -318,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const IconTile(Icons.north_east_rounded, size: 26, radius: 13),
                     ]),
                     const Spacer(),
-                    Text(areaInfo[i][1], style: const TextStyle(fontSize: 12, color: C.muted)),
+                    Text(areaInfo[i][1], style: TextStyle(fontSize: 12, color: C.muted)),
                     Text('from ${areaInfo[i][2]}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                   ]),
                 ),
@@ -338,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return SizedBox(
                   width: 230,
                   child: Material(
-                    color: C.white,
+                    color: C.card,
                     borderRadius: BorderRadius.circular(22),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
@@ -355,11 +355,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text(h.name, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                            Text('${h.area} · ${h.distanceKm} km', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                            Text('${h.area} · ${h.distanceKm} km', style: TextStyle(fontSize: 12.5, color: C.muted)),
                             const SizedBox(height: 8),
                             Text.rich(TextSpan(children: [
                               TextSpan(text: inr(h.prices.first ?? 0), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                              const TextSpan(text: ' / 3 hrs', style: TextStyle(fontSize: 12, color: C.muted)),
+                              TextSpan(text: ' / 3 hrs', style: TextStyle(fontSize: 12, color: C.muted)),
                             ])),
                           ]),
                         ),
@@ -376,8 +376,8 @@ class _HomeScreenState extends State<HomeScreen> {
               radius: 20,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               onTap: () => Navigator.pushNamed(context, '/refer'),
-              child: const Row(children: [
-                IconTile(Icons.card_giftcard_rounded, bg: Color(0xFFFFF1C7)),
+              child: Row(children: [
+                IconTile(Icons.card_giftcard_rounded, bg: C.tint(Color(0xFFFFF1C7))),
                 SizedBox(width: 12),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

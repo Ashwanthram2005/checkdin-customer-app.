@@ -55,15 +55,15 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
           const TitleBar(title: 'Checkdin credits'),
           const SizedBox(height: 18),
           WhiteCard(
-            color: C.ink,
+            color: C.inkBg,
             radius: 24,
             padding: const EdgeInsets.all(20),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text('AVAILABLE BALANCE', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: C.faint)),
+              Text('AVAILABLE BALANCE', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: C.faint)),
               const SizedBox(height: 6),
-              const Text('₹120', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, letterSpacing: -1.5, color: C.lime, height: 1)),
+              Text('₹120', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, letterSpacing: -1.5, color: C.lime, height: 1)),
               const SizedBox(height: 6),
-              const Text('Used automatically at checkout', style: TextStyle(fontSize: 12.5, color: C.faint)),
+              Text('Used automatically at checkout', style: TextStyle(fontSize: 12.5, color: C.faint)),
               const SizedBox(height: 16),
               Row(children: [
                 Expanded(child: _stat('Earned', inr(earned))),
@@ -76,7 +76,7 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: const Color(0xFFFFF4D6), borderRadius: BorderRadius.circular(14)),
+            decoration: BoxDecoration(color: C.tint(Color(0xFFFFF4D6)), borderRadius: BorderRadius.circular(14)),
             child: const Row(children: [
               Icon(Icons.schedule_rounded, size: 18, color: Color(0xFF8A6A00)),
               SizedBox(width: 8),
@@ -89,7 +89,7 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
           const SizedBox(height: 16),
           SegmentPill(options: const ['All', 'Earned', 'Used'], selected: _filter, onChanged: (i) => setState(() => _filter = i)),
           if (shown.isEmpty)
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 40),
               child: Center(child: Text('Nothing here yet', style: TextStyle(fontSize: 14, color: C.muted))),
             ),
@@ -105,7 +105,7 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
                     final plus = t.amount > 0;
                     return Container(
                       padding: const EdgeInsets.symmetric(vertical: 13),
-                      decoration: BoxDecoration(border: i.key == inMonth - 1 ? null : const Border(bottom: BorderSide(color: C.line))),
+                      decoration: BoxDecoration(border: i.key == inMonth - 1 ? null : Border(bottom: BorderSide(color: C.line))),
                       child: Row(children: [
                         IconTile(t.icon, bg: plus ? C.limeSoft : (t.expired ? const Color(0xFFFFF4D6) : C.bg), size: 40),
                         const SizedBox(width: 12),
@@ -113,7 +113,7 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text(t.title, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
                             const SizedBox(height: 2),
-                            Text('${t.sub} · ${t.date}', style: const TextStyle(fontSize: 12, color: C.muted)),
+                            Text('${t.sub} · ${t.date}', style: TextStyle(fontSize: 12, color: C.muted)),
                           ]),
                         ),
                         const SizedBox(width: 8),
@@ -121,7 +121,7 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
                           Text('${plus ? '+' : '−'}${inr(t.amount.abs())}',
                               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: plus ? C.green : (t.expired ? const Color(0xFF8A6A00) : C.ink))),
                           const SizedBox(height: 2),
-                          Text('Bal ${inr(after[i.value])}', style: const TextStyle(fontSize: 11.5, color: C.muted2)),
+                          Text('Bal ${inr(after[i.value])}', style: TextStyle(fontSize: 11.5, color: C.muted2)),
                         ]),
                       ]),
                     );
@@ -146,9 +146,9 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
   }
 
   Widget _stat(String k, String v) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(k, style: const TextStyle(fontSize: 12, color: C.faint)),
+        Text(k, style: TextStyle(fontSize: 12, color: C.faint)),
         const SizedBox(height: 2),
-        Text(v, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: C.white)),
+        Text(v, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: C.white)),
       ]);
 }
 
@@ -160,7 +160,7 @@ class _HowRow extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.only(bottom: last ? 0 : 10),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Padding(padding: EdgeInsets.only(top: 1), child: Icon(Icons.check_circle_rounded, size: 18, color: C.green)),
+          Padding(padding: EdgeInsets.only(top: 1), child: Icon(Icons.check_circle_rounded, size: 18, color: C.green)),
           const SizedBox(width: 10),
           Expanded(child: Text(text, style: const TextStyle(fontSize: 13.5, height: 1.45))),
         ]),

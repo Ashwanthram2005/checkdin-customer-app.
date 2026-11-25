@@ -62,7 +62,7 @@ class _LegalScreenState extends State<LegalScreen> {
             height: 40,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: on ? C.white : Colors.transparent,
+              color: on ? C.card : Colors.transparent,
               borderRadius: BorderRadius.circular(999),
               boxShadow: on ? kShadow : null,
             ),
@@ -99,19 +99,19 @@ class _LegalScreenState extends State<LegalScreen> {
           Text(_terms ? 'Terms of use' : 'Privacy policy',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.7)),
           const SizedBox(height: 4),
-          Text(_terms ? 'Last updated 25 Nov 2026 · Draft' : 'From checkdin.in', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+          Text(_terms ? 'Last updated 25 Nov 2026 · Draft' : 'From checkdin.in', style: TextStyle(fontSize: 12.5, color: C.muted)),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(20)),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text('IN SHORT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1, color: C.limeInk)),
+              Text('IN SHORT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1, color: C.limeInk)),
               const SizedBox(height: 10),
               for (final s in summary)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const Padding(padding: EdgeInsets.only(top: 2), child: Icon(Icons.check_rounded, size: 16, color: C.green)),
+                    Padding(padding: EdgeInsets.only(top: 2), child: Icon(Icons.check_rounded, size: 16, color: C.green)),
                     const SizedBox(width: 8),
                     Expanded(child: Text(s, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, height: 1.45))),
                   ]),
@@ -125,7 +125,7 @@ class _LegalScreenState extends State<LegalScreen> {
               for (var i = 0; i < sections.length; i++)
                 Container(
                   decoration: BoxDecoration(
-                    border: i == sections.length - 1 ? null : const Border(bottom: BorderSide(color: C.line)),
+                    border: i == sections.length - 1 ? null : Border(bottom: BorderSide(color: C.line)),
                   ),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     InkWell(
@@ -136,7 +136,7 @@ class _LegalScreenState extends State<LegalScreen> {
                           SizedBox(
                             width: 28,
                             child: Text((i + 1).toString().padLeft(2, '0'),
-                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: C.faint)),
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: C.faint)),
                           ),
                           Expanded(child: Text(sections[i][0], style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700))),
                           AnimatedRotation(
@@ -150,7 +150,7 @@ class _LegalScreenState extends State<LegalScreen> {
                     if (_open == i)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(28, 0, 0, 15),
-                        child: Text(sections[i][1], style: const TextStyle(fontSize: 13.5, color: Color(0xFF3F3F38), height: 1.6)),
+                        child: Text(sections[i][1], style: TextStyle(fontSize: 13.5, color: C.tx(Color(0xFF3F3F38)), height: 1.6)),
                       ),
                   ]),
                 ),
@@ -159,7 +159,7 @@ class _LegalScreenState extends State<LegalScreen> {
           const SizedBox(height: 14),
           WhiteCard(
             onTap: () => Navigator.pushNamed(context, '/help'),
-            child: const Row(children: [
+            child: Row(children: [
               IconTile(Icons.mail_outline_rounded, size: 38),
               SizedBox(width: 12),
               Expanded(

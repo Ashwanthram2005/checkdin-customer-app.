@@ -34,7 +34,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
             height: 36,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: plus ? (enabled ? C.lime : C.line) : C.white,
+              color: plus ? (enabled ? C.lime : C.line) : C.card,
               shape: BoxShape.circle,
               border: plus ? null : Border.all(color: enabled ? const Color(0xFFDADAD2) : C.line, width: 1.5),
             ),
@@ -43,12 +43,12 @@ class _ReserveScreenState extends State<ReserveScreen> {
         );
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(border: last ? null : const Border(bottom: BorderSide(color: C.line))),
+      decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
       child: Row(children: [
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(label, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-            Text(hint, style: const TextStyle(fontSize: 12, color: C.muted2)),
+            Text(hint, style: TextStyle(fontSize: 12, color: C.muted2)),
           ]),
         ),
         btn('−', v > min, () => set(v - 1), false),
@@ -60,14 +60,14 @@ class _ReserveScreenState extends State<ReserveScreen> {
 
   Widget _switchRow(IconData icon, String title, String sub, bool v, ValueChanged<bool> on, {bool last = false}) => Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(border: last ? null : const Border(bottom: BorderSide(color: C.line))),
+        decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
         child: Row(children: [
           Icon(icon, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(title, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-              Text(sub, style: const TextStyle(fontSize: 12, color: C.muted2)),
+              Text(sub, style: TextStyle(fontSize: 12, color: C.muted2)),
             ]),
           ),
           BrandSwitch(value: v, onChanged: on),
@@ -84,9 +84,9 @@ class _ReserveScreenState extends State<ReserveScreen> {
           body: Column(children: [
             SheetHeader(
               child: Row(children: [
-                const BackBtn(bg: C.bg, shadow: false),
+                BackBtn(bg: C.bg, shadow: false),
                 const SizedBox(width: 12),
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text('Review & reserve', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
                   Text('One last check before you pay', style: TextStyle(fontSize: 12.5, color: C.muted)),
                 ]),
@@ -104,7 +104,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                         RatingBadge(h.rating),
                         const SizedBox(height: 6),
                         Text(h.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                        Text('Deluxe Room · ${h.area}', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                        Text('Deluxe Room · ${h.area}', style: TextStyle(fontSize: 12.5, color: C.muted)),
                       ]),
                     ),
                   ]),
@@ -133,7 +133,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                               child: Container(
                                 height: 54,
                                 decoration: BoxDecoration(
-                                  color: on ? C.lime : (p == null ? C.bg : C.white),
+                                  color: on ? C.limeBg : (p == null ? C.bg : C.white),
                                   borderRadius: BorderRadius.circular(14),
                                   border: Border.all(color: on ? C.lime : C.border, width: 1.5),
                                 ),
@@ -183,10 +183,10 @@ class _ReserveScreenState extends State<ReserveScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                       decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(12)),
-                      child: const Row(children: [
+                      child: Row(children: [
                         Icon(Icons.badge_outlined, size: 18),
                         SizedBox(width: 8),
-                        Expanded(child: Text('Every guest needs an original photo ID at check-in.', style: TextStyle(fontSize: 12.5, color: Color(0xFF3F3F38)))),
+                        Expanded(child: Text('Every guest needs an original photo ID at check-in.', style: TextStyle(fontSize: 12.5, color: C.tx(Color(0xFF3F3F38))))),
                       ]),
                     ),
                   ]),
@@ -216,17 +216,17 @@ class _ReserveScreenState extends State<ReserveScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                     decoration: BoxDecoration(
-                      color: app.coupon ? const Color(0xFFF6FBE6) : C.white,
+                      color: app.coupon ? C.tint(Color(0xFFF6FBE6)) : C.card,
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(color: app.coupon ? C.green : C.ink, width: 1.5),
                     ),
                     child: Row(children: [
-                      const IconTile(Icons.percent_rounded, bg: C.lime, size: 36, radius: 10),
+                      IconTile(Icons.percent_rounded, bg: C.limeBg, size: 36, radius: 10),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text(app.coupon ? '${app.couponCode} applied' : 'Apply coupon', style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-                          Text(app.coupon ? (couponProblem(app.couponCode!) ?? couponSaving(app.couponCode!)) : 'See offers for this stay', style: const TextStyle(fontSize: 12, color: C.muted)),
+                          Text(app.coupon ? (couponProblem(app.couponCode!) ?? couponSaving(app.couponCode!)) : 'See offers for this stay', style: TextStyle(fontSize: 12, color: C.muted)),
                         ]),
                       ),
                       Text(app.coupon ? 'Remove' : 'View', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
@@ -254,7 +254,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                         onTap: () => l == 'Help'
                             ? Navigator.pushNamed(context, '/help')
                             : Navigator.pushNamed(context, '/legal', arguments: l == 'Privacy' ? 'privacy' : 'terms'),
-                        child: Text(l, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: C.muted, decoration: TextDecoration.underline)),
+                        child: Text(l, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: C.muted, decoration: TextDecoration.underline)),
                       ),
                     ),
                 ]),
@@ -265,7 +265,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                     Text(inr(app.total), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
-                    Text('${app.stayLabel} · ${app.guestsLabel}', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                    Text('${app.stayLabel} · ${app.guestsLabel}', style: TextStyle(fontSize: 12.5, color: C.muted)),
                   ]),
                 ),
                 PillBtn('Proceed to pay',

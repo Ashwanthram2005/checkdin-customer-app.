@@ -66,7 +66,7 @@ class _FilterSheetState extends State<FilterSheet> {
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
-            color: on ? C.lime : C.white,
+            color: on ? C.limeBg : C.card,
             borderRadius: BorderRadius.circular(999),
             border: Border.all(color: on ? C.lime : C.border, width: 1.5),
           ),
@@ -103,7 +103,7 @@ class _FilterSheetState extends State<FilterSheet> {
     final maxH = MediaQuery.of(context).size.height * 0.88;
     return Container(
       constraints: BoxConstraints(maxHeight: maxH),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: C.bg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
@@ -118,7 +118,7 @@ class _FilterSheetState extends State<FilterSheet> {
                 const Text('Filters & sort', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 2),
                 Text(n == 0 ? 'No filters applied' : '$n ${n == 1 ? 'filter' : 'filters'} applied',
-                    style: const TextStyle(fontSize: 13, color: C.muted)),
+                    style: TextStyle(fontSize: 13, color: C.muted)),
               ]),
             ),
             CircleBtn(icon: Icons.close_rounded, size: 40, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(context)),
@@ -139,7 +139,7 @@ class _FilterSheetState extends State<FilterSheet> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 13),
                         decoration: BoxDecoration(
-                          border: i == _sorts.length - 1 ? null : const Border(bottom: BorderSide(color: C.line)),
+                          border: i == _sorts.length - 1 ? null : Border(bottom: BorderSide(color: C.line)),
                         ),
                         child: Row(children: [
                           Expanded(
@@ -154,13 +154,13 @@ class _FilterSheetState extends State<FilterSheet> {
                             height: 22,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Filters.sort == _sorts[i] ? C.ink : C.white,
+                              color: Filters.sort == _sorts[i] ? C.inkBg : C.card,
                               border: Border.all(color: Filters.sort == _sorts[i] ? C.ink : C.border, width: 2),
                             ),
                             child: Filters.sort == _sorts[i]
                                 ? Center(
                                     child: Container(
-                                        width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)))
+                                        width: 8, height: 8, decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle)))
                                 : null,
                           ),
                         ]),

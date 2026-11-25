@@ -18,9 +18,9 @@ class DateSelectScreen extends StatelessWidget {
           body: Column(children: [
             SheetHeader(
               child: Row(children: [
-                const BackBtn(bg: C.bg, shadow: false),
+                BackBtn(bg: C.bg, shadow: false),
                 const SizedBox(width: 12),
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text('Check-in date', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
                   SizedBox(height: 1),
                   Text('Step 1 of 2', style: TextStyle(fontSize: 12.5, color: C.muted)),
@@ -71,7 +71,7 @@ class DateSelectScreen extends StatelessWidget {
                                     height: 40,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: on ? C.lime : Colors.transparent,
+                                      color: on ? C.limeBg : Colors.transparent,
                                       shape: BoxShape.circle,
                                       border: isToday && !on ? Border.all(color: C.ink, width: 1.5) : null,
                                     ),
@@ -95,7 +95,7 @@ class DateSelectScreen extends StatelessWidget {
               child: Row(children: [
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                    Text('${app.place ?? 'Chennai'} · ${app.slot}-hour stay', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                    Text('${app.place ?? 'Chennai'} · ${app.slot}-hour stay', style: TextStyle(fontSize: 12.5, color: C.muted)),
                     const SizedBox(height: 2),
                     Text('${dateLabel(sel)}${sel == today ? ' · Today' : ''}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                   ]),

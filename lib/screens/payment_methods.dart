@@ -45,7 +45,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 14),
           child: Row(children: [
-            IconTile(icon, bg: rec ? C.lime : C.bg, size: 44),
+            IconTile(icon, bg: rec ? C.limeBg : C.bg, size: 44),
             const SizedBox(width: 12),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -55,13 +55,13 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                      decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(6)),
-                      child: const Text('RECOMMENDED', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: C.lime, letterSpacing: 0.5)),
+                      decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(6)),
+                      child: Text('RECOMMENDED', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: C.lime, letterSpacing: 0.5)),
                     ),
                   ],
                 ]),
                 const SizedBox(height: 2),
-                Text(sub, style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                Text(sub, style: TextStyle(fontSize: 12.5, color: C.muted)),
               ]),
             ),
             AnimatedRotation(
@@ -110,7 +110,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                   top: 4,
                   child: Transform.rotate(
                     angle: -9 * math.pi / 180,
-                    child: Container(width: 200, height: 124, decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(18))),
+                    child: Container(width: 200, height: 124, decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(18))),
                   ),
                 ),
                 Positioned(
@@ -121,18 +121,18 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     height: 128,
                     padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
                     decoration: BoxDecoration(
-                      color: C.ink,
+                      color: C.inkBg,
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: const [BoxShadow(color: Color(0x40111111), blurRadius: 40, offset: Offset(0, 18))],
                     ),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       Row(children: [
-                        Container(width: 34, height: 24, decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(5))),
+                        Container(width: 34, height: 24, decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(5))),
                         const Spacer(),
-                        const Icon(Icons.contactless_outlined, color: C.white, size: 22),
+                        Icon(Icons.contactless_outlined, color: C.white, size: 22),
                       ]),
-                      const Text('•••• •••• ••••', style: TextStyle(color: C.white, fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 3)),
-                      const Text('PAY IN ONE TAP', style: TextStyle(color: C.faint, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 1.2)),
+                      Text('•••• •••• ••••', style: TextStyle(color: C.white, fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 3)),
+                      Text('PAY IN ONE TAP', style: TextStyle(color: C.faint, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 1.2)),
                     ]),
                   ),
                 ),
@@ -142,7 +142,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
           const SizedBox(height: 22),
           const Highlight(before: 'Book ', marked: 'faster', after: ' next time.', size: 26, align: TextAlign.center),
           const SizedBox(height: 8),
-          const Text('You have no saved payment methods yet. Add one and skip the typing at checkout.',
+          Text('You have no saved payment methods yet. Add one and skip the typing at checkout.',
               textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: C.muted, height: 1.5)),
         ] else ...[
           const SectionLabel('Saved'),
@@ -158,7 +158,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     width: 44,
                     height: 44,
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(color: i == 0 ? C.lime : C.bg, borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(color: i == 0 ? C.limeBg : C.bg, borderRadius: BorderRadius.circular(12)),
                     child: Text(_items[i].mark, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                   ),
                   const SizedBox(width: 12),
@@ -170,12 +170,12 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                           const SizedBox(width: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                            decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(6)),
-                            child: const Text('DEFAULT', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: C.lime)),
+                            decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(6)),
+                            child: Text('DEFAULT', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: C.lime)),
                           ),
                         ],
                       ]),
-                      Text(_items[i].kind, style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                      Text(_items[i].kind, style: TextStyle(fontSize: 12.5, color: C.muted)),
                     ]),
                   ),
                   CircleBtn(
@@ -232,10 +232,10 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                             : null),
                   ]),
                   const SizedBox(height: 6),
-                  const Text("We'll check the name on this UPI ID before saving.", style: TextStyle(fontSize: 12, color: C.muted2)),
+                  Text("We'll check the name on this UPI ID before saving.", style: TextStyle(fontSize: 12, color: C.muted2)),
                 ]),
               ),
-            const Divider(color: C.line, height: 1),
+            Divider(color: C.line, height: 1),
             _addRow(Icons.credit_card_rounded, 'Credit or debit card', 'Visa, Mastercard, RuPay',
                 onTap: () async {
                   final c = await Navigator.pushNamed(context, '/add-card');
@@ -255,7 +255,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
           _trust(Icons.highlight_off_rounded, 'Remove\nanytime'),
         ]),
         const SizedBox(height: 16),
-        const Text('Card details are saved by our payment partner, never on Checkdin.',
+        Text('Card details are saved by our payment partner, never on Checkdin.',
             textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
       ]),
     );

@@ -58,7 +58,7 @@ class _CheckinOtpScreenState extends State<CheckinOtpScreen> {
             children: [
               const TitleBar(title: 'Check-in OTP'),
               const SizedBox(height: 24),
-              const Center(
+              Center(
                 child: Text('Show this at the front desk',
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: C.muted)),
               ),
@@ -70,8 +70,8 @@ class _CheckinOtpScreenState extends State<CheckinOtpScreen> {
                     height: 82,
                     margin: const EdgeInsets.symmetric(horizontal: 5),
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(18)),
-                    child: Text(d, style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w800, color: C.lime)),
+                    decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(18)),
+                    child: Text(d, style: TextStyle(fontSize: 44, fontWeight: FontWeight.w800, color: C.lime)),
                   ),
               ]),
               const SizedBox(height: 14),
@@ -94,8 +94,8 @@ class _CheckinOtpScreenState extends State<CheckinOtpScreen> {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(h.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 2),
-                  Text('${app.whenShort} · ${app.stayLabel} · Booking CKD-48213', style: const TextStyle(fontSize: 12.5, color: C.muted)),
-                  const Divider(color: C.line, height: 24),
+                  Text('${app.whenShort} · ${app.stayLabel} · Booking CKD-48213', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                  Divider(color: C.line, height: 24),
                   for (final r in [
                     [Icons.badge_outlined, 'Carry an original photo ID for every guest'],
                     [Icons.schedule_rounded, 'The OTP works from 30 minutes before check-in'],
@@ -176,11 +176,11 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-        decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Text('Check out now?', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          const Text('Return the key at the front desk. Leaving early isn\'t refunded.', style: TextStyle(fontSize: 14, color: C.muted, height: 1.4)),
+          Text('Return the key at the front desk. Leaving early isn\'t refunded.', style: TextStyle(fontSize: 14, color: C.muted, height: 1.4)),
           const SizedBox(height: 18),
           Row(children: [
             Expanded(child: PillBtn('Stay', kind: BtnKind.outline, expand: true, onTap: () => Navigator.pop(ctx, false))),
@@ -216,8 +216,8 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
             const Spacer(),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(999)),
-              child: const Row(mainAxisSize: MainAxisSize.min, children: [
+              decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(999)),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
                 _Pulse(),
                 SizedBox(width: 6),
                 Text('Checked in', style: TextStyle(color: C.lime, fontSize: 12.5, fontWeight: FontWeight.w800)),
@@ -226,7 +226,7 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
           ]),
           const SizedBox(height: 18),
           Text(h.name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-          Text('${h.area} · Deluxe room', textAlign: TextAlign.center, style: const TextStyle(fontSize: 13.5, color: C.muted)),
+          Text('${h.area} · Deluxe room', textAlign: TextAlign.center, style: TextStyle(fontSize: 13.5, color: C.muted)),
           const SizedBox(height: 22),
           Center(
             child: SizedBox(
@@ -249,7 +249,7 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
           ),
           const SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text('Checked in ${_clock(start)}', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+            Text('Checked in ${_clock(start)}', style: TextStyle(fontSize: 12.5, color: C.muted)),
             if (app.extraHours > 0) ...[
               const SizedBox(width: 8),
               Tag('+${app.extraHours} hr${app.extraHours > 1 ? 's' : ''} added', bg: C.limeSoft, fg: C.ink),
@@ -261,11 +261,11 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(16)),
               child: Row(children: [
-                const Icon(Icons.timer_outlined, color: C.red),
+                Icon(Icons.timer_outlined, color: C.red),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(over ? 'Your slot has ended. Extend now or check out to avoid overstay charges.' : 'Less than 30 minutes left. Need more time?',
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFFA3241A), height: 1.4)),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: C.tx(Color(0xFFA3241A)), height: 1.4)),
                 ),
               ]),
             ),
@@ -310,9 +310,9 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
               ])
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(border: r[0] == 'Guests' ? null : const Border(bottom: BorderSide(color: C.line))),
+                  decoration: BoxDecoration(border: r[0] == 'Guests' ? null : Border(bottom: BorderSide(color: C.line))),
                   child: Row(children: [
-                    Text(r[0], style: const TextStyle(fontSize: 13.5, color: C.muted)),
+                    Text(r[0], style: TextStyle(fontSize: 13.5, color: C.muted)),
                     const Spacer(),
                     Text(r[1], style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
                   ]),
@@ -323,7 +323,7 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
           Center(
             child: TextButton(
               onPressed: _checkout,
-              child: const Text('Check out early', style: TextStyle(color: C.ink, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
+              child: Text('Check out early', style: TextStyle(color: C.ink, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
             ),
           ),
         ],
@@ -349,7 +349,7 @@ class _PulseState extends State<_Pulse> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) => FadeTransition(
         opacity: Tween(begin: 0.35, end: 1.0).animate(_c),
-        child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)),
+        child: Container(width: 8, height: 8, decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle)),
       );
 }
 
@@ -403,21 +403,21 @@ Future<void> showExtendSheet(BuildContext context) async {
       final fees = (price * 0.106).round();
       return Container(
         padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-        decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
           Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2)))),
           const SizedBox(height: 16),
           const Text('Extend your stay', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
           const SizedBox(height: 4),
           Text('Your room is free for up to $avail more hour${avail == 1 ? '' : 's'}. ${inr(rate)} per hour.',
-              style: const TextStyle(fontSize: 13.5, color: C.muted)),
+              style: TextStyle(fontSize: 13.5, color: C.muted)),
           const SizedBox(height: 16),
           if (avail <= 0)
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(16)),
-              child: const Text('This room is booked right after your slot, so it can\'t be extended further. Try booking a new slot.',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFFA3241A), height: 1.4)),
+              child: Text('This room is booked right after your slot, so it can\'t be extended further. Try booking a new slot.',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: C.tx(Color(0xFFA3241A)), height: 1.4)),
             )
           else ...[
             Row(children: [
@@ -431,7 +431,7 @@ Future<void> showExtendSheet(BuildContext context) async {
                         duration: const Duration(milliseconds: 150),
                         height: 86,
                         decoration: BoxDecoration(
-                          color: n > avail ? const Color(0xFFF2F2EC) : (pick == n ? C.lime : C.white),
+                          color: n > avail ? C.tint(Color(0xFFF2F2EC)) : (pick == n ? C.lime : C.white),
                           borderRadius: BorderRadius.circular(18),
                           border: Border.all(color: pick == n && n <= avail ? C.lime : C.border, width: 1.5),
                         ),
@@ -452,20 +452,20 @@ Future<void> showExtendSheet(BuildContext context) async {
               decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(16)),
               child: Column(children: [
                 Row(children: [
-                  const Text('New check-out', style: TextStyle(fontSize: 13.5, color: C.muted)),
+                  Text('New check-out', style: TextStyle(fontSize: 13.5, color: C.muted)),
                   const Spacer(),
                   Text(_clock(newEnd), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                 ]),
                 const SizedBox(height: 8),
                 Row(children: [
-                  Text('$pick hr × ${inr(rate)} + taxes', style: const TextStyle(fontSize: 13.5, color: C.muted)),
+                  Text('$pick hr × ${inr(rate)} + taxes', style: TextStyle(fontSize: 13.5, color: C.muted)),
                   const Spacer(),
                   Text(inr(price + fees), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                 ]),
               ]),
             ),
             const SizedBox(height: 8),
-            Text('Paid with ${app.paidWith}. Extensions can\'t be cancelled.', style: const TextStyle(fontSize: 12, color: C.muted2)),
+            Text('Paid with ${app.paidWith}. Extensions can\'t be cancelled.', style: TextStyle(fontSize: 12, color: C.muted2)),
             const SizedBox(height: 14),
             PillBtn(paying ? 'Paying…' : 'Pay ${inr(price + fees)} & extend',
                 kind: BtnKind.dark,

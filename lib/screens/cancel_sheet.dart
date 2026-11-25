@@ -42,14 +42,14 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
         child: Container(
           constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.92),
           padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-          decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
           child: SingleChildScrollView(
             child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
               Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2)))),
               const SizedBox(height: 16),
               const Text('Cancel booking?', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
               const SizedBox(height: 4),
-              Text('${app.hotel.name} · ${app.whenShort}', style: const TextStyle(fontSize: 13.5, color: C.muted)),
+              Text('${app.hotel.name} · ${app.whenShort}', style: TextStyle(fontSize: 13.5, color: C.muted)),
               const SizedBox(height: 14),
               // refund preview
               Container(
@@ -65,7 +65,7 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                       const SizedBox(height: 2),
                       Text(
                           refund > 0 ? '$nextStep Approved refunds reach you in 3–5 working days.' : nextStep,
-                          style: const TextStyle(fontSize: 12.5, color: C.muted, height: 1.4)),
+                          style: TextStyle(fontSize: 12.5, color: C.muted, height: 1.4)),
                     ]),
                   ),
                 ]),
@@ -86,8 +86,8 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                   margin: const EdgeInsets.only(top: 12),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(14)),
-                  child: const Text('Your slot has started, so this booking can no longer be cancelled in the app. Tap Get help in Help for support.',
-                      style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFFA3241A), height: 1.4)),
+                  child: Text('Your slot has started, so this booking can no longer be cancelled in the app. Tap Get help in Help for support.',
+                      style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: C.tx(Color(0xFFA3241A)), height: 1.4)),
                 ),
               const SizedBox(height: 16),
               const Text('Why are you cancelling?', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
@@ -100,7 +100,7 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                     margin: const EdgeInsets.only(bottom: 8),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                     decoration: BoxDecoration(
-                      color: picked == r ? C.limeSoft : C.white,
+                      color: picked == r ? C.limeSoft : C.card,
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(color: picked == r ? C.ink : C.border, width: 1.5),
                     ),
@@ -111,11 +111,11 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                         height: 22,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: picked == r ? C.ink : C.white,
+                          color: picked == r ? C.inkBg : C.card,
                           border: Border.all(color: picked == r ? C.ink : C.border, width: 2),
                         ),
                         child: picked == r
-                            ? Center(child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)))
+                            ? Center(child: Container(width: 8, height: 8, decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle)))
                             : null,
                       ),
                     ]),
@@ -150,7 +150,7 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                       duration: const Duration(milliseconds: 150),
                       height: 52,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(color: ready ? C.red : const Color(0xFFEFEFEA), borderRadius: BorderRadius.circular(999)),
+                      decoration: BoxDecoration(color: ready ? C.red : C.tint(Color(0xFFEFEFEA)), borderRadius: BorderRadius.circular(999)),
                       child: Text('Cancel booking',
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: ready ? C.white : C.muted2)),
                     ),

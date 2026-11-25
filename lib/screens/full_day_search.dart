@@ -17,7 +17,7 @@ Future<void> pickStayDates(BuildContext context) async {
     builder: (ctx, child) => Theme(
       data: Theme.of(ctx).copyWith(
         colorScheme: Theme.of(ctx).colorScheme.copyWith(primary: C.ink, onPrimary: C.lime, secondary: C.lime, secondaryContainer: C.limeSoft),
-        datePickerTheme: const DatePickerThemeData(rangeSelectionBackgroundColor: C.limeSoft, headerBackgroundColor: C.bg),
+        datePickerTheme: DatePickerThemeData(rangeSelectionBackgroundColor: C.limeSoft, headerBackgroundColor: C.bg),
       ),
       child: child!,
     ),
@@ -44,12 +44,12 @@ class FullDaySearchScreen extends StatelessWidget {
 
   Widget _stepper(String label, String sub, int value, int min, int max, ValueChanged<int> onChange, {bool last = false}) => Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(border: last ? null : const Border(bottom: BorderSide(color: C.line))),
+        decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
         child: Row(children: [
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(label, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-              Text(sub, style: const TextStyle(fontSize: 12, color: C.muted)),
+              Text(sub, style: TextStyle(fontSize: 12, color: C.muted)),
             ]),
           ),
           CircleBtn(
@@ -65,7 +65,7 @@ class FullDaySearchScreen extends StatelessWidget {
               icon: Icons.add_rounded,
               size: 34,
               shadow: false,
-              bg: value < max ? C.lime : C.bg,
+              bg: value < max ? C.limeBg : C.bg,
               tooltip: 'More',
               iconColor: value < max ? C.ink : C.faint,
               onTap: value < max ? () => onChange(value + 1) : null),
@@ -73,11 +73,11 @@ class FullDaySearchScreen extends StatelessWidget {
       );
 
   Widget _dateTile(String label, DateTime d, String time, CrossAxisAlignment a) => Column(crossAxisAlignment: a, children: [
-        Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: C.muted)),
+        Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: C.muted)),
         const SizedBox(height: 4),
         Text(dateLabel(d), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
         const SizedBox(height: 1),
-        Text(time, style: const TextStyle(fontSize: 12, color: C.muted)),
+        Text(time, style: TextStyle(fontSize: 12, color: C.muted)),
       ]);
 
   @override
@@ -91,7 +91,7 @@ class FullDaySearchScreen extends StatelessWidget {
             SheetHeader(
               child: Column(children: [
                 Row(children: [
-                  const BackBtn(bg: C.bg, shadow: false),
+                  BackBtn(bg: C.bg, shadow: false),
                   const SizedBox(width: 10),
                   Expanded(
                     child: SegmentPill(
@@ -132,7 +132,7 @@ class FullDaySearchScreen extends StatelessWidget {
                         if (place != null)
                           GestureDetector(
                             onTap: () => app.set(() => app.place = null),
-                            child: const Icon(Icons.close_rounded, size: 20, color: C.muted),
+                            child: Icon(Icons.close_rounded, size: 20, color: C.muted),
                           ),
                       ]),
                     ),
@@ -147,7 +147,7 @@ class FullDaySearchScreen extends StatelessWidget {
                   const SizedBox(height: 18),
                   const Highlight(before: 'Book a room\n', marked: 'for the night.', size: 28, height: 1.2),
                   const SizedBox(height: 6),
-                  const Text('Check in at 12 PM, check out by 11 AM.', style: TextStyle(fontSize: 14, color: C.muted)),
+                  Text('Check in at 12 PM, check out by 11 AM.', style: TextStyle(fontSize: 14, color: C.muted)),
                   const SectionLabel('Your stay'),
                   WhiteCard(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
@@ -162,7 +162,7 @@ class FullDaySearchScreen extends StatelessWidget {
                             Expanded(child: _dateTile('CHECK-IN', app.inDate, 'from 12:00 PM', CrossAxisAlignment.start)),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                              decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(999)),
+                              decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(999)),
                               child: Row(mainAxisSize: MainAxisSize.min, children: [
                                 const Icon(Icons.nightlight_round, size: 13),
                                 const SizedBox(width: 4),
@@ -206,7 +206,7 @@ class FullDaySearchScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(color: on ? C.ink : Colors.transparent, width: 2),
                                 ),
-                                child: Icon(_popular[i][1] as IconData, size: 30, color: const Color(0xFF3F3F38)),
+                                child: Icon(_popular[i][1] as IconData, size: 30, color: C.tx(Color(0xFF3F3F38))),
                               ),
                               const SizedBox(height: 7),
                               Text(name,
@@ -242,7 +242,7 @@ class FullDaySearchScreen extends StatelessWidget {
                           const Text('T. Nagar, Chennai', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                           const SizedBox(height: 2),
                           Text('${dateLabel(DateTime.now())} – ${dateLabel(DateTime.now().add(const Duration(days: 1)))} · 1 room · 2 guests',
-                              style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                              style: TextStyle(fontSize: 12.5, color: C.muted)),
                         ]),
                       ),
                       const Icon(Icons.chevron_right_rounded),
@@ -253,7 +253,7 @@ class FullDaySearchScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(22)),
                     child: Row(children: [
-                      const Expanded(
+                      Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text('Need it for just a few hours?', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
                           SizedBox(height: 3),
@@ -276,7 +276,7 @@ class FullDaySearchScreen extends StatelessWidget {
                     Text(place ?? 'All of Chennai', overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                     const SizedBox(height: 2),
                     Text('${app.stayLabel} · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.guestsLabel}',
-                        style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                        style: TextStyle(fontSize: 12.5, color: C.muted)),
                   ]),
                 ),
                 PillBtn('Search', icon: Icons.arrow_forward_rounded, onTap: () => Navigator.pushNamed(context, '/fullday-results')),

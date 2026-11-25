@@ -21,11 +21,11 @@ class _HelpScreenState extends State<HelpScreen> {
           padding: const EdgeInsets.all(14),
           onTap: () => Navigator.pushNamed(context, route, arguments: arg),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            IconTile(icon, bg: lime ? C.lime : C.bg, size: 40),
+            IconTile(icon, bg: lime ? C.limeBg : C.bg, size: 40),
             const SizedBox(height: 10),
             Text(title, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700, height: 1.25)),
             const SizedBox(height: 3),
-            Text(sub, style: const TextStyle(fontSize: 12, color: C.muted)),
+            Text(sub, style: TextStyle(fontSize: 12, color: C.muted)),
           ]),
         ),
       );
@@ -40,7 +40,7 @@ class _HelpScreenState extends State<HelpScreen> {
             const TitleBar(title: 'Help'),
             const SizedBox(height: 20),
             Row(children: [
-              const Expanded(
+              Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Highlight(before: "We're here\nfor ", marked: 'you.', size: 32, height: 1.1),
                   SizedBox(height: 8),
@@ -51,7 +51,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 Container(
                   width: 80,
                   height: 60,
-                  decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(14)),
+                  decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(14)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
@@ -60,7 +60,7 @@ class _HelpScreenState extends State<HelpScreen> {
                               width: 9,
                               height: 9,
                               margin: const EdgeInsets.symmetric(horizontal: 3),
-                              decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle),
+                              decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle),
                             )),
                   ),
                 ),
@@ -70,7 +70,7 @@ class _HelpScreenState extends State<HelpScreen> {
                   child: Container(
                     width: 28,
                     height: 28,
-                    decoration: BoxDecoration(color: C.lime, shape: BoxShape.circle, border: Border.all(color: C.bg, width: 3)),
+                    decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle, border: Border.all(color: C.bg, width: 3)),
                     child: const Icon(Icons.check_rounded, size: 15),
                   ),
                 ),
@@ -80,8 +80,8 @@ class _HelpScreenState extends State<HelpScreen> {
             Container(
               height: 52,
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(16)),
-              child: const Row(children: [
+              decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(16)),
+              child: Row(children: [
                 Icon(Icons.search_rounded, color: C.muted),
                 SizedBox(width: 10),
                 Expanded(
@@ -93,14 +93,14 @@ class _HelpScreenState extends State<HelpScreen> {
             ),
             const SizedBox(height: 16),
             WhiteCard(
-              color: C.ink,
+              color: C.inkBg,
               child: Row(children: [
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const Text('YOUR LAST BOOKING', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 1.3, color: C.faint)),
+                    Text('YOUR LAST BOOKING', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 1.3, color: C.faint)),
                     const SizedBox(height: 6),
-                    Text('${h.name} · ${app.slot} hrs', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: C.white)),
-                    Text('${inr(app.total)} · ${dateLabel(app.date)}', style: const TextStyle(fontSize: 12.5, color: C.faint)),
+                    Text('${h.name} · ${app.slot} hrs', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: C.white)),
+                    Text('${inr(app.total)} · ${dateLabel(app.date)}', style: TextStyle(fontSize: 12.5, color: C.faint)),
                   ]),
                 ),
                 PillBtn('Get help', height: 42, fontSize: 14, onTap: () => Navigator.pushNamed(context, '/chat')),
@@ -125,7 +125,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 children: List.generate(_faqs.length, (i) {
                   final open = _open == i;
                   return Container(
-                    decoration: BoxDecoration(border: i == _faqs.length - 1 ? null : const Border(bottom: BorderSide(color: C.line))),
+                    decoration: BoxDecoration(border: i == _faqs.length - 1 ? null : Border(bottom: BorderSide(color: C.line))),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       InkWell(
                         onTap: () => setState(() => _open = open ? -1 : i),
@@ -140,7 +140,7 @@ class _HelpScreenState extends State<HelpScreen> {
                       if (open)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 14),
-                          child: Text(_faqs[i][1], style: const TextStyle(fontSize: 13.5, color: C.muted, height: 1.55)),
+                          child: Text(_faqs[i][1], style: TextStyle(fontSize: 13.5, color: C.muted, height: 1.55)),
                         ),
                     ]),
                   );

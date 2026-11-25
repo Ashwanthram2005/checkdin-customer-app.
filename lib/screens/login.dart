@@ -46,14 +46,14 @@ class HeroTop extends StatelessWidget {
           ]),
           SizedBox(height: compact ? 10 : 22),
           if (!compact) ...[
-            Text(sub, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: C.muted)),
+            Text(sub, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: C.muted)),
             const SizedBox(height: 8),
             Text(line1, style: style),
             Text(line2, style: style),
           ],
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(14)),
+            decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(14)),
             child: Text(compact ? '$line1 $line2 $marked' : marked, style: compact ? style.copyWith(fontSize: 30, letterSpacing: -1) : style),
           ),
           if (!compact) Expanded(child: Center(child: FittedBox(fit: BoxFit.scaleDown, child: Padding(padding: const EdgeInsets.all(20), child: art)))),
@@ -71,7 +71,7 @@ class KeyCard extends StatelessWidget {
     Widget chip(String t, bool on) => Container(
           margin: const EdgeInsets.only(right: 6),
           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-          decoration: BoxDecoration(color: on ? C.lime : const Color(0xFF2A2A2A), borderRadius: BorderRadius.circular(999)),
+          decoration: BoxDecoration(color: on ? C.limeBg : const Color(0xFF2A2A2A), borderRadius: BorderRadius.circular(999)),
           child: Text(t, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: on ? C.ink : C.white)),
         );
     return Transform.rotate(
@@ -80,24 +80,24 @@ class KeyCard extends StatelessWidget {
         width: 266,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
         decoration: BoxDecoration(
-          color: C.ink,
+          color: C.inkBg,
           borderRadius: BorderRadius.circular(22),
           boxShadow: const [BoxShadow(color: Color(0x47111111), blurRadius: 50, offset: Offset(0, 24))],
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Expanded(
+            Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text('ROOM KEY', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 1.5, color: C.faint)),
                 Text('Room 204', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: C.white)),
               ]),
             ),
-            Container(width: 40, height: 30, decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(6))),
+            Container(width: 40, height: 30, decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(6))),
           ]),
           const SizedBox(height: 14),
           Row(children: [chip('3h', true), chip('6h', false), chip('9h', false), chip('12h', false)]),
           const SizedBox(height: 14),
-          const Row(children: [
+          Row(children: [
             Icon(Icons.schedule_rounded, size: 14, color: C.faint),
             SizedBox(width: 6),
             Text('Check-in 2:00 PM · Check-out 5:00 PM', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: C.faint)),
@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _Sheet(children: [
           const Text('Book your stay now', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700)),
           const SizedBox(height: 4),
-          const Text("We'll send your OTP on WhatsApp", style: TextStyle(fontSize: 15, color: C.muted)),
+          Text("We'll send your OTP on WhatsApp", style: TextStyle(fontSize: 15, color: C.muted)),
           const SizedBox(height: 20),
           Container(
             height: 56,
@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
             decoration: BoxDecoration(border: Border.all(color: const Color(0xFFDADAD2), width: 1.5), borderRadius: BorderRadius.circular(14)),
             child: Row(children: [
               const Text('+91', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
-              Container(width: 1.5, height: 20, color: C.ink, margin: const EdgeInsets.symmetric(horizontal: 12)),
+              Container(width: 1.5, height: 20, color: C.inkBg, margin: const EdgeInsets.symmetric(horizontal: 12)),
               Expanded(
                 child: TextField(
                   controller: _ctrl,
@@ -178,15 +178,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   : null),
           const SizedBox(height: 14),
-          const Row(children: [
+          Row(children: [
             Expanded(child: Divider(color: C.border)),
             Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('or', style: TextStyle(fontSize: 13, color: C.muted))),
             Expanded(child: Divider(color: C.border)),
           ]),
           const SizedBox(height: 14),
           Material(
-            color: C.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999), side: const BorderSide(color: C.border, width: 1.5)),
+            color: C.card,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999), side: BorderSide(color: C.border, width: 1.5)),
             child: InkWell(
               customBorder: const StadiumBorder(),
               onTap: () => _google(context),
@@ -216,8 +216,8 @@ class _Sheet extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(24, 26, 24, 18 + MediaQuery.of(context).padding.bottom),
-      decoration: const BoxDecoration(
-        color: C.white,
+      decoration: BoxDecoration(
+        color: C.card,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         boxShadow: kSheetShadow,
       ),
@@ -276,14 +276,14 @@ Future<void> _google(BuildContext context) async {
         padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
         child: Container(
           padding: EdgeInsets.fromLTRB(20, 14, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-          decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
           child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
             Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2)))),
             const SizedBox(height: 16),
             const Row(children: [_GoogleMark(), SizedBox(width: 10), Text('Sign in with Google', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700))]),
             const SizedBox(height: 14),
             const Text('Choose an account', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-            const Text('to continue to Checkdin', style: TextStyle(fontSize: 13.5, color: C.muted)),
+            Text('to continue to Checkdin', style: TextStyle(fontSize: 13.5, color: C.muted)),
             const SizedBox(height: 14),
             InkWell(
               borderRadius: BorderRadius.circular(14),
@@ -295,11 +295,11 @@ Future<void> _google(BuildContext context) async {
                     width: 40,
                     height: 40,
                     alignment: Alignment.center,
-                    decoration: const BoxDecoration(color: C.ink, shape: BoxShape.circle),
-                    child: const Text('A', style: TextStyle(color: C.lime, fontWeight: FontWeight.w800, fontSize: 16)),
+                    decoration: BoxDecoration(color: C.inkBg, shape: BoxShape.circle),
+                    child: Text('A', style: TextStyle(color: C.lime, fontWeight: FontWeight.w800, fontSize: 16)),
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text('Ashwanth', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
                       Text('ashwanth@gmail.com', style: TextStyle(fontSize: 13, color: C.muted)),
@@ -309,9 +309,9 @@ Future<void> _google(BuildContext context) async {
                 ]),
               ),
             ),
-            const Divider(color: C.line),
+            Divider(color: C.line),
             const SizedBox(height: 6),
-            const Text('Use another account', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted)),
+            Text('Use another account', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted)),
             const SizedBox(height: 8),
             Row(children: [
               Expanded(
@@ -334,7 +334,7 @@ Future<void> _google(BuildContext context) async {
                   onTap: validOther ? () => Navigator.pop(ctx, [other.split('@').first, other]) : null),
             ]),
             const SizedBox(height: 14),
-            const Text('Google will share your name and email address with Checkdin. Checkdin never sees your Google password.',
+            Text('Google will share your name and email address with Checkdin. Checkdin never sees your Google password.',
                 style: TextStyle(fontSize: 12, color: C.muted2, height: 1.45)),
           ]),
         ),

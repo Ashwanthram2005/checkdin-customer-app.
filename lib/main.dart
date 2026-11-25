@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'appearance.dart';
 import 'theme.dart';
+import 'screens/appearance.dart';
 import 'screens/login.dart';
 import 'screens/otp.dart';
 import 'screens/profile_setup.dart';
@@ -45,24 +47,53 @@ import 'screens/support_chat.dart';
 import 'screens/coming_soon.dart';
 import 'screens/refer.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.dark,
-  ));
+  await Appearance.load();
   runApp(const CheckdinApp());
 }
 
-class CheckdinApp extends StatelessWidget {
+class CheckdinApp extends StatefulWidget {
   const CheckdinApp({super.key});
+  @override
+  State<CheckdinApp> createState() => _CheckdinAppState();
+}
+
+class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    if (Appearance.mode == AppTheme.system) Appearance.refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
     final base = ThemeData(
       useMaterial3: true,
+      brightness: C.dark ? Brightness.dark : Brightness.light,
       scaffoldBackgroundColor: C.bg,
-      colorScheme: ColorScheme.fromSeed(seedColor: C.lime, primary: C.ink, surface: C.bg),
+      canvasColor: C.bg,
+      dividerColor: C.line,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFFD1F148),
+        brightness: C.dark ? Brightness.dark : Brightness.light,
+        primary: C.ink,
+        onPrimary: C.bg,
+        surface: C.bg,
+        onSurface: C.ink,
+      ),
+      iconTheme: IconThemeData(color: C.ink),
       splashFactory: InkRipple.splashFactory,
     );
     return MaterialApp(
@@ -70,12 +101,13 @@ class CheckdinApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: base.copyWith(
         textTheme: GoogleFonts.plusJakartaSansTextTheme(base.textTheme).apply(bodyColor: C.ink, displayColor: C.ink),
-        textSelectionTheme: const TextSelectionThemeData(cursorColor: C.ink, selectionColor: C.limeSoft, selectionHandleColor: C.ink),
+        textSelectionTheme: TextSelectionThemeData(cursorColor: C.ink, selectionColor: C.limeSoft, selectionHandleColor: C.ink),
       ),
       builder: (context, child) => OfflineGate(child: child ?? const SizedBox()),
       initialRoute: '/splash',
       routes: {
         '/splash': (_) => const SplashScreen(),
+        '/appearance': (_) => const AppearanceScreen(),
         '/policy': (_) => const PolicyDocScreen(),
         '/credits': (_) => const CreditsHistoryScreen(),
         '/gallery': (_) => const GalleryScreen(),

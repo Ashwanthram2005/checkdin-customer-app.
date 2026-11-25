@@ -62,13 +62,13 @@ class _RateStayScreenState extends State<RateStayScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         padding: EdgeInsets.fromLTRB(18, 18, 18, 18 + MediaQuery.of(ctx).padding.bottom),
-        decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Text('Add photos', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
           const SizedBox(height: 14),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: const IconTile(Icons.photo_camera_outlined, bg: C.lime),
+            leading: IconTile(Icons.photo_camera_outlined, bg: C.limeBg),
             title: const Text('Take a photo', style: TextStyle(fontWeight: FontWeight.w700)),
             onTap: () => Navigator.pop(ctx, ImageSource.camera),
           ),
@@ -124,7 +124,7 @@ class _RateStayScreenState extends State<RateStayScreen> {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: on ? (_happy ? C.lime : C.redSoft) : C.white,
+          color: on ? (_happy ? C.lime : C.redSoft) : C.card,
           borderRadius: BorderRadius.circular(999),
           border: Border.all(color: on ? (_happy ? C.lime : C.red) : C.border, width: 1.5),
         ),
@@ -159,7 +159,7 @@ class _RateStayScreenState extends State<RateStayScreen> {
                       Text(_hotel, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                       if (_when.isNotEmpty) ...[
                         const SizedBox(height: 3),
-                        Text(_when, style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                        Text(_when, style: TextStyle(fontSize: 12.5, color: C.muted)),
                       ],
                     ]),
                   ),
@@ -198,7 +198,7 @@ class _RateStayScreenState extends State<RateStayScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        border: e.key == _cat.length - 1 ? null : const Border(bottom: BorderSide(color: C.line)),
+                        border: e.key == _cat.length - 1 ? null : Border(bottom: BorderSide(color: C.line)),
                       ),
                       child: Row(children: [
                         Expanded(child: Text(e.value.key, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600))),
@@ -221,18 +221,18 @@ class _RateStayScreenState extends State<RateStayScreen> {
                   hintText: 'Tell other guests about the room, check-in and staff…',
                   hintStyle: const TextStyle(color: Color(0xFF8A8A82)),
                   filled: true,
-                  fillColor: C.white,
+                  fillColor: C.card,
                   errorText: textOk ? null : 'Write at least 20 characters (${20 - textLen} more)',
                   contentPadding: const EdgeInsets.all(14),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: C.border, width: 1.5)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.border, width: 1.5)),
                   enabledBorder:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: C.border, width: 1.5)),
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.border, width: 1.5)),
                   focusedBorder:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: C.ink, width: 1.5)),
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.ink, width: 1.5)),
                 ),
               ),
               SectionLabel('Add photos from your stay',
-                  trailing: Text('${_photos.length}/6', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: C.muted))),
+                  trailing: Text('${_photos.length}/6', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: C.muted))),
               GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
@@ -270,8 +270,8 @@ class _RateStayScreenState extends State<RateStayScreen> {
                           child: Container(
                             width: 26,
                             height: 26,
-                            decoration: const BoxDecoration(color: C.ink, shape: BoxShape.circle),
-                            child: const Icon(Icons.close_rounded, size: 16, color: C.white),
+                            decoration: BoxDecoration(color: C.inkBg, shape: BoxShape.circle),
+                            child: Icon(Icons.close_rounded, size: 16, color: C.white),
                           ),
                         ),
                       ),
@@ -279,14 +279,14 @@ class _RateStayScreenState extends State<RateStayScreen> {
                 ],
               ),
               const SizedBox(height: 8),
-              const Text('Show the room, bathroom or view. Please avoid faces and ID cards.',
+              Text('Show the room, bathroom or view. Please avoid faces and ID cards.',
                   style: TextStyle(fontSize: 12, color: C.muted2)),
               const SizedBox(height: 16),
               WhiteCard(
                 radius: 18,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(children: [
-                  const Expanded(
+                  Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text('Post anonymously', style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
                       SizedBox(height: 2),

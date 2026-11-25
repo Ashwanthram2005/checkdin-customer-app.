@@ -40,7 +40,7 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
       onTap: () => _pick(it.name),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(border: last ? null : const Border(bottom: BorderSide(color: C.line))),
+        decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
         child: Row(children: [
           IconTile(icon, bg: bg, size: 38),
           const SizedBox(width: 12),
@@ -48,7 +48,7 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(it.name, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
               const SizedBox(height: 2),
-              Text(it.sub, style: const TextStyle(fontSize: 12.5, color: C.muted)),
+              Text(it.sub, style: TextStyle(fontSize: 12.5, color: C.muted)),
             ]),
           ),
           const Icon(Icons.chevron_right_rounded, color: Color(0xFF9A9A92)),
@@ -71,7 +71,7 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
       body: Column(children: [
         SheetHeader(
           child: Column(children: [
-            Row(children: const [
+            Row(children: [
               BackBtn(bg: C.bg, shadow: false),
               SizedBox(width: 10),
               Text('Where to?', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
@@ -103,14 +103,14 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
           child: ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 28), children: [
             if (q.isEmpty) ...[
               WhiteCard(
-                color: C.lime,
+                color: C.limeBg,
                 radius: 20,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 onTap: () async {
                   if (await useMyLocation(context)) _pick('Current location');
                 },
-                child: const Row(children: [
-                  IconTile(Icons.near_me_rounded, bg: C.white, size: 40, radius: 20),
+                child: Row(children: [
+                  IconTile(Icons.near_me_rounded, bg: C.card, size: 40, radius: 20),
                   SizedBox(width: 12),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -152,16 +152,16 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                   padding: const EdgeInsets.all(14),
                   onTap: () => Navigator.pushNamed(context, '/coming-soon', arguments: soonCityFor(q)),
                   child: Row(children: [
-                    const IconTile(Icons.location_city_rounded, bg: C.lime, size: 42),
+                    IconTile(Icons.location_city_rounded, bg: C.limeBg, size: 42),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Text(soonCityFor(q)!, style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
                         const SizedBox(height: 2),
-                        const Text('Coming soon · get notified', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                        Text('Coming soon · get notified', style: TextStyle(fontSize: 12.5, color: C.muted)),
                       ]),
                     ),
-                    const Tag('SOON', bg: C.ink, fg: C.lime),
+                    Tag('SOON', bg: C.inkBg, fg: C.lime),
                   ]),
                 ),
               for (final t in ['Area', 'Landmark', 'Hotel'])
@@ -175,7 +175,7 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                   child: Column(children: [
                     Text('No matches for “${_q.text}”', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                     const SizedBox(height: 6),
-                    const Text("Try an area like T. Nagar or OMR. We're adding new hotels every week.",
+                    Text("Try an area like T. Nagar or OMR. We're adding new hotels every week.",
                         textAlign: TextAlign.center, style: TextStyle(fontSize: 13.5, color: C.muted, height: 1.5)),
                   ]),
                 ),

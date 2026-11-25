@@ -43,18 +43,18 @@ class ReferScreen extends StatelessWidget {
               const SizedBox(height: 18),
               Container(
                 padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(26)),
+                decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(26)),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   const Text('Give ₹100,\nget ₹100', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, letterSpacing: -1.2, height: 1.05)),
                   const SizedBox(height: 8),
-                  const Text('Your friend gets ₹100 off their first stay. You get ₹100 in Checkdin credits when they check in.',
+                  Text('Your friend gets ₹100 off their first stay. You get ₹100 in Checkdin credits when they check in.',
                       style: TextStyle(fontSize: 13.5, height: 1.45, color: C.limeInk)),
                   const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-                    decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(16)),
+                    decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(16)),
                     child: Row(children: [
-                      const Expanded(
+                      Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text('YOUR CODE', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: C.muted)),
                           Text(referCode, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: 2)),
@@ -78,7 +78,7 @@ class ReferScreen extends StatelessWidget {
                 CircleBtn(
                   icon: Icons.link_rounded,
                   size: 54,
-                  bg: C.white,
+                  bg: C.card,
                   shadow: false,
                   tooltip: 'Copy invite link',
                   onTap: () {
@@ -102,24 +102,24 @@ class ReferScreen extends StatelessWidget {
                   for (var i = 0; i < _friends.length; i++)
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 13),
-                      decoration: BoxDecoration(border: i == _friends.length - 1 ? null : const Border(bottom: BorderSide(color: C.line))),
+                      decoration: BoxDecoration(border: i == _friends.length - 1 ? null : Border(bottom: BorderSide(color: C.line))),
                       child: Row(children: [
                         Container(
                           width: 40,
                           height: 40,
                           alignment: Alignment.center,
-                          decoration: BoxDecoration(color: _friends[i].earned > 0 ? C.lime : C.bg, shape: BoxShape.circle),
+                          decoration: BoxDecoration(color: _friends[i].earned > 0 ? C.limeBg : C.bg, shape: BoxShape.circle),
                           child: Icon(_friends[i].earned > 0 ? Icons.check_rounded : Icons.person_outline_rounded, size: 20),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text(_friends[i].name, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-                            Text('${_friends[i].status} · ${_friends[i].when}', style: const TextStyle(fontSize: 12, color: C.muted)),
+                            Text('${_friends[i].status} · ${_friends[i].when}', style: TextStyle(fontSize: 12, color: C.muted)),
                           ]),
                         ),
                         if (_friends[i].earned > 0)
-                          Text('+${inr(_friends[i].earned)}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: C.green))
+                          Text('+${inr(_friends[i].earned)}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: C.green))
                         else
                           GestureDetector(
                             onTap: () => shareOnWhatsApp(context),
@@ -142,20 +142,20 @@ class ReferScreen extends StatelessWidget {
                       width: 30,
                       height: 30,
                       alignment: Alignment.center,
-                      decoration: const BoxDecoration(color: C.ink, shape: BoxShape.circle),
-                      child: Text(s[0], style: const TextStyle(color: C.lime, fontWeight: FontWeight.w800, fontSize: 13)),
+                      decoration: BoxDecoration(color: C.inkBg, shape: BoxShape.circle),
+                      child: Text(s[0], style: TextStyle(color: C.lime, fontWeight: FontWeight.w800, fontSize: 13)),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Text(s[1], style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800)),
-                        Text(s[2], style: const TextStyle(fontSize: 13, color: C.muted, height: 1.4)),
+                        Text(s[2], style: TextStyle(fontSize: 13, color: C.muted, height: 1.4)),
                       ]),
                     ),
                   ]),
                 ),
               const SizedBox(height: 6),
-              const Text('Up to 10 rewards per month. Credits expire 90 days after they\'re added. Self-referrals and fake accounts aren\'t eligible.',
+              Text('Up to 10 rewards per month. Credits expire 90 days after they\'re added. Self-referrals and fake accounts aren\'t eligible.',
                   style: TextStyle(fontSize: 12, color: C.muted2, height: 1.45)),
             ],
           ),
@@ -170,7 +170,7 @@ class ReferScreen extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(v, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
           const SizedBox(height: 2),
-          Text(k, style: const TextStyle(fontSize: 12, color: C.muted)),
+          Text(k, style: TextStyle(fontSize: 12, color: C.muted)),
         ]),
       );
 }

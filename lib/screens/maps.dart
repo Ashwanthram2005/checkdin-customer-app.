@@ -32,8 +32,8 @@ class _Pin extends StatelessWidget {
   Widget build(BuildContext context) {
     if (price == null) {
       return Container(
-        decoration: BoxDecoration(color: C.ink, shape: BoxShape.circle, border: Border.all(color: C.white, width: 3)),
-        child: Center(child: Container(width: 12, height: 12, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle))),
+        decoration: BoxDecoration(color: C.inkBg, shape: BoxShape.circle, border: Border.all(color: C.white, width: 3)),
+        child: Center(child: Container(width: 12, height: 12, decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle))),
       );
     }
     return Center(
@@ -41,7 +41,7 @@ class _Pin extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: on ? C.ink : C.white,
+          color: on ? C.inkBg : C.card,
           borderRadius: BorderRadius.circular(999),
           border: Border.all(color: C.ink, width: 1.5),
           boxShadow: const [BoxShadow(color: Color(0x33111111), blurRadius: 8, offset: Offset(0, 3))],
@@ -152,7 +152,7 @@ class _StaysMapScreenState extends State<StaysMapScreen> {
                 height: 44,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 alignment: Alignment.centerLeft,
-                decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(999), boxShadow: kShadow),
+                decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(999), boxShadow: kShadow),
                 child: Text('${list.length} stays in ${app.place ?? 'Chennai'}',
                     overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
               ),
@@ -164,7 +164,7 @@ class _StaysMapScreenState extends State<StaysMapScreen> {
           right: 16,
           bottom: 20 + MediaQuery.of(context).padding.bottom,
           child: Material(
-            color: C.white,
+            color: C.card,
             borderRadius: BorderRadius.circular(22),
             elevation: 6,
             shadowColor: const Color(0x33111111),
@@ -184,16 +184,16 @@ class _StaysMapScreenState extends State<StaysMapScreen> {
                       RatingBadge(_sel.rating, reviews: _sel.reviews),
                       const SizedBox(height: 4),
                       Text(_sel.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                      Text('${_sel.area} · ${_sel.distanceKm} km', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                      Text('${_sel.area} · ${_sel.distanceKm} km', style: TextStyle(fontSize: 12.5, color: C.muted)),
                       const SizedBox(height: 4),
                       Text.rich(TextSpan(children: [
                         TextSpan(text: _price(_sel), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                        TextSpan(text: widget.nightly || app.fullDay ? ' / night' : ' / ${app.slot} hrs', style: const TextStyle(fontSize: 12, color: C.muted)),
+                        TextSpan(text: widget.nightly || app.fullDay ? ' / night' : ' / ${app.slot} hrs', style: TextStyle(fontSize: 12, color: C.muted)),
                       ])),
                     ]),
                   ),
                   Column(children: [
-                    CircleBtn(icon: Icons.directions_rounded, size: 40, bg: C.lime, shadow: false, tooltip: 'Directions', onTap: () => openDirections(context, _sel)),
+                    CircleBtn(icon: Icons.directions_rounded, size: 40, bg: C.limeBg, shadow: false, tooltip: 'Directions', onTap: () => openDirections(context, _sel)),
                     const SizedBox(height: 6),
                     const Icon(Icons.chevron_right_rounded),
                   ]),

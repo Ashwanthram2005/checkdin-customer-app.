@@ -34,7 +34,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
           floatingActionButton: list.isEmpty
               ? null
               : FloatingActionButton.extended(
-                  backgroundColor: C.ink,
+                  backgroundColor: C.inkBg,
                   foregroundColor: C.lime,
                   elevation: 4,
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StaysMapScreen(list: list))),
@@ -44,8 +44,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
           body: Column(children: [
             Container(
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 14, bottom: 14),
-              decoration: const BoxDecoration(
-                color: C.white,
+              decoration: BoxDecoration(
+                color: C.card,
                 borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
                 boxShadow: [BoxShadow(color: Color(0x0F111111), blurRadius: 24, offset: Offset(0, 8))],
               ),
@@ -53,7 +53,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(children: [
-                    const BackBtn(bg: C.bg, shadow: false),
+                    BackBtn(bg: C.bg, shadow: false),
                     const SizedBox(width: 10),
                     Expanded(
                       child: InkWell(
@@ -69,7 +69,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                 Text('$place, Chennai'.replaceAll('Chennai, Chennai', 'Chennai'),
                                     overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                                 Text('${dateLabel(app.date)} · ${hourLabel(app.checkInHour, short: true)} · ${app.slot} hrs',
-                                    style: const TextStyle(fontSize: 12, color: C.muted)),
+                                    style: TextStyle(fontSize: 12, color: C.muted)),
                               ]),
                             ),
                             const CircleBtn(icon: Icons.edit_outlined, size: 32, shadow: false, tooltip: 'Edit search'),
@@ -94,7 +94,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 14),
                           decoration: BoxDecoration(
-                            color: Filters.count > 0 ? C.ink : C.white,
+                            color: Filters.count > 0 ? C.inkBg : C.card,
                             borderRadius: BorderRadius.circular(999),
                             border: Border.all(color: C.ink, width: 1.5),
                           ),
@@ -116,7 +116,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 14),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: _on.contains(c) ? C.lime : C.white,
+                                color: _on.contains(c) ? C.limeBg : C.card,
                                 borderRadius: BorderRadius.circular(999),
                                 border: Border.all(color: _on.contains(c) ? C.lime : C.border, width: 1.5),
                               ),
@@ -137,7 +137,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     Expanded(
                         child: Text('${list.length} ${list.length == 1 ? 'stay' : 'stays'} near $place',
                             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
-                    Text('Prices for ${app.slot} hrs', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                    Text('Prices for ${app.slot} hrs', style: TextStyle(fontSize: 12.5, color: C.muted)),
                   ]),
                 ),
                 const SizedBox(height: 14),
@@ -177,7 +177,7 @@ class _HotelCard extends StatelessWidget {
     }
 
     return Material(
-      color: C.white,
+      color: C.card,
       borderRadius: BorderRadius.circular(24),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -190,7 +190,7 @@ class _HotelCard extends StatelessWidget {
               top: 12,
               child: Row(children: [
                 RatingBadge(h.rating, reviews: h.reviews, dark: false),
-                if (h.topRated) ...[const SizedBox(width: 6), const Tag('Top rated', bg: C.lime, fg: C.ink)],
+                if (h.topRated) ...[const SizedBox(width: 6), Tag('Top rated', bg: C.limeBg, fg: C.ink)],
               ]),
             ),
             Positioned(
@@ -211,7 +211,7 @@ class _HotelCard extends StatelessWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(h.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
               const SizedBox(height: 3),
-              Text('${h.area} · ${h.distanceKm} km away', style: const TextStyle(fontSize: 13, color: C.muted)),
+              Text('${h.area} · ${h.distanceKm} km away', style: TextStyle(fontSize: 13, color: C.muted)),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 6,
@@ -220,7 +220,7 @@ class _HotelCard extends StatelessWidget {
                     .map((t) => Container(
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                           decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(8)),
-                          child: Text(t, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: Color(0xFF3F3F38))),
+                          child: Text(t, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: C.tx(Color(0xFF3F3F38)))),
                         ))
                     .toList(),
               ),
@@ -243,7 +243,7 @@ class _HotelCard extends StatelessWidget {
                         child: Container(
                           height: 56,
                           decoration: BoxDecoration(
-                            color: sel ? C.lime : (off ? C.bg : C.white),
+                            color: sel ? C.limeBg : (off ? C.bg : C.white),
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(color: sel ? C.lime : (off ? C.bg : C.border), width: 1.5),
                           ),

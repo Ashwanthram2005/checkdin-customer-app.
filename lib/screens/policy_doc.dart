@@ -27,14 +27,14 @@ class _PolicyBodyState extends State<PolicyBody> {
         padding: const EdgeInsets.only(bottom: 6, left: 2),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
-              width: 6, height: 6, margin: const EdgeInsets.only(top: 8, right: 10), decoration: const BoxDecoration(color: C.ink, shape: BoxShape.circle)),
-          Expanded(child: Text(l.substring(2), style: const TextStyle(fontSize: 13.5, color: Color(0xFF3F3F38), height: 1.5))),
+              width: 6, height: 6, margin: const EdgeInsets.only(top: 8, right: 10), decoration: BoxDecoration(color: C.inkBg, shape: BoxShape.circle)),
+          Expanded(child: Text(l.substring(2), style: TextStyle(fontSize: 13.5, color: C.tx(Color(0xFF3F3F38)), height: 1.5))),
         ]),
       );
     }
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Text(l, style: const TextStyle(fontSize: 13.5, color: Color(0xFF3F3F38), height: 1.55)),
+      child: Text(l, style: TextStyle(fontSize: 13.5, color: C.tx(Color(0xFF3F3F38)), height: 1.55)),
     );
   }
 
@@ -43,7 +43,7 @@ class _PolicyBodyState extends State<PolicyBody> {
     final d = widget.doc;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       if (widget.showIntro && d.intro.isNotEmpty) ...[
-        Text(d.intro, style: const TextStyle(fontSize: 14, color: C.muted, height: 1.55)),
+        Text(d.intro, style: TextStyle(fontSize: 14, color: C.muted, height: 1.55)),
         const SizedBox(height: 16),
       ],
       WhiteCard(
@@ -51,7 +51,7 @@ class _PolicyBodyState extends State<PolicyBody> {
         child: Column(children: [
           for (var i = 0; i < d.sections.length; i++)
             Container(
-              decoration: BoxDecoration(border: i == d.sections.length - 1 ? null : const Border(bottom: BorderSide(color: C.line))),
+              decoration: BoxDecoration(border: i == d.sections.length - 1 ? null : Border(bottom: BorderSide(color: C.line))),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 InkWell(
                   onTap: () => setState(() => _open = _open == i ? -1 : i),
@@ -61,7 +61,7 @@ class _PolicyBodyState extends State<PolicyBody> {
                       SizedBox(
                         width: 30,
                         child: Text((i + 1).toString().padLeft(2, '0'),
-                            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: C.faint)),
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: C.faint)),
                       ),
                       Expanded(child: Text(d.sections[i].heading, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700))),
                       AnimatedRotation(
@@ -89,7 +89,7 @@ class _PolicyBodyState extends State<PolicyBody> {
       ),
       if (d.outro.isNotEmpty) ...[
         const SizedBox(height: 14),
-        Text(d.outro, style: const TextStyle(fontSize: 12.5, color: C.muted, height: 1.5)),
+        Text(d.outro, style: TextStyle(fontSize: 12.5, color: C.muted, height: 1.5)),
       ],
     ]);
   }
@@ -119,7 +119,7 @@ class PolicyDocScreen extends StatelessWidget {
           const SizedBox(height: 18),
           WhiteCard(
             onTap: () => Navigator.pushNamed(context, '/help'),
-            child: const Row(children: [
+            child: Row(children: [
               IconTile(Icons.support_agent_rounded, size: 38),
               SizedBox(width: 12),
               Expanded(

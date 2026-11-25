@@ -12,7 +12,8 @@ class EmptyState extends StatelessWidget {
   final String title, body;
   final String? primary, secondary;
   final VoidCallback? onPrimary, onSecondary;
-  final Color tile;
+  final Color? _tile;
+  Color get tile => _tile ?? C.limeBg;
   const EmptyState({
     super.key,
     required this.icon,
@@ -22,8 +23,8 @@ class EmptyState extends StatelessWidget {
     this.onPrimary,
     this.secondary,
     this.onSecondary,
-    this.tile = C.lime,
-  });
+    Color? tile,
+  }) : _tile = tile;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class EmptyState extends StatelessWidget {
         const SizedBox(height: 20),
         Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
         const SizedBox(height: 8),
-        Text(body, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: C.muted, height: 1.5)),
+        Text(body, textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: C.muted, height: 1.5)),
         if (primary != null) ...[
           const SizedBox(height: 20),
           PillBtn(primary!, kind: BtnKind.dark, height: 50, onTap: onPrimary),
@@ -48,7 +49,7 @@ class EmptyState extends StatelessWidget {
           const SizedBox(height: 6),
           TextButton(
             onPressed: onSecondary,
-            child: Text(secondary!, style: const TextStyle(color: C.ink, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+            child: Text(secondary!, style: TextStyle(color: C.ink, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
           ),
         ],
       ]),
@@ -177,7 +178,7 @@ Future<bool?> _locationSheet(BuildContext context,
     backgroundColor: Colors.transparent,
     builder: (ctx) => Container(
       padding: EdgeInsets.fromLTRB(20, 12, 20, 16 + MediaQuery.of(ctx).padding.bottom),
-      decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2))),
         EmptyState(

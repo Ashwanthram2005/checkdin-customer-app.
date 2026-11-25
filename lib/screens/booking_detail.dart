@@ -20,9 +20,9 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
     final h = app.hotel;
     Widget infoRow(String l, String v, {bool last = false}) => Container(
           padding: const EdgeInsets.symmetric(vertical: 13),
-          decoration: BoxDecoration(border: last ? null : const Border(bottom: BorderSide(color: C.line))),
+          decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
           child: Row(children: [
-            Text(l, style: const TextStyle(fontSize: 14, color: C.muted)),
+            Text(l, style: TextStyle(fontSize: 14, color: C.muted)),
             const SizedBox(width: 12),
             Expanded(child: Text(v, textAlign: TextAlign.right, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
           ]),
@@ -38,7 +38,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(t, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                  Text(s, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: C.muted)),
+                  Text(s, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: C.muted)),
                 ]),
               ),
             ]),
@@ -77,7 +77,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                   margin: const EdgeInsets.symmetric(horizontal: 2.5),
                   width: i == _photo ? 18 : 6,
                   height: 6,
-                  decoration: BoxDecoration(color: i == _photo ? C.ink : const Color(0xFFCFCFC7), borderRadius: BorderRadius.circular(999)),
+                  decoration: BoxDecoration(color: i == _photo ? C.inkBg : C.tint(Color(0xFFCFCFC7)), borderRadius: BorderRadius.circular(999)),
                 ),
               ),
             ),
@@ -89,14 +89,14 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 const SizedBox(height: 10),
                 Text(h.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: -0.7)),
                 const SizedBox(height: 6),
-                Text(h.address, style: const TextStyle(fontSize: 13.5, color: C.muted, height: 1.5)),
+                Text(h.address, style: TextStyle(fontSize: 13.5, color: C.muted, height: 1.5)),
                 const SizedBox(height: 14),
                 PillBtn('Get directions',
                     kind: BtnKind.outline, height: 48, expand: true, icon: Icons.near_me_outlined, trailingIcon: false, onTap: () => openDirections(context, app.hotel)),
                 const SizedBox(height: 20),
                 Container(
                   padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-                  decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(24)),
+                  decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(24)),
                   child: Column(children: [
                     Row(children: [
                       const Expanded(child: Text('BOOKING ID · CHK240204', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1))),
@@ -124,7 +124,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                       inDate: dateLabel(app.date),
                       outDate: dateLabel(app.date),
                       slot: '${app.slot} hrs',
-                      chip: C.white,
+                      chip: C.card,
                     ),
                   ]),
                 ),
@@ -140,23 +140,23 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                   child: Column(children: [
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
+                      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
                       child: Row(children: [
                         const IconTile(Icons.bed_outlined, size: 42),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             const Text('Deluxe Room', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                            Text('Hourly stay · ${app.slot} hours · Room 204', style: const TextStyle(fontSize: 13, color: C.muted)),
+                            Text('Hourly stay · ${app.slot} hours · Room 204', style: TextStyle(fontSize: 13, color: C.muted)),
                           ]),
                         ),
                       ]),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
+                      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
                       child: Row(children: [
-                        const Icon(Icons.group_outlined, size: 18, color: C.muted),
+                        Icon(Icons.group_outlined, size: 18, color: C.muted),
                         const SizedBox(width: 12),
                         Text(app.guestsLabel, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                       ]),
@@ -176,7 +176,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 const SizedBox(height: 12),
                 WhiteCard(
                   onTap: () => Navigator.pushNamed(context, '/report'),
-                  child: const Row(children: [
+                  child: Row(children: [
                     IconTile(Icons.report_gmailerrorred_rounded, bg: C.redSoft, size: 40),
                     SizedBox(width: 12),
                     Expanded(

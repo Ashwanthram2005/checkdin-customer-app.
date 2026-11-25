@@ -121,27 +121,27 @@ class _AddCardScreenState extends State<AddCardScreen> {
   bool get _valid => _luhn && _expError == null && _cvvOk && _nameOk;
 
   InputDecoration _dec(String hint, {String? error, Widget? suffix}) {
-    final b = OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: C.border, width: 1.5));
+    final b = OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: C.border, width: 1.5));
     return InputDecoration(
       hintText: hint,
       hintStyle: const TextStyle(color: Color(0xFF8A8A82), fontWeight: FontWeight.w400),
       errorText: error,
       isDense: true,
       filled: true,
-      fillColor: C.white,
+      fillColor: C.card,
       suffixIcon: suffix,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
       border: b,
       enabledBorder: b,
-      focusedBorder: b.copyWith(borderSide: const BorderSide(color: C.ink, width: 1.5)),
-      errorBorder: b.copyWith(borderSide: const BorderSide(color: C.red, width: 1.5)),
-      focusedErrorBorder: b.copyWith(borderSide: const BorderSide(color: C.red, width: 1.5)),
+      focusedBorder: b.copyWith(borderSide: BorderSide(color: C.ink, width: 1.5)),
+      errorBorder: b.copyWith(borderSide: BorderSide(color: C.red, width: 1.5)),
+      focusedErrorBorder: b.copyWith(borderSide: BorderSide(color: C.red, width: 1.5)),
     );
   }
 
   Widget _label(String t) => Padding(
         padding: const EdgeInsets.only(bottom: 6),
-        child: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted)),
+        child: Text(t, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted)),
       );
 
   Widget _preview() {
@@ -157,7 +157,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
         height: 196,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: C.ink,
+          color: C.inkBg,
           borderRadius: BorderRadius.circular(22),
           boxShadow: const [BoxShadow(color: Color(0x33111111), blurRadius: 24, offset: Offset(0, 10))],
         ),
@@ -166,7 +166,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
           Positioned(
             right: -40,
             top: -50,
-            child: Container(width: 170, height: 170, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)),
+            child: Container(width: 170, height: 170, decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle)),
           ),
           Positioned(
             right: 40,
@@ -182,18 +182,18 @@ class _AddCardScreenState extends State<AddCardScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(children: [
-                  Expanded(child: Container(height: 34, color: const Color(0xFFEDEDE6))),
+                  Expanded(child: Container(height: 34, color: C.tint(Color(0xFFEDEDE6)))),
                   Container(
                     height: 34,
                     width: 64,
                     alignment: Alignment.center,
-                    color: C.white,
+                    color: C.card,
                     child: Text(_cvv.text.isEmpty ? '•••' : _cvv.text,
                         style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 2)),
                   ),
                 ]),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: Text('The 3 digits on the back of your card', style: TextStyle(color: C.faint, fontSize: 11.5)),
               ),
@@ -210,31 +210,31 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   ),
                   const Spacer(),
                   Text(_brand.isEmpty ? 'CARD' : _brand.toUpperCase(),
-                      style: const TextStyle(color: C.ink, fontSize: 15, fontWeight: FontWeight.w800, fontStyle: FontStyle.italic)),
+                      style: TextStyle(color: C.ink, fontSize: 15, fontWeight: FontWeight.w800, fontStyle: FontStyle.italic)),
                 ]),
                 const Spacer(),
                 FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(shownNum,
-                      style: const TextStyle(color: C.white, fontSize: 21, fontWeight: FontWeight.w700, letterSpacing: 2)),
+                      style: TextStyle(color: C.white, fontSize: 21, fontWeight: FontWeight.w700, letterSpacing: 2)),
                 ),
                 const SizedBox(height: 16),
                 Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      const Text('CARD HOLDER', style: TextStyle(color: C.faint, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1)),
+                      Text('CARD HOLDER', style: TextStyle(color: C.faint, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1)),
                       const SizedBox(height: 3),
                       Text(_name.text.trim().isEmpty ? 'YOUR NAME' : _name.text.trim().toUpperCase(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(color: C.white, fontSize: 13.5, fontWeight: FontWeight.w700)),
+                          style: TextStyle(color: C.white, fontSize: 13.5, fontWeight: FontWeight.w700)),
                     ]),
                   ),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const Text('EXPIRES', style: TextStyle(color: C.faint, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1)),
+                    Text('EXPIRES', style: TextStyle(color: C.faint, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1)),
                     const SizedBox(height: 3),
                     Text(_exp.text.isEmpty ? 'MM/YY' : _exp.text,
-                        style: const TextStyle(color: C.white, fontSize: 13.5, fontWeight: FontWeight.w700)),
+                        style: TextStyle(color: C.white, fontSize: 13.5, fontWeight: FontWeight.w700)),
                   ]),
                 ]),
               ]),
@@ -272,7 +272,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 onEditingComplete: () => setState(() => _touchedNum = true),
                 decoration: _dec('1234 5678 9012 3456',
                     error: numErr,
-                    suffix: _luhn ? const Icon(Icons.check_circle_rounded, color: C.green) : const Icon(Icons.credit_card_rounded, color: C.faint)),
+                    suffix: _luhn ? Icon(Icons.check_circle_rounded, color: C.green) : Icon(Icons.credit_card_rounded, color: C.faint)),
               ),
               const SizedBox(height: 14),
               Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -307,7 +307,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       onChanged: (_) => setState(() {
                         if (_cvv.text.length == 3) _touchedCvv = true;
                       }),
-                      decoration: _dec('•••', error: cvvErr, suffix: const Icon(Icons.help_outline_rounded, color: C.faint, size: 20)),
+                      decoration: _dec('•••', error: cvvErr, suffix: Icon(Icons.help_outline_rounded, color: C.faint, size: 20)),
                     ),
                   ]),
                 ),
@@ -328,7 +328,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 radius: 18,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(children: [
-                  const Expanded(
+                  Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text('Save this card', style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
                       SizedBox(height: 2),
@@ -339,7 +339,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 ]),
               ),
               const SizedBox(height: 16),
-              const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Icon(Icons.lock_outline_rounded, size: 15, color: C.muted2),
                 SizedBox(width: 6),
                 Flexible(

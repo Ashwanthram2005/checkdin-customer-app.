@@ -57,13 +57,13 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setSheet) => Container(
           padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-          decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
           child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
             Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2)))),
             const SizedBox(height: 16),
             const Text('Choose how to pay', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
             const SizedBox(height: 4),
-            Text('Last try with $_method didn\'t go through.', style: const TextStyle(fontSize: 13.5, color: C.muted)),
+            Text('Last try with $_method didn\'t go through.', style: TextStyle(fontSize: 13.5, color: C.muted)),
             const SizedBox(height: 14),
             for (final m in _methods)
               GestureDetector(
@@ -73,12 +73,12 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                   margin: const EdgeInsets.only(bottom: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: sel == m[0] ? C.limeSoft : C.white,
+                    color: sel == m[0] ? C.limeSoft : C.card,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: sel == m[0] ? C.ink : C.border, width: 1.5),
                   ),
                   child: Row(children: [
-                    IconTile(m[1] as IconData, bg: sel == m[0] ? C.lime : C.bg, size: 40),
+                    IconTile(m[1] as IconData, bg: sel == m[0] ? C.limeBg : C.bg, size: 40),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -86,10 +86,10 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                           Text(m[2] as String, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
                           if (m[2] == _method) ...[
                             const SizedBox(width: 6),
-                            const Tag('Failed', bg: C.redSoft, fg: C.red),
+                            Tag('Failed', bg: C.redSoft, fg: C.red),
                           ],
                         ]),
-                        Text(m[3] as String, style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                        Text(m[3] as String, style: TextStyle(fontSize: 12.5, color: C.muted)),
                       ]),
                     ),
                     Container(
@@ -97,11 +97,11 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                       height: 22,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: sel == m[0] ? C.ink : C.white,
+                        color: sel == m[0] ? C.inkBg : C.card,
                         border: Border.all(color: sel == m[0] ? C.ink : C.border, width: 2),
                       ),
                       child: sel == m[0]
-                          ? Center(child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)))
+                          ? Center(child: Container(width: 8, height: 8, decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle)))
                           : null,
                     ),
                   ]),
@@ -128,8 +128,8 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
             child: Container(
               width: 260,
               padding: const EdgeInsets.fromLTRB(20, 26, 20, 22),
-              decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(24)),
-              child: const Column(mainAxisSize: MainAxisSize.min, children: [
+              decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(24)),
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
                 SizedBox(width: 40, height: 40, child: CircularProgressIndicator(strokeWidth: 3.5, color: C.ink, backgroundColor: C.limeSoft)),
                 SizedBox(height: 16),
                 Text('Confirming payment…', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
@@ -180,7 +180,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
             child: Container(
               constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.9),
               padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-              decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+              decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
               child: SingleChildScrollView(
                 child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Center(
@@ -190,7 +190,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                   const Text('Why are you cancelling?', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 4),
                   Text('Your room at ${app.hotel.name} will be released. No money has been charged.',
-                      style: const TextStyle(fontSize: 13.5, color: C.muted, height: 1.45)),
+                      style: TextStyle(fontSize: 13.5, color: C.muted, height: 1.45)),
                   const SizedBox(height: 14),
                   for (final r in _reasons)
                     GestureDetector(
@@ -200,7 +200,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                         margin: const EdgeInsets.only(bottom: 8),
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
                         decoration: BoxDecoration(
-                          color: picked == r ? C.limeSoft : C.white,
+                          color: picked == r ? C.limeSoft : C.card,
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(color: picked == r ? C.ink : C.border, width: 1.5),
                         ),
@@ -213,11 +213,11 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                             height: 22,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: picked == r ? C.ink : C.white,
+                              color: picked == r ? C.inkBg : C.card,
                               border: Border.all(color: picked == r ? C.ink : C.border, width: 2),
                             ),
                             child: picked == r
-                                ? Center(child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)))
+                                ? Center(child: Container(width: 8, height: 8, decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle)))
                                 : null,
                           ),
                         ]),
@@ -255,7 +255,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                           duration: const Duration(milliseconds: 150),
                           height: 52,
                           alignment: Alignment.center,
-                          decoration: BoxDecoration(color: ok ? C.red : const Color(0xFFEFEFEA), borderRadius: BorderRadius.circular(999)),
+                          decoration: BoxDecoration(color: ok ? C.red : C.tint(Color(0xFFEFEFEA)), borderRadius: BorderRadius.circular(999)),
                           child: Text('Cancel booking',
                               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: ok ? C.white : C.muted2)),
                         ),
@@ -278,9 +278,9 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
 
   Widget _row(String k, String v, {bool last = false}) => Container(
         padding: const EdgeInsets.symmetric(vertical: 11),
-        decoration: BoxDecoration(border: last ? null : const Border(bottom: BorderSide(color: C.line))),
+        decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
         child: Row(children: [
-          Text(k, style: const TextStyle(fontSize: 13.5, color: C.muted)),
+          Text(k, style: TextStyle(fontSize: 13.5, color: C.muted)),
           const Spacer(),
           Text(v, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
         ]),
@@ -304,13 +304,13 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                   child: Container(
                     width: 88,
                     height: 88,
-                    decoration: const BoxDecoration(color: C.redSoft, shape: BoxShape.circle),
+                    decoration: BoxDecoration(color: C.redSoft, shape: BoxShape.circle),
                     child: Center(
                       child: Container(
                         width: 56,
                         height: 56,
-                        decoration: const BoxDecoration(color: C.red, shape: BoxShape.circle),
-                        child: const Icon(Icons.close_rounded, color: C.white, size: 32),
+                        decoration: BoxDecoration(color: C.red, shape: BoxShape.circle),
+                        child: Icon(Icons.close_rounded, color: C.white, size: 32),
                       ),
                     ),
                   ),
@@ -320,7 +320,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                     textAlign: TextAlign.center, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.8)),
                 const SizedBox(height: 8),
                 Text('${inr(app.total)} was not charged. Your bank didn\'t confirm the payment in time.',
-                    textAlign: TextAlign.center, style: const TextStyle(fontSize: 14.5, color: C.muted, height: 1.45)),
+                    textAlign: TextAlign.center, style: TextStyle(fontSize: 14.5, color: C.muted, height: 1.45)),
                 const SizedBox(height: 22),
                 Container(
                   padding: const EdgeInsets.all(14),
@@ -340,8 +340,8 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                     if (!expired)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(999)),
-                        child: Text(_clock, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: C.lime)),
+                        decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(999)),
+                        child: Text(_clock, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: C.lime)),
                       ),
                   ]),
                 ),
@@ -360,7 +360,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
                 WhiteCard(
                   radius: 18,
                   padding: const EdgeInsets.all(14),
-                  child: const Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Icon(Icons.info_outline_rounded, size: 20, color: C.muted),
                     SizedBox(width: 10),
                     Expanded(

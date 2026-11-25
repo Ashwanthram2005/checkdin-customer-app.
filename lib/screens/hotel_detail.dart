@@ -23,12 +23,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   void _priceSheet() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: C.white,
+      backgroundColor: C.card,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(26))),
       builder: (_) => Padding(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Container(width: 40, height: 5, decoration: BoxDecoration(color: const Color(0xFFDADAD2), borderRadius: BorderRadius.circular(999))),
+          Container(width: 40, height: 5, decoration: BoxDecoration(color: C.tint(Color(0xFFDADAD2)), borderRadius: BorderRadius.circular(999))),
           const SizedBox(height: 14),
           Row(children: [
             const Expanded(child: Text('Price details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800))),
@@ -83,16 +83,16 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                     offset: const Offset(0, -18),
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                      decoration: const BoxDecoration(color: C.bg, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+                      decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Row(children: [
                           RatingBadge(h.rating, reviews: h.reviews),
-                          if (h.topRated) ...[const SizedBox(width: 8), const Tag('Top rated', bg: C.lime, fg: C.ink)],
+                          if (h.topRated) ...[const SizedBox(width: 8), Tag('Top rated', bg: C.limeBg, fg: C.ink)],
                         ]),
                         const SizedBox(height: 10),
                         Text(h.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.8, height: 1.15)),
                         const SizedBox(height: 4),
-                        Text('${h.area}, Chennai · ${h.distanceKm} km away', style: const TextStyle(fontSize: 13.5, color: C.muted)),
+                        Text('${h.area}, Chennai · ${h.distanceKm} km away', style: TextStyle(fontSize: 13.5, color: C.muted)),
                       ]),
                     ),
                   ),
@@ -109,7 +109,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           Row(children: [
                             Expanded(child: Text(app.fullDay ? 'Your stay' : 'Choose your slot', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
                             Text(app.whenShort,
-                                style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                                style: TextStyle(fontSize: 12.5, color: C.muted)),
                           ]),
                           const SizedBox(height: 12),
                           if (app.fullDay)
@@ -134,7 +134,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                       duration: const Duration(milliseconds: 150),
                                       height: 64,
                                       decoration: BoxDecoration(
-                                        color: on ? C.lime : (p == null ? C.bg : C.white),
+                                        color: on ? C.limeBg : (p == null ? C.bg : C.white),
                                         borderRadius: BorderRadius.circular(16),
                                         border: Border.all(color: on ? C.lime : C.border, width: 1.5),
                                       ),
@@ -157,11 +157,11 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                             child: Row(children: [
                               const Icon(Icons.schedule_rounded, size: 16),
                               const SizedBox(width: 8),
-                              Text.rich(TextSpan(style: const TextStyle(fontSize: 13, color: Color(0xFF3F3F38)), children: [
+                              Text.rich(TextSpan(style: TextStyle(fontSize: 13, color: C.tx(Color(0xFF3F3F38))), children: [
                                 const TextSpan(text: 'Check-out at '),
                                 TextSpan(
                                     text: app.fullDay ? '11:00 AM, ${dateLabel(app.outDate)}' : '${hourLabel(app.checkOutHour)}${app.checkOutHour >= 24 ? ' (next day)' : ''}',
-                                    style: const TextStyle(fontWeight: FontWeight.w800, color: C.ink)),
+                                    style: TextStyle(fontWeight: FontWeight.w800, color: C.ink)),
                               ])),
                             ]),
                           ),
@@ -187,7 +187,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       ),
                       SectionLabel('Location', key: _keys['Location']),
                       Material(
-                        color: C.white,
+                        color: C.card,
                         borderRadius: BorderRadius.circular(22),
                         clipBehavior: Clip.antiAlias,
                         child: Column(children: [
@@ -221,7 +221,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                         size: 18, color: i < double.parse(h.rating).round() ? C.gold : const Color(0xFFE2E2DA))),
                               ),
                               const SizedBox(height: 4),
-                              Text('Based on ${h.reviews} verified stays', style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                              Text('Based on ${h.reviews} verified stays', style: TextStyle(fontSize: 12.5, color: C.muted)),
                             ]),
                           ]),
                           const SizedBox(height: 16),
@@ -237,7 +237,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                       value: (b[1] as double) / 5,
                                       minHeight: 8,
                                       backgroundColor: C.line,
-                                      valueColor: const AlwaysStoppedAnimation(C.ink),
+                                      valueColor: AlwaysStoppedAnimation(C.ink),
                                     ),
                                   ),
                                 ),
@@ -257,7 +257,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         mainAxisSpacing: 10,
                         crossAxisSpacing: 10,
                         childAspectRatio: 1.9,
-                        children: const [
+                        children: [
                           _Rule(Icons.badge_outlined, 'Local ID accepted', C.limeSoft),
                           _Rule(Icons.favorite_border_rounded, 'Couple friendly', C.limeSoft),
                           _Rule(Icons.verified_user_outlined, '18+ guests only', C.bg),
@@ -277,7 +277,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                     Text.rich(TextSpan(children: [
                       TextSpan(text: price == null ? 'Full' : inr(price), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
-                      TextSpan(text: app.fullDay ? ' / night' : ' / ${app.slot} hrs', style: const TextStyle(fontSize: 13, color: C.muted)),
+                      TextSpan(text: app.fullDay ? ' / night' : ' / ${app.slot} hrs', style: TextStyle(fontSize: 13, color: C.muted)),
                     ])),
                     GestureDetector(
                       onTap: _priceSheet,
@@ -297,7 +297,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
 }
 
 Widget _billRow(String l, String v, {Color? vColor}) => Row(children: [
-      Expanded(child: Text(l, style: const TextStyle(fontSize: 14, color: C.muted))),
+      Expanded(child: Text(l, style: TextStyle(fontSize: 14, color: C.muted))),
       Text(v, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: vColor ?? C.ink)),
     ]);
 
@@ -309,7 +309,7 @@ Widget _totalBox(String v, {String label = 'To pay'}) => Container(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
             const SizedBox(height: 2),
-            const Text('Inclusive of all taxes', style: TextStyle(fontSize: 12, color: C.limeInk)),
+            Text('Inclusive of all taxes', style: TextStyle(fontSize: 12, color: C.limeInk)),
           ]),
         ),
         Text(v, style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w800)),
@@ -343,7 +343,7 @@ class _TabsDelegate extends SliverPersistentHeaderDelegate {
                   padding: const EdgeInsets.only(right: 6),
                   child: ActionChip(
                     label: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-                    backgroundColor: C.white,
+                    backgroundColor: C.card,
                     side: BorderSide.none,
                     shape: const StadiumBorder(),
                     onPressed: () => onTap(t),
@@ -420,9 +420,9 @@ class _Policies extends StatelessWidget {
                                   width: 7,
                                   height: 7,
                                   margin: const EdgeInsets.only(top: 7, right: 10),
-                                  decoration: BoxDecoration(color: C.lime, shape: BoxShape.circle, border: Border.all(color: C.ink, width: 1.2)),
+                                  decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle, border: Border.all(color: C.ink, width: 1.2)),
                                 ),
-                                Expanded(child: Text(t, style: const TextStyle(fontSize: 13.5, color: Color(0xFF3F3F38), height: 1.5))),
+                                Expanded(child: Text(t, style: TextStyle(fontSize: 13.5, color: C.tx(Color(0xFF3F3F38)), height: 1.5))),
                               ]),
                             ))
                         .toList()

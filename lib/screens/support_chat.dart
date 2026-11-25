@@ -136,12 +136,12 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
       body: Column(children: [
         SheetHeader(
           child: Row(children: [
-            const BackBtn(bg: C.bg, shadow: false),
+            BackBtn(bg: C.bg, shadow: false),
             const SizedBox(width: 10),
             Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(color: _agent ? C.ink : C.lime, shape: BoxShape.circle),
+              decoration: BoxDecoration(color: _agent ? C.inkBg : C.limeBg, shape: BoxShape.circle),
               child: Icon(_agent ? Icons.support_agent_rounded : Icons.smart_toy_outlined, color: _agent ? C.lime : C.ink, size: 22),
             ),
             const SizedBox(width: 10),
@@ -149,9 +149,9 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(_agent ? 'Divya · Checkdin support' : 'Checkdin support', style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
                 Row(children: [
-                  Container(width: 7, height: 7, decoration: const BoxDecoration(color: C.green, shape: BoxShape.circle)),
+                  Container(width: 7, height: 7, decoration: BoxDecoration(color: C.green, shape: BoxShape.circle)),
                   const SizedBox(width: 5),
-                  Text(_agent ? 'Online now' : 'Replies in about 2 min · 24×7', style: const TextStyle(fontSize: 12, color: C.muted)),
+                  Text(_agent ? 'Online now' : 'Replies in about 2 min · 24×7', style: TextStyle(fontSize: 12, color: C.muted)),
                 ]),
               ]),
             ),
@@ -164,7 +164,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
             itemCount: _msgs.length + (_typing ? 1 : 0) + 1,
             itemBuilder: (_, i) {
               if (i == 0) {
-                return const Padding(
+                return Padding(
                   padding: EdgeInsets.only(bottom: 14),
                   child: Center(child: Text('Today', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: C.muted2))),
                 );
@@ -176,21 +176,21 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 10),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(18)),
-                    child: const Text('typing…', style: TextStyle(fontSize: 13, color: C.muted, fontStyle: FontStyle.italic)),
+                    decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(18)),
+                    child: Text('typing…', style: TextStyle(fontSize: 13, color: C.muted, fontStyle: FontStyle.italic)),
                   ),
                 );
               }
               final m = _msgs[k];
               return Column(crossAxisAlignment: m.me ? CrossAxisAlignment.end : CrossAxisAlignment.start, children: [
                 if (m.who != null)
-                  Padding(padding: const EdgeInsets.only(left: 4, bottom: 3), child: Text(m.who!, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: C.muted))),
+                  Padding(padding: const EdgeInsets.only(left: 4, bottom: 3), child: Text(m.who!, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: C.muted))),
                 Container(
                   constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.78),
                   margin: const EdgeInsets.only(bottom: 4),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
                   decoration: BoxDecoration(
-                    color: m.me ? C.ink : C.white,
+                    color: m.me ? C.inkBg : C.card,
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(18),
                       topRight: const Radius.circular(18),
@@ -206,7 +206,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                         onTap: () => Navigator.pushNamed(context, m.link!),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(999)),
+                          decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(999)),
                           child: Text('${m.linkLabel} →', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
                         ),
                       ),
@@ -215,7 +215,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 4, right: 4, bottom: 10),
-                  child: Text(m.me ? '${m.time} · Seen' : m.time, style: const TextStyle(fontSize: 10.5, color: C.muted2)),
+                  child: Text(m.me ? '${m.time} · Seen' : m.time, style: TextStyle(fontSize: 10.5, color: C.muted2)),
                 ),
                 if (m.chips.isNotEmpty && k == _msgs.length - 1)
                   Padding(
@@ -226,7 +226,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                           onTap: () => _send(c),
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-                            decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(999), border: Border.all(color: C.ink, width: 1.5)),
+                            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(999), border: Border.all(color: C.ink, width: 1.5)),
                             child: Text(c, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                           ),
                         ),
@@ -238,7 +238,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
         ),
         Container(
           padding: EdgeInsets.fromLTRB(12, 10, 12, 10 + MediaQuery.of(context).padding.bottom),
-          decoration: const BoxDecoration(color: C.white, boxShadow: [BoxShadow(color: Color(0x14111111), blurRadius: 20, offset: Offset(0, -6))]),
+          decoration: BoxDecoration(color: C.card, boxShadow: [BoxShadow(color: Color(0x14111111), blurRadius: 20, offset: Offset(0, -6))]),
           child: Row(children: [
             CircleBtn(
                 icon: Icons.add_photo_alternate_outlined, size: 44, bg: C.bg, shadow: false, tooltip: 'Attach photo', onTap: () => toast(context, 'Photo attachments arrive with the backend')),
@@ -267,7 +267,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
             CircleBtn(
               icon: Icons.send_rounded,
               size: 44,
-              bg: _ctrl.text.trim().isEmpty ? C.bg : C.ink,
+              bg: _ctrl.text.trim().isEmpty ? C.bg : C.inkBg,
               iconColor: _ctrl.text.trim().isEmpty ? C.faint : C.lime,
               shadow: false,
               tooltip: 'Send',

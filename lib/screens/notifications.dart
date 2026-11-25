@@ -99,7 +99,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     : null);
           },
           child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            IconTile(n.icon, bg: n.lime ? C.lime : C.bg, size: 42),
+            IconTile(n.icon, bg: n.lime ? C.limeBg : C.bg, size: 42),
             const SizedBox(width: 12),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -108,10 +108,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     child: Text(n.title,
                         style: TextStyle(fontSize: 14.5, fontWeight: n.unread ? FontWeight.w800 : FontWeight.w700)),
                   ),
-                  Text(n.time, style: const TextStyle(fontSize: 11.5, color: C.muted2, fontWeight: FontWeight.w600)),
+                  Text(n.time, style: TextStyle(fontSize: 11.5, color: C.muted2, fontWeight: FontWeight.w600)),
                 ]),
                 const SizedBox(height: 3),
-                Text(n.body, style: const TextStyle(fontSize: 13, color: C.muted, height: 1.4)),
+                Text(n.body, style: TextStyle(fontSize: 13, color: C.muted, height: 1.4)),
               ]),
             ),
             if (n.unread) ...[
@@ -120,7 +120,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 width: 9,
                 height: 9,
                 margin: const EdgeInsets.only(top: 5),
-                decoration: const BoxDecoration(color: C.red, shape: BoxShape.circle),
+                decoration: BoxDecoration(color: C.red, shape: BoxShape.circle),
               ),
             ],
           ]),
@@ -132,11 +132,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       return Padding(
         padding: const EdgeInsets.only(top: 60),
         child: Column(children: [
-          const IconTile(Icons.notifications_none_rounded, bg: C.lime, size: 72, radius: 24),
+          IconTile(Icons.notifications_none_rounded, bg: C.limeBg, size: 72, radius: 24),
           const SizedBox(height: 16),
           const Text("You're all caught up", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
-          const Text('Booking updates and deals will show up here.', style: TextStyle(fontSize: 13.5, color: C.muted)),
+          Text('Booking updates and deals will show up here.', style: TextStyle(fontSize: 13.5, color: C.muted)),
         ]),
       );
     }
@@ -167,14 +167,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               margin: const EdgeInsets.only(bottom: 10),
               padding: const EdgeInsets.only(right: 20),
               decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(20)),
-              child: const Icon(Icons.delete_outline_rounded, color: C.red),
+              child: Icon(Icons.delete_outline_rounded, color: C.red),
             ),
             onDismissed: (_) => setState(() => _inbox.remove(n)),
             child: _noteTile(n),
           ),
       ],
       const SizedBox(height: 6),
-      const Center(child: Text('Swipe left to delete', style: TextStyle(fontSize: 12, color: C.muted2))),
+      Center(child: Text('Swipe left to delete', style: TextStyle(fontSize: 12, color: C.muted2))),
     ]);
   }
 
@@ -190,7 +190,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
-                    border: i == keys.length - 1 ? null : const Border(bottom: BorderSide(color: C.line)),
+                    border: i == keys.length - 1 ? null : Border(bottom: BorderSide(color: C.line)),
                   ),
                   child: Row(children: [
                     IconTile(_icons[keys[i]]!, size: 38),
@@ -199,7 +199,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Text(keys[i], style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 2),
-                        Text(_subs[keys[i]]!, style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                        Text(_subs[keys[i]]!, style: TextStyle(fontSize: 12.5, color: C.muted)),
                       ]),
                     ),
                     const SizedBox(width: 8),
@@ -214,9 +214,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget _settingsView() {
     final always = Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
-      child: const Row(children: [
-        IconTile(Icons.receipt_long_outlined, bg: C.lime, size: 38),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
+      child: Row(children: [
+        IconTile(Icons.receipt_long_outlined, bg: C.limeBg, size: 38),
         SizedBox(width: 12),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -238,12 +238,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           margin: const EdgeInsets.only(top: 10),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(14)),
-          child: const Row(children: [
+          child: Row(children: [
             Icon(Icons.info_outline_rounded, size: 18, color: C.red),
             SizedBox(width: 8),
             Expanded(
               child: Text("You won't get check-in reminders. Keep at least one channel on.",
-                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFFA3241A))),
+                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: C.tx(Color(0xFFA3241A)))),
             ),
           ]),
         ),

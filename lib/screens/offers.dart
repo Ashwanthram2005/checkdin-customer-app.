@@ -16,10 +16,10 @@ class _Coupon {
   const _Coupon(this.code, this.big, this.unit, this.title, this.desc, this.stub, this.stubFg);
 }
 
-const _coupons = [
-  _Coupon('NEWSTAY', '25%', 'OFF', '25% off your first stay', 'Up to ₹200 off on any hourly booking.', C.lime, C.ink),
-  _Coupon('BACK8', '8%', 'BACK', '8% back as credits', 'On your next booking. Credits added after checkout.', C.ink, C.lime),
-  _Coupon('NIGHT150', '₹150', 'OFF', '₹150 off full-day stays', 'On full-day bookings above ₹1,500.', Color(0xFFFFF1C7), C.ink),
+List<_Coupon> get _coupons => [
+  _Coupon('NEWSTAY', '25%', 'OFF', '25% off your first stay', 'Up to ₹200 off on any hourly booking.', C.limeBg, C.ink),
+  _Coupon('BACK8', '8%', 'BACK', '8% back as credits', 'On your next booking. Credits added after checkout.', C.inkBg, C.lime),
+  _Coupon('NIGHT150', '₹150', 'OFF', '₹150 off full-day stays', 'On full-day bookings above ₹1,500.', C.tint(const Color(0xFFFFF1C7)), C.ink),
 ];
 
 class _OffersScreenState extends State<OffersScreen> {
@@ -43,7 +43,7 @@ class _OffersScreenState extends State<OffersScreen> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(22),
         child: Container(
-          color: C.white,
+          color: C.card,
           child: IntrinsicHeight(
             child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
               Container(
@@ -59,11 +59,11 @@ class _OffersScreenState extends State<OffersScreen> {
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
-                  decoration: const BoxDecoration(border: Border(left: BorderSide(color: C.border, width: 2))),
+                  decoration: BoxDecoration(border: Border(left: BorderSide(color: C.border, width: 2))),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(c.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                     const SizedBox(height: 3),
-                    Text(c.desc, style: const TextStyle(fontSize: 12.5, color: C.muted, height: 1.4)),
+                    Text(c.desc, style: TextStyle(fontSize: 12.5, color: C.muted, height: 1.4)),
                     const SizedBox(height: 10),
                     Row(children: [
                       Container(
@@ -94,14 +94,14 @@ class _OffersScreenState extends State<OffersScreen> {
         const Align(alignment: Alignment.centerLeft, child: BackBtn()),
         const SizedBox(height: 14),
         const Text('Offers', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: -1)),
-        const Text('Save more on every stay', style: TextStyle(fontSize: 13.5, color: C.muted)),
+        Text('Save more on every stay', style: TextStyle(fontSize: 13.5, color: C.muted)),
         const SizedBox(height: 18),
         WhiteCard(
-          color: C.ink,
+          color: C.inkBg,
           radius: 24,
           padding: const EdgeInsets.all(18),
           child: Row(children: [
-            const Expanded(
+            Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text('CHECKDIN CREDITS', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: C.faint)),
                 SizedBox(height: 6),
@@ -118,7 +118,7 @@ class _OffersScreenState extends State<OffersScreen> {
           height: 56,
           padding: const EdgeInsets.fromLTRB(16, 6, 6, 6),
           decoration: BoxDecoration(
-            color: C.white,
+            color: C.card,
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: _valid == null ? C.white : (_valid! ? C.green : C.red), width: 1.5),
           ),
@@ -158,17 +158,17 @@ class _OffersScreenState extends State<OffersScreen> {
         const Text('Refer & earn', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
         const SizedBox(height: 12),
         WhiteCard(
-          color: const Color(0xFFFFF1C7),
+          color: C.tint(Color(0xFFFFF1C7)),
           padding: const EdgeInsets.all(18),
           child: Column(children: [
-            const Row(children: [
-              IconTile(Icons.card_giftcard_rounded, bg: C.white, size: 46, radius: 14),
+            Row(children: [
+              IconTile(Icons.card_giftcard_rounded, bg: C.card, size: 46, radius: 14),
               SizedBox(width: 12),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text('Give ₹100, get ₹100', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                   SizedBox(height: 2),
-                  Text('When a friend books their first stay', style: TextStyle(fontSize: 12.5, color: Color(0xFF4A4030))),
+                  Text('When a friend books their first stay', style: TextStyle(fontSize: 12.5, color: C.tx(Color(0xFF4A4030)))),
                 ]),
               ),
             ]),
@@ -178,7 +178,7 @@ class _OffersScreenState extends State<OffersScreen> {
                 child: Container(
                   height: 46,
                   padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
-                  decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(14)),
+                  decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(14)),
                   child: Row(children: [
                     const Expanded(child: Text('ASHW100', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, letterSpacing: 1.2))),
                     PillBtn('Copy', kind: BtnKind.soft, height: 34, fontSize: 12, onTap: () => _copy('ASHW100')),
@@ -191,7 +191,7 @@ class _OffersScreenState extends State<OffersScreen> {
           ]),
         ),
         const SizedBox(height: 16),
-        const Text('One coupon per booking. Offers may change.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
+        Text('One coupon per booking. Offers may change.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
       ]),
     );
   }

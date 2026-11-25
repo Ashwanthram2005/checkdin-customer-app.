@@ -23,7 +23,7 @@ class CancelPolicyScreen extends StatelessWidget {
             Text(when, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, letterSpacing: .6, color: fg)),
             const SizedBox(height: 6),
             Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: -0.6)),
-            Text(sub, style: const TextStyle(fontSize: 11.5, color: C.muted)),
+            Text(sub, style: TextStyle(fontSize: 11.5, color: C.muted)),
           ]),
         ),
       );
@@ -46,7 +46,7 @@ class CancelPolicyScreen extends StatelessWidget {
               const SizedBox(height: 22),
               const Highlight(before: 'Plans changed?\nHere\'s what ', marked: 'you get back.', size: 28, height: 1.18),
               const SizedBox(height: 8),
-              const Text('Your refund depends on how early you cancel before check-in.', style: TextStyle(fontSize: 14, color: C.muted)),
+              Text('Your refund depends on how early you cancel before check-in.', style: TextStyle(fontSize: 14, color: C.muted)),
               const SectionLabel('Refund on the amount you paid'),
               Row(children: [
                 _tier('5+ HRS BEFORE', '50%', 'refund', C.limeSoft, C.limeInk),
@@ -64,10 +64,10 @@ class CancelPolicyScreen extends StatelessWidget {
                   const SizedBox(height: 14),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(999),
-                    child: const SizedBox(
+                    child: SizedBox(
                       height: 10,
                       child: Row(children: [
-                        Expanded(flex: 5, child: ColoredBox(color: C.lime)),
+                        Expanded(flex: 5, child: ColoredBox(color: C.limeBg)),
                         SizedBox(width: 3),
                         Expanded(flex: 2, child: ColoredBox(color: Color(0xFFF2B705))),
                         SizedBox(width: 3),
@@ -89,13 +89,13 @@ class CancelPolicyScreen extends StatelessWidget {
                         Expanded(
                           child: Text.rich(TextSpan(style: const TextStyle(fontSize: 13.5, height: 1.45), children: [
                             TextSpan(text: '${r[1]} ', style: const TextStyle(fontWeight: FontWeight.w800)),
-                            TextSpan(text: r[2] as String, style: const TextStyle(color: C.muted)),
+                            TextSpan(text: r[2] as String, style: TextStyle(color: C.muted)),
                           ])),
                         ),
                       ]),
                     ),
                   const SizedBox(height: 4),
-                  const Text('Approved refunds usually reach your original payment method in 3–5 working days.',
+                  Text('Approved refunds usually reach your original payment method in 3–5 working days.',
                       style: TextStyle(fontSize: 12.5, color: C.muted, height: 1.45)),
                 ]),
               ),
@@ -108,8 +108,8 @@ class CancelPolicyScreen extends StatelessWidget {
                       width: 30,
                       height: 30,
                       alignment: Alignment.center,
-                      decoration: const BoxDecoration(color: C.ink, shape: BoxShape.circle),
-                      child: Text('${i + 1}', style: const TextStyle(color: C.lime, fontWeight: FontWeight.w800, fontSize: 13)),
+                      decoration: BoxDecoration(color: C.inkBg, shape: BoxShape.circle),
+                      child: Text('${i + 1}', style: TextStyle(color: C.lime, fontWeight: FontWeight.w800, fontSize: 13)),
                     ),
                     const SizedBox(width: 12),
                     Expanded(child: Text(_steps[i], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600))),

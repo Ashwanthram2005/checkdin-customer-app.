@@ -18,7 +18,7 @@ class _SavedScreenState extends State<SavedScreen> {
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
         content: Text('Removed ${h.name}', style: const TextStyle(fontWeight: FontWeight.w600)),
-        backgroundColor: C.ink,
+        backgroundColor: C.inkBg,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 4),
         margin: const EdgeInsets.fromLTRB(16, 0, 16, 100),
@@ -50,7 +50,7 @@ class _SavedScreenState extends State<SavedScreen> {
                       left.isEmpty
                           ? 'Hotels you love, in one place'
                           : '${left.length} ${left.length > 1 ? 'hotels' : 'hotel'} for your next stay',
-                      style: const TextStyle(fontSize: 13.5, color: C.muted)),
+                      style: TextStyle(fontSize: 13.5, color: C.muted)),
                 ]),
               ),
               if (left.isNotEmpty)
@@ -69,13 +69,13 @@ class _SavedScreenState extends State<SavedScreen> {
                   Container(
                     width: 64,
                     height: 64,
-                    decoration: BoxDecoration(color: C.lime, shape: BoxShape.circle, border: Border.all(color: C.ink, width: 3)),
+                    decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle, border: Border.all(color: C.ink, width: 3)),
                     child: const Icon(Icons.favorite_rounded, size: 30),
                   ),
                   const SizedBox(height: 20),
                   const Text('No saved stays yet', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 6),
-                  const Text('Tap the heart on any hotel to keep it here for your next booking.',
+                  Text('Tap the heart on any hotel to keep it here for your next booking.',
                       textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: C.muted, height: 1.5)),
                   const SizedBox(height: 18),
                   PillBtn('Explore stays', kind: BtnKind.dark, onTap: () => Navigator.pushNamed(context, '/search')),
@@ -98,7 +98,7 @@ class _SavedScreenState extends State<SavedScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 14),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: on ? C.lime : C.white,
+                            color: on ? C.limeBg : C.card,
                             borderRadius: BorderRadius.circular(999),
                             border: Border.all(color: on ? C.lime : C.border, width: 1.5),
                           ),
@@ -114,9 +114,9 @@ class _SavedScreenState extends State<SavedScreen> {
                 radius: 18,
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 child: Row(children: [
-                  const IconTile(Icons.notifications_none_rounded, bg: C.limeSoft, size: 36),
+                  IconTile(Icons.notifications_none_rounded, bg: C.limeSoft, size: 36),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text('Price-drop alerts', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                       Text('On WhatsApp, for your saved hotels', style: TextStyle(fontSize: 12, color: C.muted)),
@@ -135,7 +135,7 @@ class _SavedScreenState extends State<SavedScreen> {
                 childAspectRatio: 0.66,
                 children: shown.map((h) {
                   return Material(
-                    color: C.white,
+                    color: C.card,
                     borderRadius: BorderRadius.circular(22),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
@@ -160,7 +160,7 @@ class _SavedScreenState extends State<SavedScreen> {
                             ),
                           ),
                           if (h.id == 'gr')
-                            const Positioned(left: 8, bottom: 8, child: Tag('↓ ₹100 cheaper', bg: C.lime, fg: C.ink)),
+                            Positioned(left: 8, bottom: 8, child: Tag('↓ ₹100 cheaper', bg: C.limeBg, fg: C.ink)),
                         ]),
                         Expanded(
                           child: Padding(
@@ -168,16 +168,16 @@ class _SavedScreenState extends State<SavedScreen> {
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                               Text(h.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800, height: 1.25)),
                               const SizedBox(height: 3),
-                              Text('${h.area} · ${h.distanceKm} km', style: const TextStyle(fontSize: 12, color: C.muted)),
+                              Text('${h.area} · ${h.distanceKm} km', style: TextStyle(fontSize: 12, color: C.muted)),
                               const Spacer(),
                               Row(children: [
                                 Expanded(
                                   child: Text.rich(TextSpan(children: [
                                     TextSpan(text: inr(h.prices.first ?? 0), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                                    const TextSpan(text: ' /3h', style: TextStyle(fontSize: 11.5, color: C.muted)),
+                                    TextSpan(text: ' /3h', style: TextStyle(fontSize: 11.5, color: C.muted)),
                                   ])),
                                 ),
-                                const IconTile(Icons.arrow_forward_rounded, bg: C.ink, fg: C.lime, size: 30, radius: 15),
+                                IconTile(Icons.arrow_forward_rounded, bg: C.inkBg, fg: C.lime, size: 30, radius: 15),
                               ]),
                             ]),
                           ),

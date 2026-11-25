@@ -41,7 +41,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   Widget _noUpcoming() => Padding(
         padding: const EdgeInsets.only(top: 30),
         child: Column(children: [
-          const IconTile(Icons.event_busy_outlined, bg: C.lime, size: 72, radius: 24),
+          IconTile(Icons.event_busy_outlined, bg: C.limeBg, size: 72, radius: 24),
           const SizedBox(height: 16),
           const Text('No upcoming stays', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
@@ -50,7 +50,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   ? 'Your booking was cancelled. A refund of ${inr(app.cancelRefund)} is on its way, usually in 3–5 working days.'
                   : 'Your booking was cancelled.',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 13.5, color: C.muted, height: 1.45)),
+              style: TextStyle(fontSize: 13.5, color: C.muted, height: 1.45)),
           const SizedBox(height: 18),
           PillBtn('Book a stay', kind: BtnKind.dark, height: 48, onTap: () => goHome(context)),
         ]),
@@ -68,10 +68,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Tag('● Confirmed', bg: C.lime, fg: C.ink),
+                Tag('● Confirmed', bg: C.limeBg, fg: C.ink),
                 const SizedBox(height: 10),
                 Text(h.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-                Text('${h.area}, Chennai · Room 204', style: const TextStyle(fontSize: 13, color: C.muted)),
+                Text('${h.area}, Chennai · Room 204', style: TextStyle(fontSize: 13, color: C.muted)),
               ]),
             ),
             CircleBtn(icon: Icons.more_vert_rounded, size: 40, bg: C.bg, shadow: false, tooltip: 'More options', onTap: () => setState(() => _menu = !_menu)),
@@ -86,7 +86,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               inDate: dateLabel(app.date),
               outDate: dateLabel(app.date),
               slot: '${app.slot} hrs',
-              chip: C.white,
+              chip: C.card,
             ),
           ),
           if (_menu) ...[
@@ -95,7 +95,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), border: Border.all(color: C.track, width: 1.5)),
               child: Row(children: [
-                const Expanded(
+                Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text('Incognito booking', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                     SizedBox(height: 2),
@@ -114,21 +114,21 @@ class _BookingsScreenState extends State<BookingsScreen> {
             },
             child: Container(
               padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
-              decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(18)),
+              decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(18)),
               child: Row(children: [
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(app.checkedIn ? 'YOU\'RE CHECKED IN' : 'CHECK-IN OTP',
-                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: C.faint)),
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: C.faint)),
                     const SizedBox(height: 2),
                     app.checkedIn
-                        ? const Text('View time left & extend', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: C.lime))
+                        ? Text('View time left & extend', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: C.lime))
                         : Text(app.checkinOtp.split('').join('  '),
-                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: C.lime, letterSpacing: 1)),
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: C.lime, letterSpacing: 1)),
                   ]),
                 ),
-                Text(app.checkedIn ? 'Open' : 'Show at desk', style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.white)),
-                const Icon(Icons.chevron_right_rounded, color: C.white),
+                Text(app.checkedIn ? 'Open' : 'Show at desk', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.white)),
+                Icon(Icons.chevron_right_rounded, color: C.white),
               ]),
             ),
           ),
@@ -172,7 +172,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               height: 46,
               alignment: Alignment.center,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(999), border: Border.all(color: const Color(0xFFF2C4BF), width: 1.5)),
-              child: const Row(mainAxisSize: MainAxisSize.min, children: [
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
                 Icon(Icons.event_busy_outlined, size: 18, color: C.red),
                 SizedBox(width: 8),
                 Text('Cancel booking', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: C.red)),
@@ -185,7 +185,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Row(children: [
-          Expanded(child: Text('${inr(app.total)} paid via ${app.paidWith}', style: const TextStyle(fontSize: 13, color: C.muted))),
+          Expanded(child: Text('${inr(app.total)} paid via ${app.paidWith}', style: TextStyle(fontSize: 13, color: C.muted))),
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/report'),
             child: const Text('Report an issue', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
@@ -212,7 +212,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(b.hotel, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 4),
-                Text(b.when, style: const TextStyle(fontSize: 13, color: C.muted)),
+                Text(b.when, style: TextStyle(fontSize: 13, color: C.muted)),
               ]),
             ),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -228,7 +228,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
           ]),
           if (b.canRate || b.note.isNotEmpty) ...[
             const SizedBox(height: 14),
-            const Divider(color: C.line, height: 1),
+            Divider(color: C.line, height: 1),
             const SizedBox(height: 12),
           ],
           if (b.canRate)
@@ -256,9 +256,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ])
           else if (b.note.isNotEmpty)
             Row(children: [
-              const Icon(Icons.check_circle_outline_rounded, size: 16, color: C.muted),
+              Icon(Icons.check_circle_outline_rounded, size: 16, color: C.muted),
               const SizedBox(width: 8),
-              Text(b.note, style: const TextStyle(fontSize: 13, color: C.muted)),
+              Text(b.note, style: TextStyle(fontSize: 13, color: C.muted)),
             ]),
           const SizedBox(height: 14),
           Row(children: [

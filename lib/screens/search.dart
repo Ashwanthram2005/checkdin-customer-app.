@@ -48,13 +48,13 @@ class SearchScreen extends StatelessWidget {
                         height: 56,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
-                          color: C.white,
+                          color: C.card,
                           borderRadius: BorderRadius.circular(18),
                           border: Border.all(color: place != null ? C.ink : C.white, width: 1.5),
                           boxShadow: const [BoxShadow(color: Color(0x0F111111), blurRadius: 20, offset: Offset(0, 6))],
                         ),
                         child: Row(children: [
-                          const Icon(Icons.search_rounded, color: C.ink),
+                          Icon(Icons.search_rounded, color: C.ink),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(place ?? 'Search area, landmark or hotel',
@@ -76,7 +76,7 @@ class SearchScreen extends StatelessWidget {
                     onTap: () async {
                       if (await useMyLocation(context)) app.set(() => app.place = 'Current location');
                     },
-                    child: const Row(children: [
+                    child: Row(children: [
                       IconTile(Icons.near_me_rounded, bg: C.limeSoft, size: 38, radius: 19),
                       SizedBox(width: 12),
                       Expanded(
@@ -96,7 +96,7 @@ class SearchScreen extends StatelessWidget {
                       SegmentPill(
                         options: const ['Hourly stay', 'Full-day stay'],
                         selected: app.fullDay ? 1 : 0,
-                        track: const Color(0xFFF0F0EA),
+                        track: C.tint(Color(0xFFF0F0EA)),
                         onChanged: (i) {
                           if (i == 1) {
                             app.set(() => app.fullDay = true);
@@ -118,13 +118,13 @@ class SearchScreen extends StatelessWidget {
                                     duration: const Duration(milliseconds: 150),
                                     height: 50,
                                     decoration: BoxDecoration(
-                                      color: on ? C.lime : C.white,
+                                      color: on ? C.limeBg : C.card,
                                       borderRadius: BorderRadius.circular(14),
                                       border: Border.all(color: on ? C.lime : C.border, width: 1.5),
                                     ),
                                     child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                                       Text('$h', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, height: 1.1)),
-                                      const Text('hours', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: C.muted)),
+                                      Text('hours', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: C.muted)),
                                     ]),
                                   ),
                                 ),
@@ -133,7 +133,7 @@ class SearchScreen extends StatelessWidget {
                           }).toList(),
                         )
                       else
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.all(4),
                           child: Row(children: [
                             Icon(Icons.nightlight_outlined, size: 18),
@@ -155,7 +155,7 @@ class SearchScreen extends StatelessWidget {
                           height: 40,
                           padding: const EdgeInsets.symmetric(horizontal: 14),
                           alignment: Alignment.center,
-                          decoration: BoxDecoration(color: on ? C.lime : C.white, borderRadius: BorderRadius.circular(999)),
+                          decoration: BoxDecoration(color: on ? C.limeBg : C.card, borderRadius: BorderRadius.circular(999)),
                           child: Text(a, style: TextStyle(fontSize: 13.5, fontWeight: on ? FontWeight.w800 : FontWeight.w600)),
                         ),
                       );
@@ -179,13 +179,13 @@ class SearchScreen extends StatelessWidget {
                           child: Container(
                             width: 160,
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                            decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(18)),
+                            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(18)),
                             child: Row(children: [
                               Expanded(
                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
                                   Text(r[0] as String, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
                                   const SizedBox(height: 3),
-                                  Text(r[1] as String, style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                                  Text(r[1] as String, style: TextStyle(fontSize: 12.5, color: C.muted)),
                                 ]),
                               ),
                               const Icon(Icons.chevron_right_rounded, size: 20),
@@ -207,7 +207,7 @@ class SearchScreen extends StatelessWidget {
                           Text(place, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                           const SizedBox(height: 2),
                           Text(app.fullDay ? 'Full-day stay' : '${app.slot}-hour stay',
-                              style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                              style: TextStyle(fontSize: 12.5, color: C.muted)),
                         ]),
                       ),
                       PillBtn('Continue', icon: Icons.arrow_forward_rounded, onTap: () => Navigator.pushNamed(context, '/date')),

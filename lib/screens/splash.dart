@@ -164,7 +164,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: C.lime,
+                      color: C.limeBg,
                     ),
                   ),
                 ),

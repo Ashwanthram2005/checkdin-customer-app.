@@ -33,7 +33,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget _field(IconData icon, String label, Widget child, {Widget? trailing, bool error = false}) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: C.white,
+          color: C.card,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: error ? C.red : C.white, width: 1.5),
         ),
@@ -42,7 +42,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           const SizedBox(width: 12),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: C.muted)),
+              Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: C.muted)),
               child,
             ]),
           ),
@@ -81,7 +81,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             const SizedBox(height: 14),
             Center(child: Text(_name.text.trim().isEmpty ? 'Your name' : _name.text.trim(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
-            const Center(child: Text('Tap the photo to change it', style: TextStyle(fontSize: 13, color: C.muted))),
+            Center(child: Text('Tap the photo to change it', style: TextStyle(fontSize: 13, color: C.muted))),
             const SectionLabel('Personal details'),
             _field(
               Icons.person_outline_rounded,
@@ -96,7 +96,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 padding: const EdgeInsets.only(top: 3),
                 child: Text(app.phone.isEmpty ? '+91 98765 43210' : '+91 ${app.phone}', style: inputStyle.copyWith(color: C.muted)),
               ),
-              trailing: const Tag('✓ Verified', bg: C.lime, fg: C.ink),
+              trailing: Tag('✓ Verified', bg: C.limeBg, fg: C.ink),
             ),
             const SizedBox(height: 10),
             _field(
@@ -112,7 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               error: _emailBad,
             ),
             if (_emailBad)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(6, 6, 6, 0),
                 child: Text('Please enter a valid email address.', style: TextStyle(fontSize: 12, color: C.red, fontWeight: FontWeight.w600)),
               ),
@@ -129,7 +129,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: 46,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: on ? C.ink : C.white,
+                          color: on ? C.inkBg : C.card,
                           borderRadius: BorderRadius.circular(999),
                           border: Border.all(color: on ? C.ink : const Color(0xFFDADAD2), width: 1.5),
                         ),
@@ -143,7 +143,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(height: 12),
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/help'),
-              child: const Text.rich(
+              child: Text.rich(
                 TextSpan(style: TextStyle(fontSize: 12.5, color: C.muted2), children: [
                   TextSpan(text: 'To change your mobile number, '),
                   TextSpan(text: 'contact support', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
@@ -155,7 +155,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Center(
               child: TextButton(
                 onPressed: () => Navigator.pushNamed(context, '/delete-account'),
-                child: const Text('Delete my account', style: TextStyle(color: C.red, fontWeight: FontWeight.w700, fontSize: 14)),
+                child: Text('Delete my account', style: TextStyle(color: C.red, fontWeight: FontWeight.w700, fontSize: 14)),
               ),
             ),
           ]),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../avatar.dart';
+import '../appearance.dart';
 import '../theme.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -32,7 +33,7 @@ class AccountScreen extends StatelessWidget {
               onTap: onTap,
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(border: last ? null : const Border(bottom: BorderSide(color: C.line))),
+                decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
                 child: Row(children: [
                   Icon(icon, size: 22),
                   const SizedBox(width: 12),
@@ -40,7 +41,7 @@ class AccountScreen extends StatelessWidget {
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
                       const SizedBox(height: 2),
-                      Text(sub, style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                      Text(sub, style: TextStyle(fontSize: 12.5, color: C.muted)),
                     ]),
                   ),
                   trailing ?? const Icon(Icons.chevron_right_rounded, color: Color(0xFF9A9A92)),
@@ -60,20 +61,20 @@ class AccountScreen extends StatelessWidget {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(app.name, style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
                     const SizedBox(height: 2),
-                    Text(phone, style: const TextStyle(fontSize: 13.5, color: C.muted)),
+                    Text(phone, style: TextStyle(fontSize: 13.5, color: C.muted)),
                   ]),
                 ),
                 OutlinedButton.icon(
                   onPressed: () => Navigator.pushNamed(context, '/edit-profile'),
-                  icon: const Icon(Icons.edit_outlined, size: 15, color: C.ink),
-                  label: const Text('Edit', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
-                  style: OutlinedButton.styleFrom(side: const BorderSide(color: C.ink, width: 1.5), shape: const StadiumBorder()),
+                  icon: Icon(Icons.edit_outlined, size: 15, color: C.ink),
+                  label: Text('Edit', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
+                  style: OutlinedButton.styleFrom(side: BorderSide(color: C.ink, width: 1.5), shape: const StadiumBorder()),
                 ),
               ]),
             ),
             const SizedBox(height: 14),
             WhiteCard(
-              color: C.ink,
+              color: C.inkBg,
               radius: 24,
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
               onTap: () => Navigator.pushNamed(context, '/booking-detail'),
@@ -81,18 +82,18 @@ class AccountScreen extends StatelessWidget {
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Row(children: [
-                      Container(width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle)),
+                      Container(width: 8, height: 8, decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle)),
                       const SizedBox(width: 8),
-                      const Text('UPCOMING STAY', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 1.3, color: C.faint)),
+                      Text('UPCOMING STAY', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, letterSpacing: 1.3, color: C.faint)),
                     ]),
                     const SizedBox(height: 8),
-                    Text('${app.hotel.name} · ${app.slot} hrs', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: C.white)),
+                    Text('${app.hotel.name} · ${app.slot} hrs', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: C.white)),
                     const SizedBox(height: 3),
                     Text('${dateLabel(app.date)} · ${hourLabel(app.checkInHour)} – ${hourLabel(app.checkOutHour)}',
-                        style: const TextStyle(fontSize: 13, color: C.faint)),
+                        style: TextStyle(fontSize: 13, color: C.faint)),
                   ]),
                 ),
-                const IconTile(Icons.arrow_forward_rounded, bg: C.lime, size: 44, radius: 22),
+                IconTile(Icons.arrow_forward_rounded, bg: C.limeBg, size: 44, radius: 22),
               ]),
             ),
             const SizedBox(height: 14),
@@ -108,6 +109,8 @@ class AccountScreen extends StatelessWidget {
                 row(Icons.chat_bubble_outline_rounded, 'WhatsApp updates', 'Booking updates & deals',
                     trailing: BrandSwitch(value: app.whatsappUpdates, onChanged: (v) => app.set(() => app.whatsappUpdates = v))),
                 row(Icons.notifications_none_rounded, 'Notifications', 'Check-in reminders & alerts', onTap: () => Navigator.pushNamed(context, '/notifications', arguments: 'settings')),
+                row(Icons.dark_mode_outlined, 'Appearance', Appearance.mode.label,
+                    onTap: () => Navigator.pushNamed(context, '/appearance')),
                 row(Icons.card_giftcard_rounded, 'Refer & earn', 'Give ₹100, get ₹100', onTap: () => Navigator.pushNamed(context, '/refer')),
                 row(Icons.help_outline_rounded, 'Help & support', 'Chat with us or report a problem',
                     onTap: () => Navigator.pushNamed(context, '/help'), last: true),
@@ -115,7 +118,7 @@ class AccountScreen extends StatelessWidget {
             ),
             const SizedBox(height: 14),
             WhiteCard(
-              color: C.lime,
+              color: C.limeBg,
               onTap: () => toast(context, 'Thanks! Opening Play Store…'),
               child: Row(children: [
                 const Expanded(

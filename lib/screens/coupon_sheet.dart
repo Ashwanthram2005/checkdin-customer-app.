@@ -40,7 +40,7 @@ Future<void> showCouponSheet(BuildContext context) async {
         return Container(
           margin: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
-            color: dim ? const Color(0xFFF5F5F0) : C.white,
+            color: dim ? C.tint(Color(0xFFF5F5F0)) : C.card,
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: on ? C.ink : C.border, width: 1.5),
           ),
@@ -49,7 +49,7 @@ Future<void> showCouponSheet(BuildContext context) async {
               width: 74,
               padding: const EdgeInsets.symmetric(vertical: 18),
               decoration: BoxDecoration(
-                color: dim ? const Color(0xFFE8E8E0) : C.lime,
+                color: dim ? C.tint(Color(0xFFE8E8E0)) : C.limeBg,
                 borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
               ),
               child: Column(children: [
@@ -69,11 +69,11 @@ Future<void> showCouponSheet(BuildContext context) async {
                     ),
                     if (!dim && c.code == best) ...[
                       const SizedBox(width: 6),
-                      const Tag('Best', bg: C.ink, fg: C.lime),
+                      Tag('Best', bg: C.inkBg, fg: C.lime),
                     ],
                   ]),
                   const SizedBox(height: 2),
-                  Text(c.desc, style: const TextStyle(fontSize: 12, color: C.muted, height: 1.35)),
+                  Text(c.desc, style: TextStyle(fontSize: 12, color: C.muted, height: 1.35)),
                   const SizedBox(height: 4),
                   Text(dim ? problem : couponSaving(c.code),
                       style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: dim ? C.red : C.green)),
@@ -94,7 +94,7 @@ Future<void> showCouponSheet(BuildContext context) async {
         padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
         child: Container(
           constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.88),
-          decoration: const BoxDecoration(color: C.bg, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             const SizedBox(height: 10),
             Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2))),
@@ -102,7 +102,7 @@ Future<void> showCouponSheet(BuildContext context) async {
               padding: const EdgeInsets.fromLTRB(20, 14, 12, 4),
               child: Row(children: [
                 const Expanded(child: Text('Apply coupon', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
-                CircleBtn(icon: Icons.close_rounded, size: 38, bg: C.white, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(ctx)),
+                CircleBtn(icon: Icons.close_rounded, size: 38, bg: C.card, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(ctx)),
               ]),
             ),
             Flexible(
@@ -110,7 +110,7 @@ Future<void> showCouponSheet(BuildContext context) async {
                 Container(
                   padding: const EdgeInsets.fromLTRB(14, 4, 6, 4),
                   decoration: BoxDecoration(
-                    color: C.white,
+                    color: C.card,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: error != null ? C.red : C.border, width: 1.5),
                   ),
@@ -135,17 +135,17 @@ Future<void> showCouponSheet(BuildContext context) async {
                 if (error != null)
                   Padding(
                     padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
-                    child: Text(error!, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.red)),
+                    child: Text(error!, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.red)),
                   ),
                 const SectionLabel('Available for this stay'),
-                if (ok.isEmpty) const Text('No coupons apply to this booking right now.', style: TextStyle(color: C.muted)),
+                if (ok.isEmpty) Text('No coupons apply to this booking right now.', style: TextStyle(color: C.muted)),
                 for (final c in ok) ticket(c),
                 if (notOk.isNotEmpty) ...[
                   const SectionLabel('Not available for this stay'),
                   for (final c in notOk) ticket(c, problem: couponProblem(c.code)),
                 ],
                 const SizedBox(height: 4),
-                const Text('One coupon per booking.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
+                Text('One coupon per booking.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
               ]),
             ),
           ]),

@@ -73,7 +73,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 14),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: active ? C.ink : C.white,
+              color: active ? C.inkBg : C.card,
               borderRadius: BorderRadius.circular(999),
               border: Border.all(color: active ? C.ink : C.border, width: 1.5),
             ),
@@ -97,7 +97,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
           floatingActionButton: list.isEmpty
               ? null
               : FloatingActionButton.extended(
-                  backgroundColor: C.ink,
+                  backgroundColor: C.inkBg,
                   foregroundColor: C.lime,
                   elevation: 4,
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StaysMapScreen(list: list, nightly: true))),
@@ -108,7 +108,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
             SheetHeader(
               child: Column(children: [
                 Row(children: [
-                  const BackBtn(bg: C.bg, shadow: false),
+                  BackBtn(bg: C.bg, shadow: false),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Material(
@@ -130,7 +130,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
                                   child: Text(
                                       '${dateLabel(app.inDate)} – ${dateLabel(app.outDate)} · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.adults}',
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontSize: 12.5, color: C.muted)),
+                                      style: TextStyle(fontSize: 12.5, color: C.muted)),
                                 ),
                               ]),
                             ),
@@ -164,9 +164,9 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(20, 18, 20, 30),
                 children: [
-                  Text.rich(TextSpan(style: const TextStyle(fontSize: 14, color: C.muted), children: [
+                  Text.rich(TextSpan(style: TextStyle(fontSize: 14, color: C.muted), children: [
                     const TextSpan(text: 'Showing '),
-                    TextSpan(text: '${list.length} ${list.length == 1 ? 'stay' : 'stays'}', style: const TextStyle(fontWeight: FontWeight.w800, color: C.ink)),
+                    TextSpan(text: '${list.length} ${list.length == 1 ? 'stay' : 'stays'}', style: TextStyle(fontWeight: FontWeight.w800, color: C.ink)),
                     TextSpan(text: ' for ${app.stayLabel} in ${_area ?? 'Chennai'}'),
                   ])),
                   const SizedBox(height: 14),
@@ -174,7 +174,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 40),
                       child: Column(children: [
-                        const IconTile(Icons.search_off_rounded, bg: C.lime, size: 64, radius: 22),
+                        IconTile(Icons.search_off_rounded, bg: C.limeBg, size: 64, radius: 22),
                         const SizedBox(height: 14),
                         const Text('No stays match', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
                         const SizedBox(height: 12),
@@ -204,7 +204,7 @@ class _OptionSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 18, 20, 18 + MediaQuery.of(context).padding.bottom),
-      decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
         const SizedBox(height: 8),
@@ -215,7 +215,7 @@ class _OptionSheet extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 13),
               child: Row(children: [
                 Expanded(child: Text(o, style: TextStyle(fontSize: 15, fontWeight: o == selected ? FontWeight.w800 : FontWeight.w500))),
-                if (o == selected) const Icon(Icons.check_circle_rounded, color: C.ink),
+                if (o == selected) Icon(Icons.check_circle_rounded, color: C.ink),
               ]),
             ),
           ),
@@ -254,14 +254,14 @@ class _NightCardState extends State<_NightCard> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         padding: EdgeInsets.fromLTRB(20, 18, 20, 18 + MediaQuery.of(ctx).padding.bottom),
-        decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
             Expanded(child: Text(h.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800))),
             RatingBadge(h.rating, reviews: h.reviews),
           ]),
           const SizedBox(height: 4),
-          Text(h.address, style: const TextStyle(fontSize: 13, color: C.muted)),
+          Text(h.address, style: TextStyle(fontSize: 13, color: C.muted)),
           const SizedBox(height: 14),
           for (final r in [
             [Icons.login_rounded, 'Check-in from 12:00 PM · check-out by 11:00 AM'],
@@ -312,7 +312,7 @@ class _NightCardState extends State<_NightCard> {
           ),
         );
     return Material(
-      color: C.white,
+      color: C.card,
       borderRadius: BorderRadius.circular(24),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -353,7 +353,7 @@ class _NightCardState extends State<_NightCard> {
                       width: k == _i ? 16 : 6,
                       height: 6,
                       margin: const EdgeInsets.symmetric(horizontal: 2),
-                      decoration: BoxDecoration(color: k == _i ? C.white : const Color(0x99FFFFFF), borderRadius: BorderRadius.circular(3)),
+                      decoration: BoxDecoration(color: k == _i ? C.card : const Color(0x99FFFFFF), borderRadius: BorderRadius.circular(3)),
                     ),
                 ]),
               ),
@@ -366,7 +366,7 @@ class _NightCardState extends State<_NightCard> {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(h.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
                   const SizedBox(height: 3),
-                  Text('${h.area} · ${h.distanceKm} km away', style: const TextStyle(fontSize: 13, color: C.muted)),
+                  Text('${h.area} · ${h.distanceKm} km away', style: TextStyle(fontSize: 13, color: C.muted)),
                 ]),
               ),
               GestureDetector(
@@ -397,25 +397,25 @@ class _NightCardState extends State<_NightCard> {
                       size: 16,
                       color: C.muted),
                   const SizedBox(width: 5),
-                  Text(t, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFF3F3F38))),
+                  Text(t, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: C.tx(Color(0xFF3F3F38)))),
                 ]),
             ]),
           ),
-          const Padding(padding: EdgeInsets.fromLTRB(16, 14, 16, 0), child: Divider(color: C.line, height: 1)),
+          Padding(padding: EdgeInsets.fromLTRB(16, 14, 16, 0), child: Divider(color: C.line, height: 1)),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
             child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
               Expanded(
                 child: app.nights > 1
-                    ? Text('${inr(total)} for ${app.stayLabel}', style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.green))
-                    : const Text('50% refund till 5 hrs before', style: TextStyle(fontSize: 12, color: C.green, fontWeight: FontWeight.w600)),
+                    ? Text('${inr(total)} for ${app.stayLabel}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.green))
+                    : Text('50% refund till 5 hrs before', style: TextStyle(fontSize: 12, color: C.green, fontWeight: FontWeight.w600)),
               ),
               Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                 Text.rich(TextSpan(children: [
                   TextSpan(text: inr(perNight), style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w800)),
-                  TextSpan(text: ' /night · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'}', style: const TextStyle(fontSize: 12, color: C.muted)),
+                  TextSpan(text: ' /night · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'}', style: TextStyle(fontSize: 12, color: C.muted)),
                 ])),
-                Text('+${inr(taxes)} taxes', style: const TextStyle(fontSize: 12, color: C.muted2)),
+                Text('+${inr(taxes)} taxes', style: TextStyle(fontSize: 12, color: C.muted2)),
               ]),
             ]),
           ),

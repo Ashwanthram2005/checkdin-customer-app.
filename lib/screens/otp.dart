@@ -19,17 +19,17 @@ class DoorHanger extends StatelessWidget {
         height: 210,
         padding: const EdgeInsets.only(top: 18),
         decoration: BoxDecoration(
-          color: C.ink,
+          color: C.inkBg,
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [BoxShadow(color: Color(0x47111111), blurRadius: 50, offset: Offset(0, 24))],
         ),
         child: Column(children: [
-          Container(width: 52, height: 52, decoration: const BoxDecoration(color: C.bg, shape: BoxShape.circle)),
+          Container(width: 52, height: 52, decoration: BoxDecoration(color: C.bg, shape: BoxShape.circle)),
           Container(width: 10, height: 16, color: C.bg),
           const SizedBox(height: 14),
-          const Text('Shh…', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: C.lime, letterSpacing: -1)),
+          Text('Shh…', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: C.lime, letterSpacing: -1)),
           const SizedBox(height: 6),
-          const Text('Resting till\n5:00 PM',
+          Text('Resting till\n5:00 PM',
               textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: C.faint, height: 1.4)),
         ]),
       ),
@@ -99,9 +99,9 @@ class _OtpScreenState extends State<OtpScreen> {
           const Text('Verify your number', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700)),
           const SizedBox(height: 6),
           Wrap(crossAxisAlignment: WrapCrossAlignment.center, spacing: 10, children: [
-            Text.rich(TextSpan(style: const TextStyle(fontSize: 15, color: C.muted), children: [
+            Text.rich(TextSpan(style: TextStyle(fontSize: 15, color: C.muted), children: [
               const TextSpan(text: "We've sent an OTP on WhatsApp to "),
-              TextSpan(text: '+91 $phone', style: const TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
+              TextSpan(text: '+91 $phone', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
             ])),
             GestureDetector(
               onTap: () => Navigator.pop(context),
@@ -131,7 +131,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFDADAD2), width: 1.5)),
                         focusedBorder:
-                            OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: C.ink, width: 1.5)),
+                            OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: C.ink, width: 1.5)),
                       ),
                       onChanged: (v) {
                         if (v.isNotEmpty && i < 3) _nodes[i + 1].requestFocus();
@@ -152,7 +152,7 @@ class _OtpScreenState extends State<OtpScreen> {
               onTap: _ok ? () => Navigator.pushNamedAndRemoveUntil(context, '/profile-setup', (_) => false) : null),
           const SizedBox(height: 10),
           Row(children: [
-            const Expanded(child: Text("Didn't get the code?", style: TextStyle(fontSize: 15, color: C.muted))),
+            Expanded(child: Text("Didn't get the code?", style: TextStyle(fontSize: 15, color: C.muted))),
             if (_secs > 0)
               Text('Resend in 0:${_secs.toString().padLeft(2, '0')}',
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF7C7C74)))
@@ -162,8 +162,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   _start();
                   toast(context, 'New OTP sent on WhatsApp');
                 },
-                icon: const Icon(Icons.refresh_rounded, size: 18, color: C.ink),
-                label: const Text('Resend OTP',
+                icon: Icon(Icons.refresh_rounded, size: 18, color: C.ink),
+                label: Text('Resend OTP',
                     style: TextStyle(color: C.ink, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
               ),
           ]),

@@ -71,7 +71,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 14),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: _cat == c ? C.ink : C.white,
+                          color: _cat == c ? C.inkBg : C.card,
                           borderRadius: BorderRadius.circular(999),
                           border: Border.all(color: _cat == c ? C.ink : C.border, width: 1.5),
                         ),
@@ -150,7 +150,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(color: const Color(0x33FFFFFF), borderRadius: BorderRadius.circular(999)),
-              child: Text('${_page + 1} / ${_ids.length}', style: const TextStyle(color: C.white, fontWeight: FontWeight.w700, fontSize: 13)),
+              child: Text('${_page + 1} / ${_ids.length}', style: TextStyle(color: C.white, fontWeight: FontWeight.w700, fontSize: 13)),
             ),
           ]),
         ),
@@ -161,11 +161,11 @@ class _PhotoViewerState extends State<PhotoViewer> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(999)),
+              decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(999)),
               child: Text(p[0] as String, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
             ),
             const SizedBox(height: 8),
-            Text(p[1] as String, style: const TextStyle(color: C.white, fontSize: 16, fontWeight: FontWeight.w700)),
+            Text(p[1] as String, style: TextStyle(color: C.white, fontSize: 16, fontWeight: FontWeight.w700)),
             const SizedBox(height: 4),
             const Text('Pinch to zoom · swipe for more', style: TextStyle(color: Color(0xFF9A9A92), fontSize: 12.5)),
           ]),
@@ -203,9 +203,9 @@ class GalleryStrip extends StatelessWidget {
                     color: const Color(0x99111111),
                     alignment: Alignment.center,
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      const Icon(Icons.photo_library_outlined, color: C.white, size: 22),
+                      Icon(Icons.photo_library_outlined, color: C.white, size: 22),
                       const SizedBox(height: 4),
-                      Text('+${galleryPhotos.length - 2} photos', style: const TextStyle(color: C.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                      Text('+${galleryPhotos.length - 2} photos', style: TextStyle(color: C.white, fontWeight: FontWeight.w800, fontSize: 13)),
                     ]),
                   ),
                 ]),
