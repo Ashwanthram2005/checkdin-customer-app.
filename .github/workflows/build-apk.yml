@@ -26,7 +26,7 @@ jobs:
 
       - name: Generate Android project files
         run: |
-          flutter create --platforms=android --org in.checkdin --project-name checkdin .
+          flutter create --platforms=android --org com.checkdin --project-name checkdin .
           rm -rf test
           MANIFEST=android/app/src/main/AndroidManifest.xml
           sed -i 's/android:label="checkdin"/android:label="Checkdin"/' "$MANIFEST"
