@@ -31,6 +31,7 @@ import 'screens/rate_stay.dart';
 import 'screens/notifications.dart';
 import 'screens/full_day_search.dart';
 import 'screens/full_day_results.dart';
+import 'screens/payment_failed.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,6 +90,7 @@ class CheckdinApp extends StatelessWidget {
         '/notifications': (_) => const NotificationsScreen(),
         '/fullday': (_) => const FullDaySearchScreen(),
         '/fullday-results': (_) => const FullDayResultsScreen(),
+        '/payment-failed': (_) => const PaymentFailedScreen(),
       },
     );
   }

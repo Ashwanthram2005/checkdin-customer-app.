@@ -26,6 +26,57 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
   }
 
+  static const _labels = {
+    'anyupi': 'Any UPI app',
+    'upiid': 'UPI ID',
+    'card': 'Credit / Debit card',
+    'netbank': 'Net banking',
+  };
+
+  /// Demo rule: Net banking, or a UPI ID containing "fail", simulates a failed payment.
+  bool get _willFail => _sel == 'netbank' || (_sel == 'upiid' && _vpa.text.toLowerCase().contains('fail'));
+
+  Future<void> _pay() async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: const Color(0x99111111),
+      builder: (_) => PopScope(
+        canPop: false,
+        child: Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+            width: 260,
+            padding: const EdgeInsets.fromLTRB(20, 26, 20, 22),
+            decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(24)),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              const SizedBox(width: 40, height: 40, child: CircularProgressIndicator(strokeWidth: 3.5, color: C.ink, backgroundColor: C.limeSoft)),
+              const SizedBox(height: 16),
+              const Text('Confirming payment…', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+              const SizedBox(height: 4),
+              const Text('Don\'t press back or close the app', textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12.5, color: C.muted, fontWeight: FontWeight.w500)),
+            ]),
+          ),
+          ),
+        ),
+      ),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 2200));
+    if (!mounted) return;
+    Navigator.of(context).pop();
+    if (!_willFail) {
+      Navigator.pushNamedAndRemoveUntil(context, '/success', ModalRoute.withName('/home'));
+      return;
+    }
+    final r = await Navigator.pushNamed(context, '/payment-failed', arguments: {'method': _labels[_sel] ?? 'UPI', 'left': _left});
+    if (r == 'retry' && mounted) {
+      if (_sel == 'netbank') setState(() => _sel = 'anyupi');
+      toast(context, _sel == 'anyupi' ? 'Try again with UPI, it\'s usually fastest' : 'Try again');
+    }
+  }
+
   @override
   void dispose() {
     _t?.cancel();
@@ -220,7 +271,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 height: 56,
                 expand: true,
                 icon: Icons.arrow_forward_rounded,
-                onTap: _left == 0 ? null : () => Navigator.pushNamedAndRemoveUntil(context, '/success', ModalRoute.withName('/home'))),
+                onTap: _left == 0 ? null : _pay),
           ]),
         ),
       ]),
