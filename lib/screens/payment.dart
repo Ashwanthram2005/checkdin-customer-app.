@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'package:flutter/services.dart';
+
+import '../banks.dart';
+import 'add_card.dart' show CardNumberFormatter, ExpiryFormatter, cardBrand, luhnOk, expiryError;
 import 'hotel_detail.dart' show billRow, totalBox;
 
 class PaymentScreen extends StatefulWidget {
@@ -33,8 +37,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     'netbank': 'Net banking',
   };
 
-  /// Demo rule: Net banking, or a UPI ID containing "fail", simulates a failed payment.
-  bool get _willFail => _sel == 'netbank' || (_sel == 'upiid' && _vpa.text.toLowerCase().contains('fail'));
+  /// Demo rule: a UPI ID containing "fail" (e.g. test.fail@upi) simulates a failed payment.
+  bool get _willFail => _sel == 'upiid' && _vpa.text.toLowerCase().contains('fail');
 
   Future<void> _pay() async {
     showDialog<void>(
@@ -67,7 +71,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
     if (!mounted) return;
     Navigator.of(context).pop();
     if (!_willFail) {
-      app.set(() => app.bookingCancelled = false);
+      app.set(() {
+        app.bookingCancelled = false;
+        app.paidWith = _sel == 'card'
+            ? (_useNewCard ? '${cardBrand(_cDigits).isEmpty ? 'Card' : cardBrand(_cDigits)} •••• ${_cDigits.length >= 4 ? _cDigits.substring(_cDigits.length - 4) : ''}' : app.cards[_cardSel].label)
+            : _sel == 'netbank'
+                ? bankName(_bank!)
+                : 'UPI';
+        if (_sel == 'card' && _useNewCard && _cSave) {
+          final b = cardBrand(_cDigits);
+          app.cards.add(SavedCard(b.isEmpty ? 'Card' : b, _cDigits.substring(_cDigits.length - 4), _cExp.text, _cName.text.trim()));
+        }
+      });
     Navigator.pushNamedAndRemoveUntil(context, '/success', ModalRoute.withName('/home'));
       return;
     }
@@ -78,9 +93,277 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
+  // card
+  int _cardSel = 0; // index in app.cards, or -1 = new card
+  final _cvv = TextEditingController();
+  final _cNum = TextEditingController();
+  final _cExp = TextEditingController();
+  final _cCvv = TextEditingController();
+  final _cName = TextEditingController();
+  bool _cSave = true;
+  // net banking
+  String? _bank;
+
+  String get _cDigits => _cNum.text.replaceAll(' ', '');
+  bool get _newCardOk =>
+      luhnOk(_cDigits) && expiryError(_cExp.text) == null && RegExp(r'^\d{3}$').hasMatch(_cCvv.text) && _cName.text.trim().length >= 3;
+  bool get _useNewCard => app.cards.isEmpty || _cardSel < 0;
+  bool get _canPay {
+    if (_sel == 'card') return _useNewCard ? _newCardOk : RegExp(r'^\d{3}$').hasMatch(_cvv.text);
+    if (_sel == 'netbank') return _bank != null;
+    return true;
+  }
+
+  String get _payNote {
+    if (_sel == 'card') return _useNewCard ? 'Enter your card details to pay' : 'Enter the CVV to pay';
+    if (_sel == 'netbank') return 'Choose your bank to pay';
+    return '';
+  }
+
+  InputDecoration _dec(String hint, {Widget? suffix}) => InputDecoration(
+        hintText: hint,
+        isDense: true,
+        filled: true,
+        fillColor: C.white,
+        suffixIcon: suffix,
+        hintStyle: const TextStyle(color: Color(0xFF8A8A82), fontWeight: FontWeight.w400),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: C.border, width: 1.5)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: C.border, width: 1.5)),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: C.ink, width: 1.5)),
+      );
+
+  Widget _radio(bool on) => Container(
+        width: 22,
+        height: 22,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: on ? C.ink : C.white, border: Border.all(color: on ? C.ink : C.border, width: 2)),
+        child: on ? Center(child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: C.lime, shape: BoxShape.circle))) : null,
+      );
+
+  Widget _newCardForm() {
+    final brand = cardBrand(_cDigits);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      TextField(
+        controller: _cNum,
+        keyboardType: TextInputType.number,
+        inputFormatters: [CardNumberFormatter()],
+        autofillHints: const [AutofillHints.creditCardNumber],
+        onChanged: (_) => setState(() {}),
+        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, letterSpacing: 1.2),
+        decoration: _dec('Card number',
+            suffix: Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: luhnOk(_cDigits)
+                  ? const Icon(Icons.check_circle_rounded, color: C.green, size: 20)
+                  : Text(brand, style: const TextStyle(fontWeight: FontWeight.w800, fontStyle: FontStyle.italic, fontSize: 12)),
+            )),
+      ),
+      if (_cDigits.length == 16 && !luhnOk(_cDigits))
+        const Padding(
+            padding: EdgeInsets.only(top: 4, left: 4), child: Text('Check the card number', style: TextStyle(fontSize: 12, color: C.red))),
+      const SizedBox(height: 8),
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Expanded(
+          child: TextField(
+            controller: _cExp,
+            keyboardType: TextInputType.number,
+            inputFormatters: [ExpiryFormatter()],
+            autofillHints: const [AutofillHints.creditCardExpirationDate],
+            onChanged: (_) => setState(() {}),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+            decoration: _dec('Expiry MM/YY'),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: TextField(
+            controller: _cCvv,
+            keyboardType: TextInputType.number,
+            obscureText: true,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(3)],
+            autofillHints: const [AutofillHints.creditCardSecurityCode],
+            onChanged: (_) => setState(() {}),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, letterSpacing: 3),
+            decoration: _dec('CVV'),
+          ),
+        ),
+      ]),
+      if (_cExp.text.length == 5 && expiryError(_cExp.text) != null)
+        Padding(
+            padding: const EdgeInsets.only(top: 4, left: 4),
+            child: Text(expiryError(_cExp.text)!, style: const TextStyle(fontSize: 12, color: C.red))),
+      const SizedBox(height: 8),
+      TextField(
+        controller: _cName,
+        textCapitalization: TextCapitalization.characters,
+        autofillHints: const [AutofillHints.creditCardName],
+        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z .']"))],
+        onChanged: (_) => setState(() {}),
+        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        decoration: _dec('Name on card'),
+      ),
+      const SizedBox(height: 4),
+      Row(children: [
+        Checkbox(
+          value: _cSave,
+          activeColor: C.ink,
+          checkColor: C.lime,
+          visualDensity: VisualDensity.compact,
+          onChanged: (v) => setState(() => _cSave = v ?? false),
+        ),
+        const Expanded(child: Text('Save this card for faster checkout. CVV is never saved.', style: TextStyle(fontSize: 12.5, color: C.muted))),
+      ]),
+    ]);
+  }
+
+  Widget _cardPanel() => Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          if (app.cards.isNotEmpty) ...[
+            for (var i = 0; i < app.cards.length; i++)
+              GestureDetector(
+                onTap: () => setState(() => _cardSel = i),
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: _cardSel == i ? C.limeSoft : C.white,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: _cardSel == i ? C.ink : C.border, width: 1.5),
+                  ),
+                  child: Column(children: [
+                    Row(children: [
+                      Container(
+                        width: 44,
+                        height: 30,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(6)),
+                        child: Text(app.cards[i].brand == 'Mastercard' ? 'MC' : app.cards[i].brand.toUpperCase(),
+                            style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: C.lime, fontStyle: FontStyle.italic)),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Text(app.cards[i].label, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
+                          Text('Expires ${app.cards[i].expiry}', style: const TextStyle(fontSize: 12, color: C.muted)),
+                        ]),
+                      ),
+                      _radio(_cardSel == i),
+                    ]),
+                    if (_cardSel == i) ...[
+                      const SizedBox(height: 10),
+                      Row(children: [
+                        const Expanded(child: Text('Enter CVV to confirm', style: TextStyle(fontSize: 12.5, color: C.muted))),
+                        SizedBox(
+                          width: 96,
+                          child: TextField(
+                            controller: _cvv,
+                            keyboardType: TextInputType.number,
+                            obscureText: true,
+                            textAlign: TextAlign.center,
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(3)],
+                            onChanged: (_) => setState(() {}),
+                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 3),
+                            decoration: _dec('CVV'),
+                          ),
+                        ),
+                      ]),
+                    ],
+                  ]),
+                ),
+              ),
+            GestureDetector(
+              onTap: () => setState(() => _cardSel = -1),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: _cardSel < 0 ? C.limeSoft : C.white,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: _cardSel < 0 ? C.ink : C.border, width: 1.5),
+                ),
+                child: Row(children: [
+                  const Icon(Icons.add_card_rounded, size: 22),
+                  const SizedBox(width: 12),
+                  const Expanded(child: Text('Use a new card', style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700))),
+                  _radio(_cardSel < 0),
+                ]),
+              ),
+            ),
+          ],
+          if (_useNewCard) _newCardForm(),
+        ]),
+      );
+
+  Future<void> _pickBank() async {
+    final r = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _BankSheet(selected: _bank),
+    );
+    if (r != null) setState(() => _bank = r);
+  }
+
+  Widget _bankPanel() => Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Popular banks', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.muted)),
+          const SizedBox(height: 8),
+          GridView.count(
+            crossAxisCount: 3,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 2.2,
+            children: [
+              for (final b in popularBanks)
+                GestureDetector(
+                  onTap: () => setState(() => _bank = b[0]),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: _bank == b[0] ? C.lime : C.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: _bank == b[0] ? C.lime : C.border, width: 1.5),
+                    ),
+                    child: Text(b[1], style: TextStyle(fontSize: 13.5, fontWeight: _bank == b[0] ? FontWeight.w800 : FontWeight.w600)),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: _pickBank,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
+              decoration: BoxDecoration(color: C.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: C.border, width: 1.5)),
+              child: Row(children: [
+                const Icon(Icons.search_rounded, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                      _bank != null && !popularBanks.any((b) => b[0] == _bank) ? bankName(_bank!) : 'All ${allBanks.length} banks',
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                ),
+                const Icon(Icons.chevron_right_rounded),
+              ]),
+            ),
+          ),
+          const SizedBox(height: 6),
+          const Text('You\'ll log in on your bank\'s secure page to approve the payment.', style: TextStyle(fontSize: 12, color: C.muted2)),
+        ]),
+      );
+
   @override
   void dispose() {
     _t?.cancel();
+    for (final c in [_cvv, _cNum, _cExp, _cCvv, _cName]) {
+      c.dispose();
+    }
     _vpa.dispose();
     super.dispose();
   }
@@ -253,8 +536,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
               radius: 20,
               padding: const EdgeInsets.all(5),
               child: Column(children: [
-                _row('card', Icons.credit_card_rounded, 'Credit / Debit card', 'Visa, Mastercard, RuPay'),
-                _row('netbank', Icons.account_balance_outlined, 'Net banking', 'All major Indian banks'),
+                _row('card', Icons.credit_card_rounded, 'Credit / Debit card',
+                    app.cards.isEmpty ? 'Visa, Mastercard, RuPay' : '${app.cards.length} saved · or add a new card'),
+                if (_sel == 'card') _cardPanel(),
+                _row('netbank', Icons.account_balance_outlined, 'Net banking',
+                    _bank == null ? '${allBanks.length} Indian banks' : bankName(_bank!)),
+                if (_sel == 'netbank') _bankPanel(),
               ]),
             ),
           ]),
@@ -266,16 +553,95 @@ class _PaymentScreenState extends State<PaymentScreen> {
               SizedBox(width: 6),
               Text('Secure, encrypted payments', style: TextStyle(fontSize: 12, color: C.muted)),
             ]),
+            if (!_canPay) ...[
+              const SizedBox(height: 6),
+              Text(_payNote, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.red)),
+            ],
             const SizedBox(height: 10),
             PillBtn('Pay ${inr(app.total)}',
                 kind: BtnKind.dark,
                 height: 56,
                 expand: true,
                 icon: Icons.arrow_forward_rounded,
-                onTap: _left == 0 ? null : _pay),
+                onTap: _left == 0 || !_canPay ? null : _pay),
           ]),
         ),
       ]),
+    );
+  }
+}
+
+class _BankSheet extends StatefulWidget {
+  final String? selected;
+  const _BankSheet({this.selected});
+  @override
+  State<_BankSheet> createState() => _BankSheetState();
+}
+
+class _BankSheetState extends State<_BankSheet> {
+  String _q = '';
+  @override
+  Widget build(BuildContext context) {
+    final list = allBanks.where((b) => b[1].toLowerCase().contains(_q.toLowerCase())).toList();
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.85,
+        decoration: const BoxDecoration(color: C.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        child: Column(children: [
+          const SizedBox(height: 10),
+          Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2))),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 14, 12, 8),
+            child: Row(children: [
+              const Expanded(child: Text('Choose your bank', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800))),
+              CircleBtn(icon: Icons.close_rounded, size: 38, bg: C.bg, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(context)),
+            ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+            child: TextField(
+              autofocus: false,
+              onChanged: (v) => setState(() => _q = v),
+              decoration: InputDecoration(
+                hintText: 'Search ${allBanks.length} banks',
+                prefixIcon: const Icon(Icons.search_rounded),
+                isDense: true,
+                filled: true,
+                fillColor: C.bg,
+                contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+              ),
+            ),
+          ),
+          Expanded(
+            child: list.isEmpty
+                ? const Center(child: Text('No bank matches', style: TextStyle(color: C.muted)))
+                : ListView.separated(
+                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+                    itemCount: list.length,
+                    separatorBuilder: (_, __) => const Divider(color: C.line, height: 1),
+                    itemBuilder: (_, i) {
+                      final on = list[i][0] == widget.selected;
+                      return InkWell(
+                        onTap: () => Navigator.pop(context, list[i][0]),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          child: Row(children: [
+                            const IconTile(Icons.account_balance_outlined, size: 36),
+                            const SizedBox(width: 12),
+                            Expanded(
+                                child: Text(list[i][1],
+                                    style: TextStyle(fontSize: 14.5, fontWeight: on ? FontWeight.w800 : FontWeight.w600))),
+                            if (on) const Icon(Icons.check_circle_rounded, color: C.ink),
+                          ]),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ]),
+      ),
     );
   }
 }

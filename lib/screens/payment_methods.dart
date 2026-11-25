@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../state.dart';
 import '../theme.dart';
 import 'add_card.dart';
 
@@ -13,13 +14,23 @@ class PaymentMethodsScreen extends StatefulWidget {
 
 class _Saved {
   final String label, kind, mark;
-  _Saved(this.label, this.kind, this.mark);
+  final SavedCard? card;
+  _Saved(this.label, this.kind, this.mark, {this.card});
 }
+
+_Saved _fromCard(SavedCard c) =>
+    _Saved(c.label, 'Card · expires ${c.expiry}', c.brand == 'Mastercard' ? 'MC' : c.brand.toUpperCase(), card: c);
 
 class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
   final List<_Saved> _items = [];
   bool _adding = false;
   final _vpa = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _items.addAll(app.cards.map(_fromCard));
+  }
 
   @override
   void dispose() {
@@ -174,7 +185,11 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     shadow: false,
                     size: 40,
                     tooltip: 'Remove',
-                    onTap: () => setState(() => _items.removeAt(i)),
+                    onTap: () => setState(() {
+                      final c = _items[i].card;
+                      if (c != null) app.cards.remove(c);
+                      _items.removeAt(i);
+                    }),
                   ),
                 ]),
               ),
@@ -225,7 +240,9 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                 onTap: () async {
                   final c = await Navigator.pushNamed(context, '/add-card');
                   if (c is NewCard && mounted) {
-                    setState(() => _items.add(_Saved('${c.brand} •••• ${c.last4}', 'Card · expires ${c.expiry}', c.brand == 'Mastercard' ? 'MC' : c.brand.toUpperCase())));
+                    final sc = SavedCard(c.brand, c.last4, c.expiry, c.name);
+                    app.cards.add(sc);
+                    setState(() => _items.add(_fromCard(sc)));
                     toast(context, 'Card saved');
                   }
                 }),

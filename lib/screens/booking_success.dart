@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'cancel_sheet.dart';
 
 class BookingSuccessScreen extends StatelessWidget {
   const BookingSuccessScreen({super.key});
@@ -109,7 +110,7 @@ class BookingSuccessScreen extends StatelessWidget {
                           child: Text('${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.guestsLabel}',
                               style: const TextStyle(fontSize: 13, color: C.muted))),
                       Text.rich(TextSpan(children: [
-                        const TextSpan(text: 'Paid via UPI ', style: TextStyle(fontSize: 13, color: C.muted)),
+                        TextSpan(text: 'Paid via ${app.paidWith} ', style: const TextStyle(fontSize: 13, color: C.muted)),
                         TextSpan(text: inr(app.total), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
                       ])),
                     ]),
@@ -123,6 +124,22 @@ class BookingSuccessScreen extends StatelessWidget {
                 action(Icons.event_outlined, 'Calendar', false, () => toast(context, 'Added to your calendar')),
                 action(Icons.download_rounded, 'Voucher', false, () => toast(context, 'Voucher downloaded')),
               ]),
+              const SizedBox(height: 10),
+              Center(
+                child: GestureDetector(
+                  onTap: () async {
+                    final done = await showCancelBookingSheet(context);
+                    if (done && context.mounted) Navigator.pushNamedAndRemoveUntil(context, '/bookings', ModalRoute.withName('/home'));
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6),
+                    child: Text.rich(TextSpan(style: TextStyle(fontSize: 13), children: [
+                      TextSpan(text: 'Need to cancel? ', style: TextStyle(color: C.muted)),
+                      TextSpan(text: 'Cancel booking', style: TextStyle(fontWeight: FontWeight.w800, color: C.red, decoration: TextDecoration.underline)),
+                    ])),
+                  ),
+                ),
+              ),
               const SizedBox(height: 12),
               WhiteCard(
                 color: const Color(0xFFFFF6DA),

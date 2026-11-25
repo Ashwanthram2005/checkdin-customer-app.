@@ -6,7 +6,8 @@ import '../theme.dart';
 /// Result returned to Payment methods when a card is saved.
 class NewCard {
   final String brand, last4, expiry, name;
-  const NewCard(this.brand, this.last4, this.expiry, this.name);
+  final bool save;
+  const NewCard(this.brand, this.last4, this.expiry, this.name, {this.save = true});
 }
 
 class AddCardScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class AddCardScreen extends StatefulWidget {
 }
 
 /// Groups digits as 4-4-4-4.
-class _CardNumberFormatter extends TextInputFormatter {
+class CardNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     final d = newValue.text.replaceAll(RegExp(r'\D'), '');
@@ -32,7 +33,7 @@ class _CardNumberFormatter extends TextInputFormatter {
 }
 
 /// Writes MM/YY.
-class _ExpiryFormatter extends TextInputFormatter {
+class ExpiryFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     var d = newValue.text.replaceAll(RegExp(r'\D'), '');
@@ -262,7 +263,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               TextField(
                 controller: _num,
                 keyboardType: TextInputType.number,
-                inputFormatters: [_CardNumberFormatter()],
+                inputFormatters: [CardNumberFormatter()],
                 autofillHints: const [AutofillHints.creditCardNumber],
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 1.5),
                 onChanged: (_) => setState(() {
@@ -281,7 +282,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     TextField(
                       controller: _exp,
                       keyboardType: TextInputType.number,
-                      inputFormatters: [_ExpiryFormatter()],
+                      inputFormatters: [ExpiryFormatter()],
                       autofillHints: const [AutofillHints.creditCardExpirationDate],
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                       onChanged: (_) => setState(() {
@@ -358,7 +359,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 ? () {
                     FocusScope.of(context).unfocus();
                     Navigator.pop(
-                        context, NewCard(_brand.isEmpty ? 'Card' : _brand, _digits.substring(_digits.length - 4), _exp.text, _name.text.trim()));
+                        context, NewCard(_brand.isEmpty ? 'Card' : _brand, _digits.substring(_digits.length - 4), _exp.text, _name.text.trim(), save: _save));
                   }
                 : null,
           ),
@@ -366,4 +367,40 @@ class _AddCardScreenState extends State<AddCardScreen> {
       ]),
     );
   }
+}
+
+
+/// Card helpers shared with the checkout form.
+String cardBrand(String digits) {
+  if (digits.isEmpty) return '';
+  if (digits.startsWith('4')) return 'VISA';
+  if (RegExp(r'^(5[1-5]|2[2-7])').hasMatch(digits)) return 'Mastercard';
+  if (RegExp(r'^(60|65|81|82|508|353|356)').hasMatch(digits)) return 'RuPay';
+  return '';
+}
+
+bool luhnOk(String d) {
+  if (d.length < 15) return false;
+  var sum = 0;
+  var alt = false;
+  for (var i = d.length - 1; i >= 0; i--) {
+    var n = int.parse(d[i]);
+    if (alt) {
+      n *= 2;
+      if (n > 9) n -= 9;
+    }
+    sum += n;
+    alt = !alt;
+  }
+  return sum % 10 == 0;
+}
+
+String? expiryError(String t) {
+  if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(t)) return 'Enter as MM/YY';
+  final m = int.parse(t.substring(0, 2));
+  final y = 2000 + int.parse(t.substring(3));
+  if (m < 1 || m > 12) return 'Month should be 01–12';
+  final now = DateTime.now();
+  if (y < now.year || (y == now.year && m < now.month)) return 'This card has expired';
+  return null;
 }

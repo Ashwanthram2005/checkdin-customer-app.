@@ -135,6 +135,9 @@ class AppState extends ChangeNotifier {
   bool priceAlerts = true;
   // upcoming booking cancelled by the guest
   bool bookingCancelled = false;
+  // cards the guest chose to save (shared by checkout and Manage payments)
+  final List<SavedCard> cards = [];
+  String paidWith = 'UPI';
   int cancelRefund = 0;
 
   void set(VoidCallback fn) {
@@ -183,3 +186,9 @@ class AppState extends ChangeNotifier {
 }
 
 final app = AppState();
+
+class SavedCard {
+  final String brand, last4, expiry, name;
+  const SavedCard(this.brand, this.last4, this.expiry, this.name);
+  String get label => '${brand == 'Card' ? 'Card' : brand} •••• $last4';
+}

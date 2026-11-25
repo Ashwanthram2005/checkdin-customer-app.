@@ -135,7 +135,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Row(children: [
-          Expanded(child: Text('${inr(app.total)} paid via UPI', style: const TextStyle(fontSize: 13, color: C.muted))),
+          Expanded(child: Text('${inr(app.total)} paid via ${app.paidWith}', style: const TextStyle(fontSize: 13, color: C.muted))),
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/help'),
             child: const Text('Need help?', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
