@@ -32,6 +32,8 @@ jobs:
           sed -i 's/android:label="checkdin"/android:label="Checkdin"/' "$MANIFEST"
           grep -q 'android.permission.INTERNET' "$MANIFEST" || \
             sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>\n    <application#' "$MANIFEST"
+          # Checkdin app icon (adaptive + legacy)
+          cp -r android_res/. android/app/src/main/res/
           # Native launch screen: brand cream instead of white, so it flows into the logo animation
           for f in android/app/src/main/res/drawable/launch_background.xml android/app/src/main/res/drawable-v21/launch_background.xml; do
             if [ -f "$f" ]; then sed -i 's#<item android:drawable="[^"]*" */>#<item><color android:color="\#F5F6F0" /></item>#' "$f"; fi
