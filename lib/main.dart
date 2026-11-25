@@ -32,6 +32,7 @@ import 'screens/notifications.dart';
 import 'screens/full_day_search.dart';
 import 'screens/full_day_results.dart';
 import 'screens/payment_failed.dart';
+import 'screens/splash.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,8 +61,9 @@ class CheckdinApp extends StatelessWidget {
         textTheme: GoogleFonts.plusJakartaSansTextTheme(base.textTheme).apply(bodyColor: C.ink, displayColor: C.ink),
         textSelectionTheme: const TextSelectionThemeData(cursorColor: C.ink, selectionColor: C.limeSoft, selectionHandleColor: C.ink),
       ),
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
+        '/splash': (_) => const SplashScreen(),
         '/': (_) => const LoginScreen(),
         '/otp': (_) => const OtpScreen(),
         '/profile-setup': (_) => const ProfileSetupScreen(),
