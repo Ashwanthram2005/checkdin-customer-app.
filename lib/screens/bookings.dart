@@ -106,6 +106,32 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ),
           ],
           const SizedBox(height: 14),
+          GestureDetector(
+            onTap: () async {
+              await Navigator.pushNamed(context, app.checkedIn ? '/live' : '/checkin');
+              if (mounted) setState(() {});
+            },
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+              decoration: BoxDecoration(color: C.ink, borderRadius: BorderRadius.circular(18)),
+              child: Row(children: [
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(app.checkedIn ? 'YOU\'RE CHECKED IN' : 'CHECK-IN OTP',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: C.faint)),
+                    const SizedBox(height: 2),
+                    app.checkedIn
+                        ? const Text('View time left & extend', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: C.lime))
+                        : Text(app.checkinOtp.split('').join('  '),
+                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: C.lime, letterSpacing: 1)),
+                  ]),
+                ),
+                Text(app.checkedIn ? 'Open' : 'Show at desk', style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.white)),
+                const Icon(Icons.chevron_right_rounded, color: C.white),
+              ]),
+            ),
+          ),
+          const SizedBox(height: 10),
           Row(children: [
             Expanded(child: PillBtn('Directions', height: 46, fontSize: 14, icon: Icons.near_me_rounded, trailingIcon: false, onTap: () => openDirections(context, app.hotel))),
             const SizedBox(width: 10),

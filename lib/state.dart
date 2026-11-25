@@ -156,6 +156,22 @@ class AppState extends ChangeNotifier {
   MyReview? myReview;
   // logged in with Google (demo)
   bool googleAccount = false;
+  // during the stay
+  final String checkinOtp = '4827';
+  bool checkedIn = false;
+  DateTime? stayStart;
+  int extraHours = 0;
+  int extraPaid = 0;
+  // cities the guest asked to be notified about
+  final Set<String> notifyCities = {};
+
+  int get stayHours => (fullDay ? nights * 23 : slot) + extraHours;
+  DateTime get stayEnd => (stayStart ?? DateTime.now()).add(Duration(hours: stayHours));
+  /// Price per extra hour (a little cheaper than the slot's hourly rate).
+  int get extendRate {
+    final p = hotel.priceFor(slot) ?? hotel.prices.whereType<int>().first;
+    return ((p / slot) * 0.8 / 10).round() * 10;
+  }
   int cancelRefund = 0;
 
   void set(VoidCallback fn) {

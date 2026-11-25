@@ -103,7 +103,7 @@ class _HelpScreenState extends State<HelpScreen> {
                     Text('${inr(app.total)} · ${dateLabel(app.date)}', style: const TextStyle(fontSize: 12.5, color: C.faint)),
                   ]),
                 ),
-                PillBtn('Get help', height: 42, fontSize: 14, onTap: () => toast(context, 'Connecting you on WhatsApp…')),
+                PillBtn('Get help', height: 42, fontSize: 14, onTap: () => Navigator.pushNamed(context, '/chat')),
               ]),
             ),
             const SectionLabel('Browse topics'),
@@ -159,8 +159,8 @@ class _HelpScreenState extends State<HelpScreen> {
         BottomBar(
           child: Row(children: [
             Expanded(
-              child: PillBtn('Chat with us on WhatsApp',
-                  kind: BtnKind.dark, icon: Icons.chat_bubble_outline_rounded, trailingIcon: false, fontSize: 15, onTap: () => toast(context, 'Opening WhatsApp…')),
+              child: PillBtn('Chat with us',
+                  kind: BtnKind.dark, icon: Icons.chat_bubble_outline_rounded, trailingIcon: false, fontSize: 15, onTap: () => Navigator.pushNamed(context, '/chat')),
             ),
             const SizedBox(width: 10),
             CircleBtn(icon: Icons.mail_outline_rounded, size: 52, shadow: false, bg: C.bg, tooltip: 'Email hello@checkdin.in', onTap: () => toast(context, 'hello@checkdin.in')),

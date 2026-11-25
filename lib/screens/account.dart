@@ -113,6 +113,7 @@ class AccountScreen extends StatelessWidget {
                 row(Icons.chat_bubble_outline_rounded, 'WhatsApp updates', 'Booking updates & deals',
                     trailing: BrandSwitch(value: app.whatsappUpdates, onChanged: (v) => app.set(() => app.whatsappUpdates = v))),
                 row(Icons.notifications_none_rounded, 'Notifications', 'Check-in reminders & alerts', onTap: () => Navigator.pushNamed(context, '/notifications', arguments: 'settings')),
+                row(Icons.card_giftcard_rounded, 'Refer & earn', 'Give ₹100, get ₹100', onTap: () => Navigator.pushNamed(context, '/refer')),
                 row(Icons.help_outline_rounded, 'Help & support', 'Chat with us or report a problem',
                     onTap: () => Navigator.pushNamed(context, '/help'), last: true),
               ]),

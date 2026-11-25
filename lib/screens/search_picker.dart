@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'coming_soon.dart';
+import 'states.dart';
 
 class SearchPickerScreen extends StatefulWidget {
   const SearchPickerScreen({super.key});
@@ -104,7 +106,9 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                 color: C.lime,
                 radius: 20,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                onTap: () => _pick('Current location'),
+                onTap: () async {
+                  if (await useMyLocation(context)) _pick('Current location');
+                },
                 child: const Row(children: [
                   IconTile(Icons.near_me_rounded, bg: C.white, size: 40, radius: 20),
                   SizedBox(width: 12),
@@ -142,12 +146,30 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
               const SectionLabel('Near landmarks'),
               _list(_all.where((x) => x.type == 'Landmark').toList()),
             ] else ...[
+              if (soonCityFor(q) != null)
+                WhiteCard(
+                  radius: 20,
+                  padding: const EdgeInsets.all(14),
+                  onTap: () => Navigator.pushNamed(context, '/coming-soon', arguments: soonCityFor(q)),
+                  child: Row(children: [
+                    const IconTile(Icons.location_city_rounded, bg: C.lime, size: 42),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text(soonCityFor(q)!, style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
+                        const SizedBox(height: 2),
+                        const Text('Coming soon · get notified', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                      ]),
+                    ),
+                    const Tag('SOON', bg: C.ink, fg: C.lime),
+                  ]),
+                ),
               for (final t in ['Area', 'Landmark', 'Hotel'])
                 if (hits.any((x) => x.type == t)) ...[
                   SectionLabel('${t}s'),
                   _list(hits.where((x) => x.type == t).toList()),
                 ],
-              if (hits.isEmpty)
+              if (hits.isEmpty && soonCityFor(q) == null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
                   child: Column(children: [

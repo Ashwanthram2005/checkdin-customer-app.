@@ -215,6 +215,38 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ]),
           ),
+          if (app.checkedIn)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              child: Material(
+                color: C.ink,
+                borderRadius: BorderRadius.circular(20),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () => Navigator.pushNamed(context, '/live'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Row(children: [
+                      Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(color: C.lime, borderRadius: BorderRadius.circular(14)),
+                        child: const Icon(Icons.hotel_rounded),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Text('Staying at ${app.hotel.name}', style: const TextStyle(color: C.white, fontWeight: FontWeight.w800, fontSize: 14.5)),
+                          const SizedBox(height: 2),
+                          Text('Check-out ${hourLabel(app.stayEnd.hour)} · tap to extend', style: const TextStyle(color: C.faint, fontSize: 12.5)),
+                        ]),
+                      ),
+                      const Icon(Icons.chevron_right_rounded, color: C.lime),
+                    ]),
+                  ),
+                ),
+              ),
+            ),
           _title('Continue your search'),
           SizedBox(
             height: 58,
@@ -348,7 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: WhiteCard(
               radius: 20,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              onTap: () => Navigator.pushNamedAndRemoveUntil(context, '/offers', ModalRoute.withName('/home')),
+              onTap: () => Navigator.pushNamed(context, '/refer'),
               child: const Row(children: [
                 IconTile(Icons.card_giftcard_rounded, bg: Color(0xFFFFF1C7)),
                 SizedBox(width: 12),

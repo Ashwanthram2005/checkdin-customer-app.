@@ -40,6 +40,10 @@ import 'screens/gallery.dart';
 import 'screens/reviews.dart';
 import 'screens/report_issue.dart';
 import 'screens/delete_account.dart';
+import 'screens/stay.dart';
+import 'screens/support_chat.dart';
+import 'screens/coming_soon.dart';
+import 'screens/refer.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,6 +82,11 @@ class CheckdinApp extends StatelessWidget {
         '/reviews': (_) => const ReviewsScreen(),
         '/report': (_) => const ReportIssueScreen(),
         '/delete-account': (_) => const DeleteAccountScreen(),
+        '/checkin': (_) => const CheckinOtpScreen(),
+        '/live': (_) => const LiveStayScreen(),
+        '/chat': (_) => const SupportChatScreen(),
+        '/coming-soon': (_) => const ComingSoonScreen(),
+        '/refer': (_) => const ReferScreen(),
         '/': (_) => const LoginScreen(),
         '/otp': (_) => const OtpScreen(),
         '/profile-setup': (_) => const ProfileSetupScreen(),

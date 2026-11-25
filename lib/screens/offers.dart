@@ -182,7 +182,7 @@ class _OffersScreenState extends State<OffersScreen> {
                 ),
               ),
               const SizedBox(width: 8),
-              PillBtn('Share', kind: BtnKind.dark, height: 46, fontSize: 14, icon: Icons.share_outlined, trailingIcon: false, onTap: () => toast(context, 'Opening WhatsApp…')),
+              PillBtn('Invite', kind: BtnKind.dark, height: 46, fontSize: 14, icon: Icons.share_outlined, trailingIcon: false, onTap: () => Navigator.pushNamed(context, '/refer')),
             ]),
           ]),
         ),
