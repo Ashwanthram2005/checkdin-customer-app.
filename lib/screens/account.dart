@@ -103,7 +103,7 @@ class AccountScreen extends StatelessWidget {
             const SizedBox(height: 14),
             Row(children: [
               tile(Icons.calendar_month_outlined, 'Bookings', () => Navigator.pushNamed(context, '/bookings')),
-              tile(Icons.favorite_border_rounded, 'Saved', () => toast(context, '${app.saved.length} saved hotels')),
+              tile(Icons.favorite_border_rounded, 'Saved', () => Navigator.pushNamed(context, '/saved')),
               tile(Icons.credit_card_rounded, 'Payments', () => Navigator.pushNamed(context, '/payment-methods')),
             ]),
             const SectionLabel('Preferences & help'),
