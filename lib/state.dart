@@ -144,7 +144,24 @@ class AppState extends ChangeNotifier {
   // booking
   Hotel hotel = hotels.first;
   int rooms = 1, adults = 2, kids = 0;
-  bool coupon = false;
+  String? couponCode;
+  bool get coupon => couponCode != null;
+  int get discount {
+    final c = couponCode;
+    if (c == null) return 0;
+    if (c == 'NEWSTAY' && fullDay) return 0;
+    if (c == 'NIGHT150' && (!fullDay || gross < 1500)) return 0;
+    switch (c) {
+      case 'NEWSTAY':
+        final d = (gross * 0.25).round();
+        return d > 200 ? 200 : d;
+      case 'FIRST40':
+        return 40;
+      case 'NIGHT150':
+        return 150;
+    }
+    return 0;
+  }
   final Set<String> saved = {'gr', 'ls'};
   bool priceAlerts = true;
   // upcoming booking cancelled by the guest
@@ -213,7 +230,7 @@ class AppState extends ChangeNotifier {
       ? hotel.night * nights * rooms
       : (hotel.priceFor(slot) ?? hotel.prices.whereType<int>().first) * rooms;
   int get fees => (gross * 0.106).round();
-  int get total => gross - (coupon ? 40 : 0);
+  int get total => gross - discount;
 
   String get guestsLabel =>
       '$adults ${adults > 1 ? 'guests' : 'guest'}${kids > 0 ? ', $kids ${kids > 1 ? 'kids' : 'kid'}' : ''}';

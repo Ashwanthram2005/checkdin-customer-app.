@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../state.dart';
 import '../theme.dart';
 
 class OffersScreen extends StatefulWidget {
@@ -137,7 +138,10 @@ class _OffersScreenState extends State<OffersScreen> {
                 kind: BtnKind.dark,
                 height: 44,
                 fontSize: 14,
-                onTap: code.isEmpty ? null : () => setState(() => _valid = _coupons.any((c) => c.code == code))),
+                onTap: code.isEmpty ? null : () => setState(() {
+                  _valid = _coupons.any((c) => c.code == code);
+                  if (_valid!) app.set(() => app.couponCode = code);
+                })),
           ]),
         ),
         if (_valid != null)

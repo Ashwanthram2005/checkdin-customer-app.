@@ -204,7 +204,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                   child: Column(children: [
                     billRow('Room price', inr(app.gross - app.fees)),
                     const SizedBox(height: 12),
-                    if (app.coupon) ...[billRow('Coupon FIRST40', '−₹40', vColor: C.green), const SizedBox(height: 12)],
+                    if (app.discount > 0) ...[billRow('Coupon ${app.couponCode}', '−${inr(app.discount)}', vColor: C.green), const SizedBox(height: 12)],
                     billRow('Taxes & fees', inr(app.fees)),
                     const SizedBox(height: 14),
                     totalBox(inr(app.total), label: 'Total paid'),

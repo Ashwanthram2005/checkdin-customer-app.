@@ -488,7 +488,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             billRow('Room price', inr(app.gross - app.fees)),
                             const SizedBox(height: 12),
                             billRow('Taxes & fees', inr(app.fees)),
-                            if (app.coupon) ...[const SizedBox(height: 12), billRow('Coupon FIRST40', '−₹40', vColor: C.green)],
+                            if (app.discount > 0) ...[const SizedBox(height: 12), billRow('Coupon ${app.couponCode}', '−${inr(app.discount)}', vColor: C.green)],
                             const SizedBox(height: 14),
                             totalBox(inr(app.total)),
                           ]),

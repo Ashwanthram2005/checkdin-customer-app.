@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../coupons.dart';
 import '../theme.dart';
+import 'coupon_sheet.dart';
 import 'hotel_detail.dart' show billRow, totalBox;
 
 class ReserveScreen extends StatefulWidget {
@@ -210,7 +212,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 ),
                 const SizedBox(height: 14),
                 GestureDetector(
-                  onTap: () => app.set(() => app.coupon = !app.coupon),
+                  onTap: () => app.coupon ? app.set(() => app.couponCode = null) : showCouponSheet(context),
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                     decoration: BoxDecoration(
@@ -223,8 +225,8 @@ class _ReserveScreenState extends State<ReserveScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(app.coupon ? 'FIRST40 applied' : 'Apply coupon', style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-                          Text(app.coupon ? 'You save ₹40 on this stay' : 'See offers for this stay', style: const TextStyle(fontSize: 12, color: C.muted)),
+                          Text(app.coupon ? '${app.couponCode} applied' : 'Apply coupon', style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
+                          Text(app.coupon ? (couponProblem(app.couponCode!) ?? couponSaving(app.couponCode!)) : 'See offers for this stay', style: const TextStyle(fontSize: 12, color: C.muted)),
                         ]),
                       ),
                       Text(app.coupon ? 'Remove' : 'View', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
@@ -238,7 +240,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                     billRow('Room price · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} × ${app.stayLabel}', inr(app.gross - app.fees)),
                     const SizedBox(height: 12),
                     billRow('Taxes & fees', inr(app.fees)),
-                    if (app.coupon) ...[const SizedBox(height: 12), billRow('Coupon FIRST40', '−₹40', vColor: C.green)],
+                    if (app.discount > 0) ...[const SizedBox(height: 12), billRow('Coupon ${app.couponCode}', '−${inr(app.discount)}', vColor: C.green)],
                     const SizedBox(height: 14),
                     totalBox(inr(app.total)),
                   ]),

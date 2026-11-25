@@ -107,7 +107,7 @@ Future<pw.Document> _doc(String id) async {
       label('Payment'),
       row('Room price', _rs(room)),
       row('Taxes & fees', _rs(app.fees)),
-      if (app.coupon) row('Coupon FIRST40', '- Rs. 40'),
+      if (app.discount > 0) row('Coupon ${app.couponCode}', '- ${_rs(app.discount)}'),
       pw.Divider(color: line),
       row('Total paid', _rs(app.total), bold: true),
       row('Paid via', app.paidWith),
