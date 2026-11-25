@@ -248,7 +248,9 @@ class _ReserveScreenState extends State<ReserveScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 9),
                       child: GestureDetector(
-                        onTap: l == 'Help' ? () => Navigator.pushNamed(context, '/help') : null,
+                        onTap: () => l == 'Help'
+                            ? Navigator.pushNamed(context, '/help')
+                            : Navigator.pushNamed(context, '/legal', arguments: l == 'Privacy' ? 'privacy' : 'terms'),
                         child: Text(l, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: C.muted, decoration: TextDecoration.underline)),
                       ),
                     ),

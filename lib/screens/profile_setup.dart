@@ -87,16 +87,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               Padding(
                 padding: EdgeInsets.fromLTRB(24, 0, 24, 18 + MediaQuery.of(context).padding.bottom),
                 child: Column(children: [
-                  const Text.rich(
-                    TextSpan(style: TextStyle(fontSize: 12.5, color: C.muted), children: [
-                      TextSpan(text: 'By continuing, I agree to the '),
-                      TextSpan(text: 'T&Cs', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
-                      TextSpan(text: ' and '),
-                      TextSpan(text: 'Privacy Policy', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
-                      TextSpan(text: '.'),
-                    ]),
-                    textAlign: TextAlign.center,
-                  ),
+                  const LegalLine(lead: 'By continuing, I agree to the ', terms: 'T&Cs', underline: true),
                   const SizedBox(height: 12),
                   PillBtn('Start exploring stays',
                       kind: BtnKind.dark,

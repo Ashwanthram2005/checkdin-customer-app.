@@ -434,7 +434,7 @@ class _Policies extends StatelessWidget {
                     collapsedIconColor: C.ink,
                     childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
                     children: e.value
-                        .map((t) => Padding(
+                        .map<Widget>((t) => Padding(
                               padding: const EdgeInsets.only(bottom: 8),
                               child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 Container(
@@ -446,7 +446,22 @@ class _Policies extends StatelessWidget {
                                 Expanded(child: Text(t, style: const TextStyle(fontSize: 13.5, color: Color(0xFF3F3F38), height: 1.5))),
                               ]),
                             ))
-                        .toList(),
+                        .toList()
+                      ..addAll(e.key == 'Cancellation'
+                          ? [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: GestureDetector(
+                                  onTap: () => Navigator.pushNamed(context, '/cancel-policy'),
+                                  child: const Padding(
+                                    padding: EdgeInsets.only(top: 2),
+                                    child: Text('Read full policy',
+                                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+                                  ),
+                                ),
+                              ),
+                            ]
+                          : const <Widget>[]),
                   ))
               .toList(),
         ),

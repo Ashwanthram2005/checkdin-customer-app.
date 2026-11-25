@@ -24,6 +24,8 @@ import 'screens/help.dart';
 import 'screens/home.dart';
 import 'screens/saved.dart';
 import 'screens/offers.dart';
+import 'screens/cancel_policy.dart';
+import 'screens/legal.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,6 +77,8 @@ class CheckdinApp extends StatelessWidget {
         '/home': (_) => const HomeScreen(),
         '/saved': (_) => const SavedScreen(),
         '/offers': (_) => const OffersScreen(),
+        '/cancel-policy': (_) => const CancelPolicyScreen(),
+        '/legal': (_) => const LegalScreen(),
       },
     );
   }

@@ -630,3 +630,32 @@ class BottomNav extends StatelessWidget {
     );
   }
 }
+
+
+/// "By continuing, I accept the Terms & Privacy Policy" with both links tappable.
+class LegalLine extends StatelessWidget {
+  final String lead;
+  final String terms;
+  final bool underline;
+  const LegalLine({super.key, this.lead = 'By continuing, I accept the ', this.terms = 'Terms & Conditions', this.underline = false});
+  @override
+  Widget build(BuildContext context) {
+    const base = TextStyle(fontSize: 12.5, color: C.muted, height: 1.5);
+    final link = TextStyle(
+        fontSize: 12.5,
+        height: 1.5,
+        color: C.ink,
+        fontWeight: FontWeight.w700,
+        decoration: underline ? TextDecoration.underline : TextDecoration.none);
+    Widget l(String t, String arg) => GestureDetector(
+          onTap: () => Navigator.pushNamed(context, '/legal', arguments: arg),
+          child: Text(t, style: link),
+        );
+    return Wrap(alignment: WrapAlignment.center, crossAxisAlignment: WrapCrossAlignment.center, children: [
+      Text(lead, style: base),
+      l(terms, 'terms'),
+      const Text(' & ', style: base),
+      l('Privacy Policy', 'privacy'),
+    ]);
+  }
+}

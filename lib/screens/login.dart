@@ -185,15 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   : null),
           const SizedBox(height: 14),
-          const Text.rich(
-            TextSpan(style: TextStyle(fontSize: 12.5, color: C.muted, height: 1.5), children: [
-              TextSpan(text: 'By continuing, I accept the '),
-              TextSpan(text: 'Terms & Conditions', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
-              TextSpan(text: ' & '),
-              TextSpan(text: 'Privacy Policy', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
-            ]),
-            textAlign: TextAlign.center,
-          ),
+          const LegalLine(),
         ]),
       ]),
     );

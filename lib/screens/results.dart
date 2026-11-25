@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'filter_sort.dart';
 
 class ResultsScreen extends StatefulWidget {
   const ResultsScreen({super.key});
@@ -72,14 +73,25 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(999), border: Border.all(color: C.ink, width: 1.5)),
-                        child: const Row(children: [
-                          Icon(Icons.tune_rounded, size: 16),
-                          SizedBox(width: 6),
-                          Text('Filters', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-                        ]),
+                      GestureDetector(
+                        onTap: () async {
+                          await showFilterSheet(context);
+                          if (mounted) setState(() {});
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          decoration: BoxDecoration(
+                            color: Filters.count > 0 ? C.ink : C.white,
+                            borderRadius: BorderRadius.circular(999),
+                            border: Border.all(color: C.ink, width: 1.5),
+                          ),
+                          child: Row(children: [
+                            Icon(Icons.tune_rounded, size: 16, color: Filters.count > 0 ? C.lime : C.ink),
+                            const SizedBox(width: 6),
+                            Text(Filters.count > 0 ? 'Filters · ${Filters.count}' : 'Filters',
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Filters.count > 0 ? C.lime : C.ink)),
+                          ]),
+                        ),
                       ),
                       for (final c in _chips)
                         Padding(

@@ -160,7 +160,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                       ]),
                     ),
                     InkWell(
-                      onTap: () => toast(context, 'Free cancellation up to 2 hours before check-in'),
+                      onTap: () => Navigator.pushNamed(context, '/cancel-policy'),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 14),
                         child: Row(children: [
