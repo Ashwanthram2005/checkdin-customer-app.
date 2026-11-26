@@ -70,6 +70,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _offerCard(bool lime) {
     final fg = lime ? C.ink : C.white;
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, '/offers'),
+      child: _offerBody(lime, fg),
+    );
+  }
+
+  Widget _offerBody(bool lime, Color fg) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 6),
       padding: const EdgeInsets.all(20),
@@ -143,7 +150,11 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, _) => Scaffold(
         extendBody: true,
         bottomNavigationBar: const BottomNav(current: 'Home'),
-        body: ListView(padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 14, bottom: 120), children: [
+        body: Column(children: [
+          Container(
+            color: C.bg,
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 14, bottom: 12),
+            child: Column(children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(children: [
@@ -168,15 +179,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ]),
           ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                child: _stayToggle(app.fullDay),
+              ),
+            ]),
+          ),
+          Expanded(
+            child: ListView(padding: const EdgeInsets.only(top: 6, bottom: 120), children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text('Hi ${app.name.isEmpty ? 'there' : app.name},', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: C.muted)),
               const SizedBox(height: 4),
               const Highlight(before: 'Need a room for ', marked: 'a few hours?', size: 28, height: 1.2),
-              const SizedBox(height: 18),
-              _stayToggle(app.fullDay),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               Material(
                 color: C.card,
                 borderRadius: BorderRadius.circular(18),
@@ -388,6 +405,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icon(Icons.chevron_right_rounded),
               ]),
             ),
+          ),
+        ]),
           ),
         ]),
       ),

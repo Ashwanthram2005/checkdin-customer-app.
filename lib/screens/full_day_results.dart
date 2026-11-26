@@ -19,7 +19,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
   double? _minRating;
 
   List<Hotel> get _list {
-    var l = _allStays.where((h) => (_area == null || h.area == _area) && (_minRating == null || double.parse(h.rating) >= _minRating!)).toList();
+    var l = orderForPlace(_allStays.where((h) => (_area == null || h.area == _area) && (_minRating == null || double.parse(h.rating) >= _minRating!)).toList());
     switch (Filters.sort) {
       case 'Price: low to high':
         l.sort((a, b) => a.night.compareTo(b.night));
@@ -31,7 +31,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
         l.sort((a, b) => b.rating.compareTo(a.rating));
         break;
       case 'Distance: nearest first':
-        l.sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
+        l.sort((a, b) => kmFor(a).compareTo(kmFor(b)));
         break;
     }
     return l;
@@ -366,7 +366,7 @@ class _NightCardState extends State<_NightCard> {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(h.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
                   const SizedBox(height: 3),
-                  Text('${h.area} · ${h.distanceKm} km away', style: TextStyle(fontSize: 13, color: C.muted)),
+                  Text('${h.area} · ${kmLabel(h)}', style: TextStyle(fontSize: 13, color: C.muted)),
                 ]),
               ),
               GestureDetector(

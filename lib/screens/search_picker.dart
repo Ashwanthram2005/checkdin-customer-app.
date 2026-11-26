@@ -21,7 +21,7 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
 
   late final List<_Item> _all = [
     ...areas.map((a) => _Item(a, a == 'OMR' ? 'IT Corridor' : 'Chennai', 'Area')),
-    ...landmarks.map((l) => _Item(l[0], l[1], 'Landmark')),
+    ...landmarks.map((l) => _Item(l.name, l.sub, 'Landmark')),
     ...hotels.map((h) => _Item(h.name, 'Hotel · ${h.area}', 'Hotel')),
   ];
 

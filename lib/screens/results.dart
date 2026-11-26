@@ -21,13 +21,32 @@ class _ResultsScreenState extends State<ResultsScreen> {
     return ListenableBuilder(
       listenable: app,
       builder: (context, _) {
-        final list = hotels.where((h) {
+        final list = orderForPlace(hotels.where((h) {
           if (_on.contains('Under ₹1,000') && (h.prices.first ?? 9999) >= 1000) return false;
           if (_on.contains('Rating 4+') && double.parse(h.rating) < 4) return false;
           if (_on.contains('Couple friendly') && !h.tags.contains('Couple friendly')) return false;
           if (_on.contains('Local ID accepted') && !h.tags.contains('Local ID accepted')) return false;
+          if (Filters.distance != null) {
+            final max = double.tryParse(Filters.distance!.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 99;
+            if (kmFor(h) > max) return false;
+          }
           return true;
-        }).toList();
+        }).toList());
+        int price(Hotel h) => h.priceFor(app.slot) ?? 99999;
+        switch (Filters.sort) {
+          case 'Price: low to high':
+            list.sort((a, b) => price(a).compareTo(price(b)));
+            break;
+          case 'Price: high to low':
+            list.sort((a, b) => price(b).compareTo(price(a)));
+            break;
+          case 'Rating: high to low':
+            list.sort((a, b) => b.rating.compareTo(a.rating));
+            break;
+          case 'Distance: nearest first':
+            list.sort((a, b) => kmFor(a).compareTo(kmFor(b)));
+            break;
+        }
         final place = app.place ?? 'Chennai';
         return Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -211,7 +230,7 @@ class _HotelCard extends StatelessWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(h.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
               const SizedBox(height: 3),
-              Text('${h.area} · ${h.distanceKm} km away', style: TextStyle(fontSize: 13, color: C.muted)),
+              Text('${h.area} · ${kmLabel(h)}', style: TextStyle(fontSize: 13, color: C.muted)),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 6,

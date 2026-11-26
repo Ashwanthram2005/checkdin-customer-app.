@@ -4,7 +4,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../state.dart';
 import '../theme.dart';
+import 'location_settings.dart';
 
 /// Friendly empty / error block used across screens.
 class EmptyState extends StatelessWidget {
@@ -127,6 +129,18 @@ class _OfflineGateState extends State<OfflineGate> {
 
 /// Asks for location. Returns true when the app may use it; shows the right help otherwise.
 Future<bool> useMyLocation(BuildContext context) async {
+  if (!app.useLocation) {
+    final on = await _locationSheet(
+      context,
+      icon: Icons.location_disabled_outlined,
+      title: 'Location is off in Checkdin',
+      body: 'You turned off location for Checkdin. Turn it back on to see stays near you, or search by area or landmark.',
+      primary: 'Turn on location',
+    );
+    if (on != true) return false;
+    await setLocationChoice(true);
+    if (!context.mounted) return false;
+  }
   if (!await Geolocator.isLocationServiceEnabled()) {
     if (context.mounted) {
       await _locationSheet(

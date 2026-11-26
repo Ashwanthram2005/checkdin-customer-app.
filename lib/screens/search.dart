@@ -8,6 +8,36 @@ import 'states.dart';
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
+  Widget _stepper(String label, String sub, int value, int min, int max, ValueChanged<int> onChange, {bool last = false}) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
+        child: Row(children: [
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(label, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
+              Text(sub, style: TextStyle(fontSize: 12, color: C.muted)),
+            ]),
+          ),
+          CircleBtn(
+              icon: Icons.remove_rounded,
+              size: 34,
+              shadow: false,
+              bg: C.bg,
+              tooltip: 'Less',
+              iconColor: value > min ? C.ink : C.faint,
+              onTap: value > min ? () => onChange(value - 1) : null),
+          SizedBox(width: 36, child: Text('$value', textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
+          CircleBtn(
+              icon: Icons.add_rounded,
+              size: 34,
+              shadow: false,
+              bg: value < max ? C.limeBg : C.bg,
+              tooltip: 'More',
+              iconColor: value < max ? C.ink : C.faint,
+              onTap: value < max ? () => onChange(value + 1) : null),
+        ]),
+      );
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -27,7 +57,21 @@ class SearchScreen extends StatelessWidget {
                 children: [
                   Row(children: [
                     const BackBtn(),
-                    const Spacer(),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: SegmentPill(
+                        options: const ['Hourly stay', 'Full-day stay'],
+                        selected: 0,
+                        height: 38,
+                        onChanged: (i) {
+                          if (i == 1) {
+                            app.set(() => app.fullDay = true);
+                            Navigator.pushReplacementNamed(context, '/fullday');
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(context, '/account'),
                       child: const Avatar(size: 44),
@@ -89,58 +133,44 @@ class SearchScreen extends StatelessWidget {
                       Icon(Icons.chevron_right_rounded, color: Color(0xFF9A9A92)),
                     ]),
                   ),
-                  const SectionLabel('How long are you staying?'),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(14),
-                    child: Column(children: [
-                      SegmentPill(
-                        options: const ['Hourly stay', 'Full-day stay'],
-                        selected: app.fullDay ? 1 : 0,
-                        track: C.tint(Color(0xFFF0F0EA)),
-                        onChanged: (i) {
-                          if (i == 1) {
-                            app.set(() => app.fullDay = true);
-                            Navigator.pushReplacementNamed(context, '/fullday');
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      if (!app.fullDay)
-                        Row(
-                          children: [3, 6, 9, 12].map((h) {
-                            final on = app.slot == h;
-                            return Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(right: h == 12 ? 0 : 8),
-                                child: GestureDetector(
-                                  onTap: () => app.set(() => app.slot = h),
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 150),
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: on ? C.limeBg : C.card,
-                                      borderRadius: BorderRadius.circular(14),
-                                      border: Border.all(color: on ? C.lime : C.border, width: 1.5),
-                                    ),
-                                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                      Text('$h', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, height: 1.1)),
-                                      Text('hours', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: C.muted)),
-                                    ]),
-                                  ),
-                                ),
+                  const SectionLabel('How many hours?'),
+                  Row(
+                    children: [3, 6, 9, 12].map((h) {
+                      final on = app.slot == h;
+                      return Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(right: h == 12 ? 0 : 8),
+                          child: GestureDetector(
+                            onTap: () => app.set(() => app.slot = h),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 150),
+                              height: 56,
+                              decoration: BoxDecoration(
+                                color: on ? C.limeBg : C.card,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: on ? C.lime : C.border, width: 1.5),
                               ),
-                            );
-                          }).toList(),
-                        )
-                      else
-                        Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Row(children: [
-                            Icon(Icons.nightlight_outlined, size: 18),
-                            SizedBox(width: 10),
-                            Expanded(child: Text('Book by the night, for one or more days.', style: TextStyle(fontSize: 13.5, color: C.muted))),
-                          ]),
+                              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                Text('$h', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, height: 1.1)),
+                                Text('hours', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: C.muted)),
+                              ]),
+                            ),
+                          ),
                         ),
+                      );
+                    }).toList(),
+                  ),
+                  const SectionLabel('Rooms & guests'),
+                  WhiteCard(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+                    child: Column(children: [
+                      _stepper('Rooms', 'Up to 3 guests per room', app.rooms, 1, 5, (v) => app.set(() {
+                            app.rooms = v;
+                            if (app.adults < v) app.adults = v;
+                            if (app.adults > v * 3) app.adults = v * 3;
+                          })),
+                      _stepper('Guests', 'Aged 12 and above', app.adults, app.rooms, app.rooms * 3, (v) => app.set(() => app.adults = v)),
+                      _stepper('Children', 'Below 5 years, stay free', app.kids, 0, 2, (v) => app.set(() => app.kids = v), last: true),
                     ]),
                   ),
                   const SectionLabel('Popular in Chennai'),
@@ -206,7 +236,7 @@ class SearchScreen extends StatelessWidget {
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                           Text(place, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                           const SizedBox(height: 2),
-                          Text(app.fullDay ? 'Full-day stay' : '${app.slot}-hour stay',
+                          Text('${app.slot}-hour stay · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.guestsLabel}',
                               style: TextStyle(fontSize: 12.5, color: C.muted)),
                         ]),
                       ),

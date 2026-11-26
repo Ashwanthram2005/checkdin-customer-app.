@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'appearance.dart';
 import 'theme.dart';
 import 'screens/appearance.dart';
+import 'screens/location_settings.dart';
 import 'screens/login.dart';
 import 'screens/otp.dart';
 import 'screens/profile_setup.dart';
@@ -50,6 +51,7 @@ import 'screens/refer.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Appearance.load();
+  await loadLocationChoice();
   runApp(const CheckdinApp());
 }
 
@@ -108,6 +110,7 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
       routes: {
         '/splash': (_) => const SplashScreen(),
         '/appearance': (_) => const AppearanceScreen(),
+        '/location': (_) => const LocationSettingsScreen(),
         '/policy': (_) => const PolicyDocScreen(),
         '/credits': (_) => const CreditsHistoryScreen(),
         '/gallery': (_) => const GalleryScreen(),

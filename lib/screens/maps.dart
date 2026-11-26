@@ -184,7 +184,7 @@ class _StaysMapScreenState extends State<StaysMapScreen> {
                       RatingBadge(_sel.rating, reviews: _sel.reviews),
                       const SizedBox(height: 4),
                       Text(_sel.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                      Text('${_sel.area} · ${_sel.distanceKm} km', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                      Text('${_sel.area} · ${kmLabel(_sel)}', style: TextStyle(fontSize: 12.5, color: C.muted)),
                       const SizedBox(height: 4),
                       Text.rich(TextSpan(children: [
                         TextSpan(text: _price(_sel), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 
 import 'theme.dart';
@@ -117,11 +119,68 @@ const fullDayOnly = <Hotel>[
 ];
 
 const areas = ['T. Nagar', 'OMR', 'Porur', 'Velachery', 'Anna Nagar', 'Guindy', 'Egmore', 'Adyar'];
+class Landmark {
+  final String name, sub;
+  final double lat, lng;
+  const Landmark(this.name, this.sub, this.lat, this.lng);
+}
+
 const landmarks = [
-  ['Chennai Airport', 'Meenambakkam'],
-  ['Chennai Central', 'Railway station'],
-  ['Marina Beach', 'Triplicane'],
+  Landmark('Chennai Airport', 'Airport · Meenambakkam', 12.9941, 80.1709),
+  Landmark('Chennai Central', 'Railway station · Park Town', 13.0827, 80.2757),
+  Landmark('Chennai Egmore', 'Railway station · Egmore', 13.0780, 80.2614),
+  Landmark('Koyambedu CMBT', 'Bus terminus · Koyambedu', 13.0687, 80.2050),
+  Landmark('Marina Beach', 'Beach · Triplicane', 13.0500, 80.2824),
+  Landmark('Phoenix MarketCity', 'Mall · Velachery', 12.9915, 80.2170),
+  Landmark('Express Avenue', 'Mall · Royapettah', 13.0587, 80.2641),
+  Landmark('Apollo Hospitals', 'Hospital · Greams Road', 13.0630, 80.2510),
+  Landmark('Sri Ramachandra Hospital', 'Hospital · Porur', 13.0367, 80.1430),
+  Landmark('Chennai Trade Centre', 'Convention centre · Nandambakkam', 13.0160, 80.1820),
+  Landmark('Tidel Park', 'IT park · Taramani', 12.9890, 80.2483),
+  Landmark('IIT Madras', 'Campus · Guindy', 12.9916, 80.2336),
+  Landmark('Kapaleeshwarar Temple', 'Temple · Mylapore', 13.0339, 80.2697),
 ];
+
+Landmark? landmarkNamed(String? name) {
+  for (final l in landmarks) {
+    if (l.name == name) return l;
+  }
+  return null;
+}
+
+double _km(double lat1, double lng1, double lat2, double lng2) {
+  const r = 6371.0;
+  final dLat = (lat2 - lat1) * math.pi / 180, dLng = (lng2 - lng1) * math.pi / 180;
+  final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+      math.cos(lat1 * math.pi / 180) * math.cos(lat2 * math.pi / 180) * math.sin(dLng / 2) * math.sin(dLng / 2);
+  return r * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+}
+
+/// Distance used for sorting and labels: from the picked landmark, else the usual one.
+double kmFor(Hotel h) {
+  final l = landmarkNamed(app.place);
+  return l == null ? h.distanceKm : _km(l.lat, l.lng, h.lat, h.lng);
+}
+
+String kmLabel(Hotel h) {
+  final l = landmarkNamed(app.place);
+  return l == null ? '${h.distanceKm} km away' : '${kmFor(h).toStringAsFixed(1)} km from ${l.name}';
+}
+
+/// Orders stays for the searched place: nearest to a landmark, the picked hotel first,
+/// or stays in the picked area first.
+List<Hotel> orderForPlace(List<Hotel> list) {
+  final l = [...list];
+  final p = app.place;
+  if (p == null) return l;
+  if (landmarkNamed(p) != null) {
+    l.sort((a, b) => kmFor(a).compareTo(kmFor(b)));
+  } else {
+    int rank(Hotel h) => h.name == p ? 0 : (h.area == p ? 1 : 2);
+    l.sort((a, b) => rank(a).compareTo(rank(b)));
+  }
+  return l;
+}
 
 /// Shared booking + user state for the whole app.
 class AppState extends ChangeNotifier {
@@ -174,6 +233,7 @@ class AppState extends ChangeNotifier {
   // logged in with Google (demo)
   bool googleAccount = false;
   String? photoPath;
+  bool useLocation = true;
   // during the stay
   final String checkinOtp = '4827';
   bool checkedIn = false;
