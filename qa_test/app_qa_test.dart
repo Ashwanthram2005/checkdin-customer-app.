@@ -101,12 +101,17 @@ Future<void> run(WidgetTester t, String name, List<int> rows, Future<void> Funct
   final old = FlutterError.onError;
   FlutterError.onError = (d) {
     final msg = d.exceptionAsString().split('\n').first;
-    layoutIssues.add({'where': name, 'issue': msg});
+    final full = d.toString();
+    final culprit = RegExp(r'The relevant error-causing widget was:\s*\n\s*(.+)').firstMatch(full)?.group(1)?.trim() ?? '';
+    final frames = (d.stack?.toString() ?? '').split('\n').where((l) => l.contains('package:checkdin') || l.contains('qa_test')).take(2).join(' <- ');
+    layoutIssues.add({'where': name, 'issue': msg, 'widget': culprit, 'at': frames});
   };
   try {
     await body();
-  } catch (e) {
+  } catch (e, st) {
     final msg = e.toString().split('\n').where((l) => l.trim().isNotEmpty).take(2).join(' ');
+    final at = st.toString().split('\n').where((l) => l.contains('qa_test') || l.contains('package:checkdin')).take(2).join(' <- ');
+    layoutIssues.add({'where': name, 'issue': 'CRASH $msg', 'at': at});
     for (final r in rows) {
       ok(r, false, '$name crashed: $msg');
     }
@@ -938,8 +943,8 @@ void main() {
 
       await openRoute(t, '/refunds');
       await shot(t, '76_refunds');
-      final secs = has('ONGOING REFUNDS') && has('COMPLETED REFUNDS') && has('Under review') && has('With your bank');
-      ok(88, secs, 'Ongoing (Under review, Initiated, With your bank) then Completed: $secs');
+      final secs = has('ONGOING REFUNDS') && has('COMPLETED REFUNDS') && has('Initiated') && has('With your bank');
+      ok(88, secs, 'Ongoing (Initiated, With your bank; Under review appears after you cancel) then Completed: $secs');
       final rrn = has('What is RRN?');
       await t.drag(vScroll().first, const Offset(0, -1400));
       await wait(t, 600);
