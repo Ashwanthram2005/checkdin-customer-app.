@@ -80,7 +80,7 @@ Future<void> tapText(WidgetTester t, String s, {bool last = false}) async {
     throw StateError('Button "$s" not found. On screen: ${screenTexts().join(' | ')}');
   }
   final one = last ? f.last : f.first;
-  await t.ensureVisible(one);
+  await centre(t, one);
   await t.pump(const Duration(milliseconds: 250));
   // Re-find after scrolling: the element can be rebuilt.
   var g = find.text(s);
@@ -88,6 +88,17 @@ Future<void> tapText(WidgetTester t, String s, {bool last = false}) async {
   final target = g.evaluate().isEmpty ? one : (last ? g.last : g.first);
   await t.tap(target, warnIfMissed: false);
   await t.pump(const Duration(milliseconds: 100));
+}
+
+/// Scroll an item to the middle of the screen (not the top, where a pinned
+/// header could cover it).
+Future<void> centre(WidgetTester t, Finder f) async {
+  try {
+    await Scrollable.ensureVisible(t.element(f), alignment: 0.5);
+  } catch (_) {
+    await t.ensureVisible(f);
+  }
+  await t.pump(const Duration(milliseconds: 50));
 }
 
 Finder vScroll() => find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down);
@@ -350,7 +361,7 @@ void main() {
       // offer card
       final offer = find.textContaining('FIRST STAY OFFER', findRichText: true);
       if (offer.evaluate().isNotEmpty) {
-        await t.ensureVisible(offer.first);
+        await centre(t, offer.first);
         await t.tap(offer.first, warnIfMissed: false);
         await wait(t, 2000);
         ok(15, has('OFFERS') || has('Offers'), 'Tapping an offer card opens Offers');
@@ -648,20 +659,21 @@ void main() {
 
       final input = find.byWidgetPredicate((w) => w is TextField && (w.decoration?.hintText ?? '') == 'Enter coupon code');
       await t.enterText(input.first, 'ABC');
-      await tapText(t, 'Apply', last: false);
+      await t.testTextInput.receiveAction(TextInputAction.done);
       await wait(t, 1500);
       final bad = has('That code isn');
       await shot(t, '44_coupon_bad');
       ok(52, bad, bad ? 'Fake code shows "That code isn\'t valid"' : 'No error for fake code');
 
       await t.enterText(input.first, 'NEWSTAY');
-      await tapText(t, 'Apply');
+      await t.testTextInput.receiveAction(TextInputAction.done);
       await wait(t, 1800);
       final applied = app.couponCode == 'NEWSTAY';
       ok(51, applied, 'NEWSTAY applied from the sheet: $applied');
-      if (find.byType(BottomSheet).evaluate().isNotEmpty) {
-        appNavigator.currentState!.pop();
-        await wait(t, 600);
+      final close = find.byTooltip('Close');
+      if (close.evaluate().isNotEmpty) {
+        await t.tap(close.last, warnIfMissed: false);
+        await wait(t, 800);
       }
       await shot(t, '45_reserve_coupon_applied');
       if (applied) {
@@ -675,7 +687,7 @@ void main() {
         ok(53, false, 'Coupon was not applied, so removal could not be checked');
       }
 
-      await t.drag(vScroll().first, const Offset(0, -900));
+      if (vScroll().evaluate().isNotEmpty) await t.drag(vScroll().first, const Offset(0, -900));
       await wait(t, 600);
       await shot(t, '46_reserve_bill');
       ok(54, has('BILL SUMMARY') || has('Bill summary'), 'Bill summary visible (credits line checked by screenshot)');
@@ -864,9 +876,9 @@ void main() {
       }
       ok(78, app.extraHours > before, 'Extend during stay: ${app.extraHours - before} hr added');
 
-      final co = find.text('Check out');
+      final co = find.text('Check out early', skipOffstage: false);
       if (co.evaluate().isNotEmpty) {
-        await t.ensureVisible(co.first);
+        await centre(t, co.first);
         await t.tap(co.first, warnIfMissed: false);
         await wait(t, 1000);
         await shot(t, '66_checkout_confirm');
@@ -978,10 +990,8 @@ void main() {
       }
       await shot(t, '77_refund_details');
       ok(89, rrn || has('What is RRN?'), 'Opened card shows timeline, booking ID and "What is RRN?"');
-      final yes = find.text('Yes');
-      if (yes.evaluate().isNotEmpty) {
-        await t.ensureVisible(yes.last);
-        await t.tap(yes.last, warnIfMissed: false);
+      if (find.text('Yes', skipOffstage: false).evaluate().isNotEmpty) {
+        await tapText(t, 'Yes', last: true);
         await wait(t, 500);
       }
       ok(90, has('Thanks for letting us know'), 'Yes on a completed refund says thanks');

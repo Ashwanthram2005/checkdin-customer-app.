@@ -268,8 +268,10 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _title('Continue your search'),
           SizedBox(
-            height: 58,
-            child: ListView.separated(
+            height: 62,
+            child: MediaQuery.withClampedTextScaling(
+              maxScaleFactor: 1.1,
+              child: ListView.separated(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               itemCount: recent.length,
@@ -295,6 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ]),
                 ]),
               ),
+            ),
             ),
           ),
           const SizedBox(height: 22),

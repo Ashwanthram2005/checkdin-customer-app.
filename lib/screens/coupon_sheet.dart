@@ -183,7 +183,8 @@ Future<void> showCouponSheet(BuildContext context) async {
       );
     }),
   );
-  ctrl.dispose();
+  // Wait for the sheet's close animation before freeing the text box.
+  Future<void>.delayed(const Duration(milliseconds: 600), ctrl.dispose);
   if (applied == null) return;
   app.set(() => app.couponCode = applied);
   if (context.mounted) toast(context, '$applied applied · ${couponSaving(applied)}');

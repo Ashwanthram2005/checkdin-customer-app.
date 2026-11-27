@@ -270,7 +270,8 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
         },
       ),
     );
-    other.dispose();
+    // Wait for the sheet's close animation before freeing the text box.
+  Future<void>.delayed(const Duration(milliseconds: 600), other.dispose);
     if (yes == true && mounted) {
       toast(context, 'Booking cancelled. No money was charged.');
       goHome(context);

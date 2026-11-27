@@ -391,7 +391,8 @@ Future<void> _google(BuildContext context) async {
       );
     }),
   );
-  emailCtrl.dispose();
+  // Wait for the sheet's close animation before freeing the text box.
+  Future<void>.delayed(const Duration(milliseconds: 600), emailCtrl.dispose);
   if (picked == null || !context.mounted) return;
   googleBusy.value = true;
   try {

@@ -220,16 +220,14 @@ class WhiteCard extends StatelessWidget {
       : _color = color;
   @override
   Widget build(BuildContext context) {
-    final box = Container(
-      width: expand ? double.infinity : null,
-      padding: padding,
-      decoration: ShapeDecoration(color: color, shape: smooth(radius, side: border?.top ?? BorderSide.none)),
-      child: child,
-    );
-    if (onTap == null) return box;
+    // A Material (not a painted box) so ripples inside the card stay visible.
+    final shape = smooth(radius, side: border?.top ?? BorderSide.none);
+    final inner = Container(width: expand ? double.infinity : null, padding: padding, child: child);
     return Material(
-      color: Colors.transparent,
-      child: InkWell(customBorder: smooth(radius), onTap: onTap, child: box),
+      color: color,
+      shape: shape,
+      clipBehavior: Clip.antiAlias,
+      child: onTap == null ? inner : InkWell(customBorder: shape, onTap: onTap, child: inner),
     );
   }
 }
