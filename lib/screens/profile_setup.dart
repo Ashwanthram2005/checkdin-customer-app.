@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
   const ProfileSetupScreen({super.key});
@@ -24,6 +26,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
 
   final _kName = GlobalKey<ShakeState>(), _kEmail = GlobalKey<ShakeState>();
   bool _tried = false;
+  bool _saving = false;
   bool get _emailBad => _email.text.trim().isNotEmpty && !RegExp(r'^[\w.+-]+@[\w-]+\.[\w.]+$').hasMatch(_email.text.trim());
 
   @override
@@ -115,8 +118,20 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                       height: 56,
                       expand: true,
                       icon: Icons.arrow_forward_rounded,
+                      loading: _saving,
                       onTap: ok
-                          ? () {
+                          ? () async {
+                              setState(() => _saving = true);
+                              try {
+                                await api.updateProfile();
+                              } on ApiError catch (e) {
+                                if (mounted) {
+                                  setState(() => _saving = false);
+                                  toast(context, e.message);
+                                }
+                                return;
+                              }
+                              if (!mounted) return;
                               app.set(() {
                                 app.name = _name.text.trim();
                                 app.email = _email.text.trim();

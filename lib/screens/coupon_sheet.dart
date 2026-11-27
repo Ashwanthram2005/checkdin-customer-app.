@@ -12,18 +12,32 @@ Future<void> showCouponSheet(BuildContext context) async {
   final ctrl = TextEditingController();
   String? error;
   final shake = GlobalKey<ShakeState>();
+  var checking = false;
   final applied = await showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (ctx) => StatefulBuilder(builder: (ctx, set) {
-      void tryCode(String raw) {
+      Future<void> tryCode(String raw) async {
         final code = raw.trim().toUpperCase();
+        if (checking) return;
         if (code.isEmpty) {
           set(() => error = 'Enter a coupon code');
           shake.currentState?.shake();
           return;
         }
+        set(() => checking = true);
+        try {
+          await api.checkCoupon(code);
+        } on ApiError catch (e) {
+          set(() {
+            checking = false;
+            error = e.message;
+          });
+          shake.currentState?.shake();
+          return;
+        }
+        set(() => checking = false);
         final c = couponByCode(code);
         if (c == null) {
           set(() => error = 'That code isn\'t valid. Check it and try again.');
@@ -139,7 +153,7 @@ Future<void> showCouponSheet(BuildContext context) async {
                         ),
                       ),
                     ),
-                    PillBtn('Apply', kind: BtnKind.dark, height: 40, fontSize: 13.5, onTap: () => tryCode(ctrl.text)),
+                    PillBtn('Apply', kind: BtnKind.dark, height: 40, fontSize: 13.5, loading: checking, onTap: () => tryCode(ctrl.text)),
                   ]),
                 )),
                 if (error != null)

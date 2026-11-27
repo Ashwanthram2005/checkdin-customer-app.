@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 /// Arguments: {'hotel': String, 'when': String, 'rating': int}. Pops with the overall rating (int) when posted.
 class RateStayScreen extends StatefulWidget {
@@ -300,13 +302,20 @@ class _RateStayScreenState extends State<RateStayScreen> {
           ),
         ),
         BottomBar(
-          child: PillBtn(
+          child: AsyncBtn(
             _overall == 0 ? 'Rate your stay to post' : 'Post review',
             kind: BtnKind.dark,
             expand: true,
             onTap: canPost
-                ? () {
+                ? () async {
                     FocusScope.of(context).unfocus();
+                    try {
+                      await api.submitReview();
+                    } on ApiError catch (e) {
+                      if (context.mounted) toast(context, e.message);
+                      return;
+                    }
+                    if (!context.mounted) return;
                     final all = [...hotels, ...fullDayOnly];
                     final h = all.where((x) => x.name == _hotel);
                     app.set(() => app.myReview = MyReview(h.isEmpty ? app.hotel.id : h.first.id, _overall, _text.text.trim(),

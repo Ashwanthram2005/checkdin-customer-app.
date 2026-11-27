@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 /// Result returned to Payment methods when a card is saved.
 class NewCard {
@@ -123,9 +125,16 @@ class _AddCardScreenState extends State<AddCardScreen> {
   final _kNum = GlobalKey<ShakeState>(), _kExp = GlobalKey<ShakeState>(), _kCvv = GlobalKey<ShakeState>(), _kName = GlobalKey<ShakeState>();
   bool _tried = false;
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_valid) {
       FocusScope.of(context).unfocus();
+      try {
+        await api.saveCard();
+      } on ApiError catch (e) {
+        if (mounted) toast(context, e.message);
+        return;
+      }
+      if (!mounted) return;
       Navigator.pop(context, NewCard(_brand.isEmpty ? 'Card' : _brand, _digits.substring(_digits.length - 4), _exp.text, _name.text.trim(), save: _save));
       return;
     }
@@ -368,7 +377,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
           ),
         ),
         BottomBar(
-          child: PillBtn(
+          child: AsyncBtn(
             'Save card',
             kind: BtnKind.dark,
             expand: true,

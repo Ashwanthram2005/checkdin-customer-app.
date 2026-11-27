@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 /// Shared top half used by login / OTP: logo + headline + illustration.
 class HeroTop extends StatelessWidget {
@@ -127,7 +129,10 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _getOtp() {
+  bool _sending = false;
+
+  Future<void> _getOtp() async {
+    if (_sending) return;
     final n = _ctrl.text;
     final err = n.isEmpty
         ? 'Enter your mobile number'
@@ -141,8 +146,19 @@ class _LoginScreenState extends State<LoginScreen> {
       _shake.currentState?.shake();
       return;
     }
-    app.set(() => app.phone = n);
-    Navigator.pushNamed(context, '/otp');
+    setState(() => _sending = true);
+    try {
+      await api.sendOtp(n);
+      if (!mounted) return;
+      app.set(() => app.phone = n);
+      Navigator.pushNamed(context, '/otp');
+    } on ApiError catch (e) {
+      if (!mounted) return;
+      setState(() => _err = e.message);
+      _shake.currentState?.shake();
+    } finally {
+      if (mounted) setState(() => _sending = false);
+    }
   }
 
   @override
@@ -198,6 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
               kind: BtnKind.dark,
               height: 56,
               expand: true,
+              loading: _sending,
               onTap: _getOtp),
           const SizedBox(height: 14),
           Row(children: [
@@ -212,13 +229,18 @@ class _LoginScreenState extends State<LoginScreen> {
             child: InkWell(
               customBorder: const StadiumBorder(),
               onTap: () => _google(context),
-              child: const SizedBox(
+              child: SizedBox(
                 height: 54,
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  _GoogleMark(),
-                  SizedBox(width: 10),
-                  Text('Continue with Google', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w700)),
-                ]),
+                child: ValueListenableBuilder<bool>(
+                  valueListenable: googleBusy,
+                  builder: (_, busy, __) => busy
+                      ? const Center(child: Spinner())
+                      : const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          _GoogleMark(),
+                          SizedBox(width: 10),
+                          Text('Continue with Google', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w700)),
+                        ]),
+                ),
               ),
             ),
           ),
@@ -285,7 +307,10 @@ class _GPainter extends CustomPainter {
 }
 
 /// Google account picker. Real sign-in needs a Google Cloud OAuth client (see README).
+final googleBusy = ValueNotifier<bool>(false);
+
 Future<void> _google(BuildContext context) async {
+  if (googleBusy.value) return;
   final emailCtrl = TextEditingController();
   final picked = await showModalBottomSheet<List<String>>(
     context: context,
@@ -365,6 +390,16 @@ Future<void> _google(BuildContext context) async {
   );
   emailCtrl.dispose();
   if (picked == null || !context.mounted) return;
+  googleBusy.value = true;
+  try {
+    await api.googleSignIn(picked[1]);
+  } on ApiError catch (e) {
+    googleBusy.value = false;
+    if (context.mounted) toast(context, e.message);
+    return;
+  }
+  googleBusy.value = false;
+  if (!context.mounted) return;
   app.set(() {
     app.name = picked[0].isEmpty ? '' : picked[0][0].toUpperCase() + picked[0].substring(1);
     app.email = picked[1];

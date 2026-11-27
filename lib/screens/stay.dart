@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import 'maps.dart';
 
 String _hm(Duration d) {
@@ -32,7 +34,15 @@ class _CheckinOtpScreenState extends State<CheckinOtpScreen> {
 
   Future<void> _refresh() async {
     setState(() => _checking = true);
-    await Future<void>.delayed(const Duration(milliseconds: 1200));
+    try {
+      await api.bookingDetail(app.bookingId);
+    } on ApiError catch (e) {
+      if (mounted) {
+        setState(() => _checking = false);
+        toast(context, e.message);
+      }
+      return;
+    }
     if (!mounted) return;
     // Demo: the hotel has entered the OTP in the partner app.
     app.set(() {
@@ -134,8 +144,7 @@ class _CheckinOtpScreenState extends State<CheckinOtpScreen> {
                     kind: BtnKind.outline, height: 52, icon: Icons.near_me_rounded, trailingIcon: false, expand: true, onTap: () => openDirections(context, app.hotel))),
             const SizedBox(width: 12),
             Expanded(
-              child: PillBtn(_checking ? 'Checking…' : 'I\'m checked in',
-                  kind: BtnKind.dark, height: 52, expand: true, onTap: _checking ? null : _refresh),
+              child: PillBtn('I\'m checked in', kind: BtnKind.dark, height: 52, expand: true, loading: _checking, onTap: _refresh),
             ),
           ]),
         ),
@@ -185,7 +194,15 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
           Row(children: [
             Expanded(child: PillBtn('Stay', kind: BtnKind.outline, expand: true, onTap: () => Navigator.pop(ctx, false))),
             const SizedBox(width: 12),
-            Expanded(child: PillBtn('Check out', kind: BtnKind.dark, expand: true, onTap: () => Navigator.pop(ctx, true))),
+            Expanded(
+                child: AsyncBtn('Check out', kind: BtnKind.dark, expand: true, onTap: () async {
+              try {
+                await api.checkOut(app.bookingId);
+                if (ctx.mounted) Navigator.pop(ctx, true);
+              } on ApiError catch (e) {
+                if (ctx.mounted) toast(ctx, e.message);
+              }
+            })),
           ]),
         ]),
       ),
@@ -467,7 +484,8 @@ Future<void> showExtendSheet(BuildContext context) async {
             const SizedBox(height: 8),
             Text('Paid with ${app.paidWith}. Extensions can\'t be cancelled.', style: TextStyle(fontSize: 12, color: C.muted2)),
             const SizedBox(height: 14),
-            PillBtn(paying ? 'Paying…' : 'Pay ${inr(price + fees)} & extend',
+            PillBtn('Pay ${inr(price + fees)} & extend',
+                loading: paying,
                 kind: BtnKind.dark,
                 height: 56,
                 expand: true,
@@ -475,7 +493,13 @@ Future<void> showExtendSheet(BuildContext context) async {
                     ? null
                     : () async {
                         set(() => paying = true);
-                        await Future<void>.delayed(const Duration(milliseconds: 1400));
+                        try {
+                          await api.extendStay(app.bookingId, pick);
+                        } on ApiError catch (e) {
+                          set(() => paying = false);
+                          if (context.mounted) toast(context, e.message);
+                          return;
+                        }
                         app.set(() {
                           app.extraHours += pick;
                           app.extraPaid += price + fees;

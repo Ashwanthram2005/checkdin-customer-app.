@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import 'login.dart';
 
 class DoorHanger extends StatelessWidget {
@@ -84,10 +86,10 @@ class _OtpScreenState extends State<OtpScreen> {
   bool _bad = false;
   int _tries = 3;
 
-  /// Demo: the correct OTP is 1234 until a real SMS/WhatsApp service is connected.
-  static const _demoOtp = '1234';
+  bool _verifying = false;
 
   Future<void> _verify() async {
+    if (_verifying) return;
     final code = _ctrls.map((c) => c.text).join();
     if (_tries == 0) {
       setState(() => _err = 'Too many wrong tries. Tap Resend to get a new OTP.');
@@ -102,7 +104,23 @@ class _OtpScreenState extends State<OtpScreen> {
       _shake.currentState?.shake();
       return;
     }
-    if (code != _demoOtp) {
+    setState(() => _verifying = true);
+    ApiError? fail;
+    var isNew = true;
+    try {
+      // Demo: the fake backend accepts 1234 until a real WhatsApp/SMS service is connected.
+      isNew = await api.verifyOtp(app.phone, code);
+    } on ApiError catch (e) {
+      fail = e;
+    }
+    if (!mounted) return;
+    setState(() => _verifying = false);
+    if (fail != null && fail.code != 'wrong_otp') {
+      setState(() => _err = fail!.message);
+      _shake.currentState?.shake();
+      return;
+    }
+    if (fail != null) {
       _tries--;
       setState(() {
         _bad = true;
@@ -118,7 +136,7 @@ class _OtpScreenState extends State<OtpScreen> {
       if (_tries > 0) _nodes[0].requestFocus();
       return;
     }
-    Navigator.pushNamedAndRemoveUntil(context, '/profile-setup', (_) => false);
+    Navigator.pushNamedAndRemoveUntil(context, isNew ? '/profile-setup' : '/home', (_) => false);
   }
 
   @override
@@ -200,6 +218,7 @@ class _OtpScreenState extends State<OtpScreen> {
               kind: BtnKind.dark,
               height: 56,
               expand: true,
+              loading: _verifying,
               onTap: _verify),
           const SizedBox(height: 6),
           Text('Demo OTP: 1234', style: TextStyle(fontSize: 12, color: C.muted2)),

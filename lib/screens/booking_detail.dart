@@ -111,10 +111,13 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(999),
                           onTap: () => shareVoucher(context),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                             child: Row(children: [
-                              Icon(Icons.download_rounded, size: 15),
+                              ValueListenableBuilder<bool>(
+                                valueListenable: voucherBusy,
+                                builder: (_, busy, __) => busy ? const Spinner(size: 15) : const Icon(Icons.download_rounded, size: 15),
+                              ),
                               SizedBox(width: 5),
                               Text('Voucher', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700)),
                             ]),

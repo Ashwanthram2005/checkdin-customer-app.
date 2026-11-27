@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import 'package:flutter/services.dart';
 
 import '../banks.dart';
@@ -26,9 +28,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
   String? _vpaErr;
   bool _vpaOk = false;
 
-  void _verifyVpa() {
+  bool _vpaBusy = false;
+
+  Future<void> _verifyVpa() async {
     final v = _vpa.text.trim();
-    final ok = RegExp(r'^[a-zA-Z0-9._-]{2,}@[a-zA-Z]{2,}$').hasMatch(v);
+    if (_vpaBusy) return;
+    var ok = RegExp(r'^[a-zA-Z0-9._-]{2,}@[a-zA-Z]{2,}$').hasMatch(v);
+    if (ok) {
+      setState(() => _vpaBusy = true);
+      try {
+        ok = await api.verifyUpiId(v);
+      } on ApiError catch (e) {
+        if (mounted) {
+          setState(() => _vpaBusy = false);
+          toast(context, e.message);
+        }
+        return;
+      }
+      if (!mounted) return;
+      _vpaBusy = false;
+    }
     setState(() {
       _vpaOk = ok;
       _vpaErr = v.isEmpty ? 'Enter your UPI ID' : (ok ? null : 'That doesn\'t look like a UPI ID. It should be like name@okhdfc');
@@ -40,9 +59,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  void _tryPay() {
+  Future<void> _tryPay() async {
     if (_sel == 'upiid' && !_vpaOk) {
-      _verifyVpa();
+      await _verifyVpa();
       if (!_vpaOk) return;
     }
     if (!_canPay) {
@@ -98,15 +117,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ),
       ),
     );
-    await Future<void>.delayed(const Duration(milliseconds: 2200));
+    var ok = true;
+    String? id;
+    try {
+      id = await api.pay(method: _sel, amount: app.total, simulateFailure: _willFail);
+    } on ApiError {
+      ok = false;
+    }
     if (!mounted) return;
     Navigator.of(context).pop();
-    if (!_willFail) {
+    if (ok) {
       app.set(() {
         app.bookingCancelled = false;
         app.checkedIn = false;
-        app.bookingId = newBookingId(DateTime.now());
-      app.bookingId = newBookingId(DateTime.now());
+        app.bookingId = id ?? newBookingId(DateTime.now());
         app.stayStart = null;
         app.extraHours = 0;
         app.extraPaid = 0;
@@ -576,7 +600,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          PillBtn('Verify', kind: BtnKind.dark, height: 46, fontSize: 14, onTap: _verifyVpa),
+                          PillBtn('Verify', kind: BtnKind.dark, height: 46, fontSize: 14, loading: _vpaBusy, onTap: _verifyVpa),
                         ]),
                       ),
                       FieldError(_vpaErr),

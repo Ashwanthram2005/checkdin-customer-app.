@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 /// Cancel an upcoming booking: shows the refund, asks for a reason, confirms.
 /// Returns true when the booking was cancelled (and marks it in [app]).
@@ -33,6 +35,7 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
   final other = TextEditingController();
   final shake = GlobalKey<ShakeState>();
   var tried = false;
+  var cancelling = false;
   final ok = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
@@ -152,7 +155,17 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                 Expanded(
                   child: GestureDetector(
                     onTap: ready
-                        ? () => Navigator.pop(ctx, true)
+                        ? () async {
+                            if (cancelling) return;
+                            setSheet(() => cancelling = true);
+                            try {
+                              await api.cancelBooking(app.bookingId, isOther ? other.text.trim() : picked!);
+                              if (ctx.mounted) Navigator.pop(ctx, true);
+                            } on ApiError catch (e) {
+                              setSheet(() => cancelling = false);
+                              if (ctx.mounted) toast(ctx, e.message);
+                            }
+                          }
                         : started
                             ? null
                             : () {
@@ -164,8 +177,10 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                       height: 52,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(color: ready ? C.red : C.tint(Color(0xFFEFEFEA)), borderRadius: BorderRadius.circular(999)),
-                      child: Text('Cancel booking',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: ready ? C.white : C.muted2)),
+                      child: cancelling
+                          ? Spinner(color: C.white)
+                          : Text('Cancel booking',
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: ready ? C.white : C.muted2)),
                     ),
                   ),
                 ),

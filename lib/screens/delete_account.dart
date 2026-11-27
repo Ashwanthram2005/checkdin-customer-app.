@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
@@ -35,8 +37,17 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
       !_hasUpcoming && _reason != null && (_reason != 'Other reason' || _other.text.trim().isNotEmpty) && _understand && !_working;
 
   Future<void> _delete() async {
+    if (_working) return;
     setState(() => _working = true);
-    await Future<void>.delayed(const Duration(milliseconds: 900));
+    try {
+      await api.deleteAccount();
+    } on ApiError catch (e) {
+      if (mounted) {
+        setState(() => _working = false);
+        toast(context, e.message);
+      }
+      return;
+    }
     if (!mounted) return;
     app.set(() {
       app.name = '';
@@ -177,8 +188,9 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   height: 52,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(color: _ok ? C.red : C.tint(Color(0xFFEFEFEA)), borderRadius: BorderRadius.circular(999)),
-                  child: Text(_working ? 'Deleting…' : 'Delete account',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: _ok ? C.white : C.muted2)),
+                  child: _working
+                      ? Spinner(color: C.white)
+                      : Text('Delete account', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: _ok ? C.white : C.muted2)),
                 ),
               ),
             ),

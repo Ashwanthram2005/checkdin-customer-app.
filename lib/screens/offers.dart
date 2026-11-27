@@ -29,6 +29,7 @@ class _OffersScreenState extends State<OffersScreen> {
   final _code = TextEditingController();
   bool? _valid;
   final _shake = GlobalKey<ShakeState>();
+  bool _checking = false;
 
   @override
   void dispose() {
@@ -145,7 +146,18 @@ class _OffersScreenState extends State<OffersScreen> {
                 kind: BtnKind.dark,
                 height: 44,
                 fontSize: 14,
-                onTap: () {
+                loading: _checking,
+                onTap: () async {
+                  if (code.isNotEmpty) {
+                    setState(() => _checking = true);
+                    try {
+                      await api.checkCoupon(code);
+                    } on ApiError catch (e) {
+                      if (mounted) toast(context, e.message);
+                    }
+                    if (!mounted) return;
+                    setState(() => _checking = false);
+                  }
                   setState(() => _valid = code.isNotEmpty && _coupons.any((c) => c.code == code));
                   if (_valid!) {
                     app.set(() => app.couponCode = code);

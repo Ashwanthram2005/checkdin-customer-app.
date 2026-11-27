@@ -11,13 +11,20 @@ import 'theme.dart';
 String _rs(int v) => 'Rs. ${inr(v).replaceAll('₹', '')}';
 
 /// Builds the booking voucher + payment receipt PDF and opens the share/save sheet.
+/// True while the voucher PDF is being made (buttons show a spinner).
+final voucherBusy = ValueNotifier<bool>(false);
+
 Future<void> shareVoucher(BuildContext context, {String? bookingId}) async {
   bookingId ??= app.bookingId;
+  if (voucherBusy.value) return;
+  voucherBusy.value = true;
   try {
     final bytes = await buildVoucher(bookingId);
     await Printing.sharePdf(bytes: bytes, filename: 'Checkdin-$bookingId.pdf');
   } catch (_) {
     if (context.mounted) toast(context, 'Couldn\'t create the voucher. Try again.');
+  } finally {
+    voucherBusy.value = false;
   }
 }
 

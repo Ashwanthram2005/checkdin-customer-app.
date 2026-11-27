@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import '../voucher.dart';
 import 'stay.dart';
 import 'maps.dart';
@@ -180,7 +182,25 @@ class BookingSuccessScreen extends StatelessWidget {
                 action(Icons.near_me_rounded, 'Directions', true, () => openDirections(context, app.hotel)),
                 action(Icons.call_outlined, 'Call hotel', false, () => callHotel(context)),
                 action(Icons.event_outlined, 'Calendar', false, () => toast(context, 'Added to your calendar')),
-                action(Icons.download_rounded, 'Voucher', false, () => shareVoucher(context)),
+                ValueListenableBuilder<bool>(
+                  valueListenable: voucherBusy,
+                  builder: (_, busy, __) => busy
+                      ? Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: WhiteCard(
+                              radius: 18,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: const Column(children: [
+                                SizedBox(height: 38, child: Center(child: Spinner())),
+                                SizedBox(height: 6),
+                                Text('Voucher', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700)),
+                              ]),
+                            ),
+                          ),
+                        )
+                      : action(Icons.download_rounded, 'Voucher', false, () => shareVoucher(context)),
+                ),
               ]),
               const SizedBox(height: 10),
               Center(

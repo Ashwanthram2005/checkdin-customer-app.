@@ -65,6 +65,8 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
         child: Column(children: [for (var i = 0; i < items.length; i++) _row(items[i], i == items.length - 1)]),
       );
 
+  bool _locating = false;
+
   @override
   Widget build(BuildContext context) {
     final q = _q.text.trim().toLowerCase();
@@ -109,7 +111,12 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                 radius: 20,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 onTap: () async {
-                  if (await useMyLocation(context)) _pick('Current location');
+                  if (_locating) return;
+                  setState(() => _locating = true);
+                  final ok = await useMyLocation(context);
+                  if (!mounted) return;
+                  setState(() => _locating = false);
+                  if (ok) _pick('Current location');
                 },
                 child: Row(children: [
                   IconTile(Icons.near_me_rounded, bg: C.card, size: 40, radius: 20),
@@ -121,7 +128,7 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                       Text('Stays near you, right now', style: TextStyle(fontSize: 12.5, color: C.limeInk)),
                     ]),
                   ),
-                  Icon(Icons.chevron_right_rounded),
+                  _locating ? const Spinner() : const Icon(Icons.chevron_right_rounded),
                 ]),
               ),
               const SectionLabel('Popular areas'),

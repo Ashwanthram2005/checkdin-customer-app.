@@ -4,6 +4,8 @@ import '../state.dart';
 import '../avatar.dart';
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -53,6 +55,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   final _kName = GlobalKey<ShakeState>(), _kEmail = GlobalKey<ShakeState>();
   bool _tried = false;
+  bool _saving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -171,6 +174,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               kind: BtnKind.dark,
               height: 56,
               expand: true,
+              loading: _saving,
               onTap: !_changed
                   ? null
                   : !ok
@@ -178,7 +182,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       setState(() => _tried = true);
                       shakeAll([if (nameBad) _kName, if (_emailBad) _kEmail]);
                     }
-                  : () {
+                  : () async {
+                      setState(() => _saving = true);
+                      try {
+                        await api.updateProfile();
+                      } on ApiError catch (e) {
+                        if (mounted) toast(context, e.message);
+                        return;
+                      } finally {
+                        if (mounted) setState(() => _saving = false);
+                      }
+                      if (!mounted) return;
                       app.set(() {
                         app.name = _name.text.trim();
                         app.email = _email.text.trim();

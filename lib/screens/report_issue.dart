@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 class ReportIssueScreen extends StatefulWidget {
   const ReportIssueScreen({super.key});
@@ -61,9 +62,17 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
 
   Future<void> _submit() async {
     setState(() => _sending = true);
-    await Future<void>.delayed(const Duration(milliseconds: 900));
+    final String id;
+    try {
+      id = await api.reportIssue(_type!, _text.text.trim());
+    } on ApiError catch (e) {
+      if (mounted) {
+        setState(() => _sending = false);
+        toast(context, e.message);
+      }
+      return;
+    }
     if (!mounted) return;
-    final id = 'TKT-${1000 + math.Random().nextInt(9000)}';
     final urgent = _type == 'Hotel refused check-in' || _type == 'Safety concern';
     await Navigator.pushReplacement(
       context,
@@ -215,7 +224,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
         ),
         BottomBar(
           child: PillBtn(
-            _sending ? 'Sending…' : (_ok ? 'Submit report' : 'Pick an issue and add details'),
+            _ok ? 'Submit report' : 'Pick an issue and add details',
+            loading: _sending,
             kind: BtnKind.dark,
             height: 54,
             expand: true,
