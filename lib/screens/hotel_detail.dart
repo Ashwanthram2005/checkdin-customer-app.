@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../theme.dart';
 import 'gallery.dart';
+import 'hotel_extras.dart';
 import 'maps.dart';
 import 'reviews.dart';
 
@@ -13,7 +14,25 @@ class HotelDetailScreen extends StatefulWidget {
 }
 
 class _HotelDetailScreenState extends State<HotelDetailScreen> {
-  final _keys = {for (final s in ['Slots', 'Facilities', 'Location', 'Ratings', 'Policies']) s: GlobalKey()};
+  final _keys = {for (final s in ['Slots', 'Room', 'Reviews', 'Location', 'Food', 'Rules']) s: GlobalKey()};
+
+  final _scroll = ScrollController();
+  bool _compact = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(() {
+      final c = _scroll.offset > 250;
+      if (c != _compact) setState(() => _compact = c);
+    });
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
 
   void _jump(String s) {
     final ctx = _keys[s]!.currentContext;
@@ -56,7 +75,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
         return Scaffold(
           body: Column(children: [
             Expanded(
-              child: CustomScrollView(slivers: [
+              child: CustomScrollView(controller: _scroll, slivers: [
                 SliverToBoxAdapter(
                   child: Stack(children: [
                     const GalleryStrip(height: 300),
@@ -72,7 +91,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           onTap: () => app.set(() => saved ? app.saved.remove(h.id) : app.saved.add(h.id)),
                         ),
                         const SizedBox(width: 8),
-                        CircleBtn(icon: Icons.share_outlined, tooltip: 'Share', onTap: () => toast(context, 'Share link copied')),
+                        CircleBtn(icon: Icons.share_outlined, tooltip: 'Share', onTap: () => shareHotel(context, h)),
                       ]),
                     ),
                     
@@ -92,12 +111,18 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         const SizedBox(height: 10),
                         Text(h.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.8, height: 1.15)),
                         const SizedBox(height: 4),
-                        Text('${h.area}, Chennai · ${h.distanceKm} km away', style: TextStyle(fontSize: 13.5, color: C.muted)),
+                        Text('${h.area}, Chennai · ${kmLabel(h)}', style: TextStyle(fontSize: 13.5, color: C.muted)),
                       ]),
                     ),
                   ),
                 ),
-                SliverPersistentHeader(pinned: true, delegate: _TabsDelegate(_keys.keys.toList(), _jump)),
+                SliverPersistentHeader(pinned: true, delegate: _TabsDelegate(_keys.keys.toList(), _jump,
+                        compact: _compact,
+                        top: MediaQuery.of(context).padding.top,
+                        title: h.name,
+                        saved: saved,
+                        onSave: () => app.set(() => saved ? app.saved.remove(h.id) : app.saved.add(h.id)),
+                        onShare: () => shareHotel(context, h))),
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
                   sliver: SliverList(
@@ -106,11 +131,21 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       WhiteCard(
                         key: _keys['Slots'],
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Row(children: [
-                            Expanded(child: Text(app.fullDay ? 'Your stay' : 'Choose your slot', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
-                            Text(app.whenShort,
-                                style: TextStyle(fontSize: 12.5, color: C.muted)),
-                          ]),
+                          const StayEditors(),
+                          const SizedBox(height: 16),
+                          Text(app.fullDay ? 'Your stay' : 'Choose your slot', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                          if (!app.fullDay)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2),
+                              child: Text.rich(TextSpan(style: TextStyle(fontSize: 13, color: C.muted), children: [
+                                const TextSpan(text: 'Per night '),
+                                TextSpan(text: inr(h.night), style: const TextStyle(decoration: TextDecoration.lineThrough)),
+                                if (price != null)
+                                  TextSpan(
+                                      text: '  ·  save ${((1 - price / h.night) * 100).round()}% by the hour',
+                                      style: TextStyle(color: C.green, fontWeight: FontWeight.w700)),
+                              ])),
+                            ),
                           const SizedBox(height: 12),
                           if (app.fullDay)
                             StayTimeline(
@@ -121,34 +156,43 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                               slot: app.stayLabel,
                             )
                           else
-                          Row(
-                            children: [3, 6, 9, 12].map((hrs) {
-                              final p = h.priceFor(hrs);
-                              final on = hrs == app.slot;
-                              return Expanded(
-                                child: Padding(
+                          SizedBox(
+                            height: 92,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [3, 6, 9, 12].map((hrs) {
+                                final p = h.priceFor(hrs);
+                                final on = hrs == app.slot;
+                                return Padding(
                                   padding: EdgeInsets.only(right: hrs == 12 ? 0 : 8),
                                   child: GestureDetector(
                                     onTap: p == null ? null : () => app.set(() => app.slot = hrs),
                                     child: AnimatedContainer(
                                       duration: const Duration(milliseconds: 150),
-                                      height: 64,
+                                      width: 112,
                                       decoration: BoxDecoration(
-                                        color: on ? C.limeBg : (p == null ? C.bg : C.white),
+                                        color: on ? C.limeBg : (p == null ? C.bg : C.card),
                                         borderRadius: BorderRadius.circular(16),
                                         border: Border.all(color: on ? C.lime : C.border, width: 1.5),
                                       ),
-                                      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                        Text('$hrs hrs', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: on ? C.limeInk : C.muted2)),
-                                        const SizedBox(height: 2),
-                                        Text(p == null ? 'Full' : inr(p),
-                                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: p == null ? C.faint : C.ink)),
-                                      ]),
+                                      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: p == null
+                                          ? [
+                                              Text('Not available', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: C.faint)),
+                                              const SizedBox(height: 2),
+                                              Text('for $hrs hours', style: TextStyle(fontSize: 12, color: C.faint)),
+                                            ]
+                                          : [
+                                              Text(inr(p), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                                              const SizedBox(height: 2),
+                                              Text('${hourLabel(app.checkInHour, short: true)} – ${hourLabel(app.checkInHour + hrs, short: true)}',
+                                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                                              Text('$hrs hours', style: TextStyle(fontSize: 11.5, color: on ? C.limeInk : C.muted2)),
+                                            ]),
                                     ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
+                                );
+                              }).toList(),
+                            ),
                           ),
                           const SizedBox(height: 12),
                           Container(
@@ -165,9 +209,20 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                               ])),
                             ]),
                           ),
+                          const SizedBox(height: 10),
+                          Row(children: [
+                            Icon(Icons.verified_rounded, size: 16, color: C.green),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text('Earn ${inr(((price ?? h.night) * 0.05).round())} Checkdin credits on this stay',
+                                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.green)),
+                            ),
+                          ]),
                         ]),
                       ),
-                      SectionLabel('Facilities', key: _keys['Facilities']),
+                      SectionLabel('Room', key: _keys['Room']),
+                      RoomCard(h),
+                      const SectionLabel('Facilities'),
                       WhiteCard(
                         child: GridView.count(
                           crossAxisCount: 3,
@@ -185,28 +240,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           ],
                         ),
                       ),
-                      SectionLabel('Location', key: _keys['Location']),
-                      Material(
-                        color: C.card,
-                        borderRadius: BorderRadius.circular(22),
-                        clipBehavior: Clip.antiAlias,
-                        child: Column(children: [
-                          HotelMiniMap(h, height: 150),
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(children: [
-                              Expanded(
-                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                  Text(h.address, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                                ]),
-                              ),
-                              const SizedBox(width: 10),
-                              PillBtn('Directions', kind: BtnKind.outline, height: 38, fontSize: 13, onTap: () => openDirections(context, h)),
-                            ]),
-                          ),
-                        ]),
-                      ),
-                      SectionLabel('Ratings & reviews', key: _keys['Ratings']),
+                      SectionLabel('Ratings & reviews', key: _keys['Reviews']),
                       WhiteCard(
                         padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -246,24 +280,44 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                     child: Text('${b[1]}', textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),
                               ]),
                             ),
+                          const SizedBox(height: 4),
+                          ReviewSummary(h),
+                          const SizedBox(height: 14),
                           const ReviewsPreview(),
+                          const SizedBox(height: 6),
+                          GestureDetector(
+                            onTap: () => Navigator.pushNamed(context, '/reviews'),
+                            child: Text('See all ${h.reviews} reviews',
+                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
+                          ),
                         ]),
                       ),
-                      SectionLabel('Good to know', key: _keys['Policies']),
-                      GridView.count(
-                        crossAxisCount: 2,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 1.9,
-                        children: [
-                          _Rule(Icons.badge_outlined, 'Local ID accepted', C.limeSoft),
-                          _Rule(Icons.favorite_border_rounded, 'Couple friendly', C.limeSoft),
-                          _Rule(Icons.verified_user_outlined, '18+ guests only', C.bg),
-                          _Rule(Icons.smoke_free_rounded, 'No smoking or alcohol', C.redSoft),
-                        ],
+                      SectionLabel('Location', key: _keys['Location']),
+                      Material(
+                        color: C.card,
+                        borderRadius: BorderRadius.circular(22),
+                        clipBehavior: Clip.antiAlias,
+                        child: Column(children: [
+                          HotelMiniMap(h, height: 150),
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(children: [
+                              Expanded(
+                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                  Text(h.address, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                                ]),
+                              ),
+                              const SizedBox(width: 10),
+                              PillBtn('Directions', kind: BtnKind.outline, height: 38, fontSize: 13, onTap: () => openDirections(context, h)),
+                            ]),
+                          ),
+                          Padding(padding: const EdgeInsets.fromLTRB(16, 0, 16, 10), child: NearbyCard(h)),
+                        ]),
                       ),
+                      SectionLabel('Food & dining', key: _keys['Food']),
+                      FoodCard(h),
+                      SectionLabel('Property rules', key: _keys['Rules']),
+                      RulesCard(h),
                       const SizedBox(height: 10),
                       const _Policies(),
                     ]),
@@ -275,10 +329,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
               child: Row(children: [
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                    Text.rich(TextSpan(children: [
-                      TextSpan(text: price == null ? 'Full' : inr(price), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
-                      TextSpan(text: app.fullDay ? ' / night' : ' / ${app.slot} hrs', style: TextStyle(fontSize: 13, color: C.muted)),
-                    ])),
+                    Text(price == null ? 'Not available' : inr(app.gross), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                    Text(
+                        app.fullDay
+                            ? '${app.stayLabel} · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · incl. taxes'
+                            : '${hourLabel(app.checkInHour, short: true)} – ${hourLabel(app.checkOutHour, short: true)} (${app.slot} hrs) · incl. taxes',
+                        style: TextStyle(fontSize: 12.5, color: C.muted)),
                     GestureDetector(
                       onTap: _priceSheet,
                       child: const Text('Price details',
@@ -323,34 +379,61 @@ Widget totalBox(String v, {String label = 'To pay'}) => _totalBox(v, label: labe
 class _TabsDelegate extends SliverPersistentHeaderDelegate {
   final List<String> tabs;
   final ValueChanged<String> onTap;
-  _TabsDelegate(this.tabs, this.onTap);
+  final bool compact, saved;
+  final double top;
+  final String title;
+  final VoidCallback onSave, onShare;
+  _TabsDelegate(this.tabs, this.onTap,
+      {required this.compact, required this.top, required this.title, required this.saved, required this.onSave, required this.onShare});
+  double get _h => 54 + (compact ? top + 56 : 0);
   @override
-  double get minExtent => 54;
+  double get minExtent => _h;
   @override
-  double get maxExtent => 54;
+  double get maxExtent => _h;
   @override
-  bool shouldRebuild(covariant _TabsDelegate old) => false;
+  bool shouldRebuild(covariant _TabsDelegate old) => old.compact != compact || old.saved != saved || old.top != top;
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: C.bg,
-      padding: EdgeInsets.only(top: shrinkOffset > 0 || overlapsContent ? 0 : 0),
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
-        children: tabs
-            .map((t) => Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: ActionChip(
-                    label: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-                    backgroundColor: C.card,
-                    side: BorderSide.none,
-                    shape: const StadiumBorder(),
-                    onPressed: () => onTap(t),
-                  ),
-                ))
-            .toList(),
-      ),
+      child: Column(children: [
+        if (compact)
+          Container(
+            height: top + 56,
+            padding: EdgeInsets.fromLTRB(12, top, 8, 0),
+            decoration: BoxDecoration(color: C.card, border: Border(bottom: BorderSide(color: C.line))),
+            child: Row(children: [
+              const BackBtn(shadow: false),
+              const SizedBox(width: 8),
+              Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
+              IconButton(
+                tooltip: 'Save',
+                onPressed: onSave,
+                icon: Icon(saved ? Icons.favorite_rounded : Icons.favorite_border_rounded, color: saved ? const Color(0xFFE5484D) : C.ink),
+              ),
+              IconButton(tooltip: 'Share', onPressed: onShare, icon: Icon(Icons.share_outlined, color: C.ink)),
+            ]),
+          ),
+        SizedBox(
+          height: 54,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
+            children: tabs
+                .map((t) => Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: ActionChip(
+                        label: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                        backgroundColor: C.card,
+                        side: BorderSide.none,
+                        shape: const StadiumBorder(),
+                        onPressed: () => onTap(t),
+                      ),
+                    ))
+                .toList(),
+          ),
+        ),
+      ]),
     );
   }
 }

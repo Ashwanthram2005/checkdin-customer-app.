@@ -317,3 +317,5 @@ class SavedCard {
   const SavedCard(this.brand, this.last4, this.expiry, this.name);
   String get label => '${brand == 'Card' ? 'Card' : brand} •••• $last4';
 }
+
+double kmBetween(Hotel h, Landmark l) => _km(l.lat, l.lng, h.lat, h.lng);
