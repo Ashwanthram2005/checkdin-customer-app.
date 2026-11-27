@@ -10,6 +10,8 @@ import 'fake_api.dart';
 /// CheckdinApi` and change the one line at the bottom of this file.
 abstract class CheckdinApi {
   // auth
+  /// Checks the saved login on this phone. True = go straight to Home.
+  Future<bool> restoreSession();
   Future<void> sendOtp(String phone);
   /// Returns true when this phone number is new (needs profile setup).
   Future<bool> verifyOtp(String phone, String code);

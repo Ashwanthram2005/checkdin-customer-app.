@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../api/api.dart';
+import '../loading.dart';
 import '../theme.dart';
 import 'login.dart';
 
@@ -19,14 +21,33 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   static const double _total = 3.6; // seconds
   late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 3600));
   bool _left = false;
+  // Login check runs while the logo animates. If it isn't done when the logo
+  // finishes, the animation holds and a spinner appears (next screen unknown).
+  bool _ready = false, _loggedIn = false, _waiting = false, _showSpin = false;
 
   @override
   void initState() {
     super.initState();
     _c.addListener(() {
-      if (!_left && _c.value * _total >= 3.5) _leave();
+      final t = _c.value * _total;
+      if (!_ready && !_waiting && t >= 2.95) {
+        _waiting = true;
+        _c.stop();
+        Future<void>.delayed(const Duration(milliseconds: 300), () {
+          if (mounted && !_ready) setState(() => _showSpin = true);
+        });
+      }
+      if (!_left && t >= 3.5) _leave();
     });
     _c.forward();
+    api.restoreSession().then((v) => _loggedIn = v, onError: (_) => _loggedIn = false).whenComplete(() {
+      if (!mounted) return;
+      setState(() {
+        _ready = true;
+        _showSpin = false;
+      });
+      if (_waiting) _c.forward();
+    });
   }
 
   @override
@@ -36,8 +57,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   void _leave() {
-    if (_left || !mounted) return;
+    if (_left || !mounted || !_ready) return;
     _left = true;
+    if (_loggedIn) {
+      Navigator.of(context).pushReplacementNamed('/home');
+      return;
+    }
     Navigator.of(context).pushReplacement(PageRouteBuilder<void>(
       settings: const RouteSettings(name: '/'),
       transitionDuration: const Duration(milliseconds: 380),
@@ -90,6 +115,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             final diag = math.sqrt(size.width * size.width + size.height * size.height);
 
             return Stack(children: [
+              if (_showSpin)
+                Positioned(left: 0, right: 0, top: top + lockH + 56, child: const Center(child: Spinner(size: 26))),
               Positioned(
                 left: (size.width - lockW) / 2,
                 top: top,

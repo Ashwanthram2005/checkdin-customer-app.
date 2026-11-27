@@ -22,6 +22,12 @@ class FakeApi implements CheckdinApi {
 
   // ---------------------------------------------------------------- auth
   @override
+  Future<bool> restoreSession() async {
+    await _wait(500);
+    return app.name.isNotEmpty && app.phone.isNotEmpty;
+  }
+
+  @override
   Future<void> sendOtp(String phone) => _wait(800);
 
   @override
