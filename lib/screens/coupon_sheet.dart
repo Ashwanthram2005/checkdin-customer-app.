@@ -4,6 +4,8 @@ import '../coupons.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 /// Coupon picker for the current booking. Applies the chosen code to [app].
 Future<void> showCouponSheet(BuildContext context) async {
@@ -145,6 +147,10 @@ Future<void> showCouponSheet(BuildContext context) async {
                     padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
                     child: Text(error!, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.red)),
                   ),
+                Loader<void>(
+                  load: api.offers,
+                  skeleton: const SkCards(count: 3, height: 110),
+                  builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 const SectionLabel('Available for this stay'),
                 if (ok.isEmpty) Text('No coupons apply to this booking right now.', style: TextStyle(color: C.muted)),
                 for (final c in ok) ticket(c),
@@ -152,6 +158,8 @@ Future<void> showCouponSheet(BuildContext context) async {
                   const SectionLabel('Not available for this stay'),
                   for (final c in notOk) ticket(c, problem: couponProblem(c.code)),
                 ],
+                  ]),
+                ),
                 const SizedBox(height: 4),
                 Text('One coupon per booking.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
               ]),

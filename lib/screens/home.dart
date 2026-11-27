@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../avatar.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -259,6 +261,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+          Loader<void>(
+            load: api.homeFeed,
+            skeleton: const SkHome(),
+            builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _title('Continue your search'),
           SizedBox(
             height: 58,
@@ -405,6 +411,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icon(Icons.chevron_right_rounded),
               ]),
             ),
+          ),
+            ]),
           ),
         ]),
           ),

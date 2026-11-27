@@ -409,3 +409,16 @@ Future<T> withPaymentSpinner<T>(BuildContext context, Future<T> work) async {
     if (nav.canPop()) nav.pop();
   }
 }
+
+/// Whole-page skeleton: real back button and title, grey content below.
+class SkPage extends StatelessWidget {
+  final String title;
+  final Widget child;
+  const SkPage({super.key, required this.title, required this.child});
+  @override
+  Widget build(BuildContext context) => ListView(
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 24),
+        children: [TitleBar(title: title), const SizedBox(height: 18), child],
+      );
+}

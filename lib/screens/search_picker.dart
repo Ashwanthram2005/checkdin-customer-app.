@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import 'coming_soon.dart';
 import 'states.dart';
 
@@ -146,6 +148,11 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
               const SectionLabel('Near landmarks'),
               _list(_all.where((x) => x.type == 'Landmark').toList()),
             ] else ...[
+              Loader<void>(
+                reloadKey: q,
+                load: () => api.suggestPlaces(q),
+                skeleton: const SkSuggestions(),
+                builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
               if (soonCityFor(q) != null)
                 WhiteCard(
                   radius: 20,
@@ -179,6 +186,8 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                         textAlign: TextAlign.center, style: TextStyle(fontSize: 13.5, color: C.muted, height: 1.5)),
                   ]),
                 ),
+                ]),
+              ),
             ],
           ]),
         ),

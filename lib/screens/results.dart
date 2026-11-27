@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import 'maps.dart';
 import 'states.dart';
 import 'filter_sort.dart';
@@ -16,12 +18,29 @@ class _ResultsScreenState extends State<ResultsScreen> {
   final Set<String> _on = {};
   static const _chips = ['Under ₹1,000', 'Rating 4+', 'Couple friendly', 'Local ID accepted'];
 
+  List<Hotel>? _hotels;
+
+  Future<List<Hotel>> _fetch() async {
+    final r = await api.searchHotels(place: app.place, fullDay: false);
+    _hotels = r;
+    return r;
+  }
+
+  Future<void> _refresh() async {
+    try {
+      await _fetch();
+      if (mounted) setState(() {});
+    } on ApiError catch (e) {
+      if (mounted) toast(context, e.message);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: app,
       builder: (context, _) {
-        final list = orderForPlace(hotels.where((h) {
+        final list = orderForPlace((_hotels ?? hotels).where((h) {
           if (_on.contains('Under ₹1,000') && (h.prices.first ?? 9999) >= 1000) return false;
           if (_on.contains('Rating 4+') && double.parse(h.rating) < 4) return false;
           if (_on.contains('Couple friendly') && !h.tags.contains('Couple friendly')) return false;
@@ -149,7 +168,15 @@ class _ResultsScreenState extends State<ResultsScreen> {
               ]),
             ),
             Expanded(
-              child: ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 28), children: [
+              child: Loader<List<Hotel>>(
+                reloadKey: '${app.place}|${app.date}|${app.hour}|${app.rooms}',
+                load: _fetch,
+                skeleton: const SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(), padding: EdgeInsets.fromLTRB(20, 16, 20, 28), child: SkHotelList()),
+                builder: (context, _) => RefreshIndicator(
+                  color: C.ink,
+                  onRefresh: _refresh,
+                  child: ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 28), children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Row(children: [
@@ -175,6 +202,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     },
                   ),
               ]),
+                ),
+              ),
             ),
           ]),
         );

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import 'gallery.dart';
 import 'hotel_extras.dart';
 import 'maps.dart';
@@ -123,10 +125,14 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         saved: saved,
                         onSave: () => app.set(() => saved ? app.saved.remove(h.id) : app.saved.add(h.id)),
                         onShare: () => shareHotel(context, h))),
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate([
+SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+                    child: Loader<Hotel>(
+                      reloadKey: h.id,
+                      load: () => api.hotelDetails(h.id),
+                      skeleton: const SkHotelBody(),
+                      builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                       const SizedBox(height: 16),
                       WhiteCard(
                         key: _keys['Slots'],
@@ -321,6 +327,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       const SizedBox(height: 10),
                       const _Policies(),
                     ]),
+                    ),
                   ),
                 ),
               ]),
@@ -329,7 +336,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
               child: Row(children: [
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                    Text(price == null ? 'Not available' : inr(app.gross), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                    Loader<int?>(
+                      reloadKey: '${app.slot}|${app.date}|${app.hour}|${app.rooms}|${app.adults}|${app.kids}|${app.fullDay}|${app.inDate}|${app.outDate}',
+                      load: () => api.quote(h.id),
+                      skeleton: const Skeleton(child: Bone(width: 96, height: 24)),
+                      builder: (context, _) => Text(price == null ? 'Not available' : inr(app.gross), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                    ),
                     Text(
                         app.fullDay
                             ? '${app.stayLabel} · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · incl. taxes'

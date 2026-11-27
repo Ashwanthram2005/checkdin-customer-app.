@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 enum RefundStatus { underReview, initiated, processing, completed, failed }
 
@@ -318,7 +320,10 @@ class _RefundsScreenState extends State<RefundsScreen> {
     final done = all.where((r) => !r.ongoing).toList();
     return Scaffold(
       backgroundColor: C.bg,
-      body: SafeArea(
+      body: Loader<void>(
+        load: api.refunds,
+        skeleton: const SkPage(title: 'My refunds', child: SkCards(count: 3, height: 160)),
+        builder: (context, _) => SafeArea(
         child: ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 30), children: [
           const TitleBar(title: 'My refunds'),
           const SizedBox(height: 14),
@@ -345,6 +350,7 @@ class _RefundsScreenState extends State<RefundsScreen> {
           SectionLabel('Completed refunds · ${done.length}'),
           ...done.map(_card),
         ]),
+      ),
       ),
     );
   }

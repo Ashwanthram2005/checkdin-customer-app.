@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 class _Note {
   final IconData icon;
@@ -255,7 +257,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: Loader<void>(
+        load: api.notifications,
+        skeleton: const SkPage(title: 'Notifications', child: SkRows(count: 6)),
+        builder: (context, _) => ListView(
         padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 32 + MediaQuery.of(context).padding.bottom),
         children: [
           const TitleBar(title: 'Notifications'),
@@ -267,6 +272,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
           if (_tab == 0) _inboxView() else _settingsView(),
         ],
+      ),
       ),
     );
   }

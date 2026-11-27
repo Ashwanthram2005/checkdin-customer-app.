@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 class _Review {
   final String name, when, stay, text, reply;
@@ -158,7 +160,10 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
       return true;
     }).toList();
     return Scaffold(
-      body: ListView(
+      body: Loader<void>(
+        load: () => api.hotelReviews(app.hotel.id),
+        skeleton: const SkPage(title: 'Reviews', child: SkCards(count: 3, height: 130)),
+        builder: (context, _) => ListView(
         padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 32 + MediaQuery.of(context).padding.bottom),
         children: [
           const TitleBar(title: 'Ratings & reviews'),
@@ -236,6 +241,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           Text('Only guests who completed a stay through Checkdin can review.',
               textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
         ],
+      ),
       ),
     );
   }

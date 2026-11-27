@@ -6,6 +6,7 @@ import '../appearance.dart';
 import '../api/api.dart';
 import '../api/fake_api.dart';
 import '../theme.dart';
+import '../loading.dart';
 import 'refunds.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -76,7 +77,10 @@ class AccountScreen extends StatelessWidget {
               ]),
             ),
             const SizedBox(height: 14),
-            WhiteCard(
+            Loader<void>(
+              load: api.account,
+              skeleton: const Skeleton(child: Bone(height: 96, radius: 24)),
+              builder: (context, _) => WhiteCard(
               color: C.inkBg,
               radius: 24,
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
@@ -98,6 +102,7 @@ class AccountScreen extends StatelessWidget {
                 ),
                 IconTile(Icons.arrow_forward_rounded, bg: C.limeBg, size: 44, radius: 22),
               ]),
+            ),
             ),
             const SizedBox(height: 14),
             Row(children: [

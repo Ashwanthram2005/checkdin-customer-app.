@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import '../voucher.dart';
 import 'maps.dart';
 import 'hotel_detail.dart' show billRow, totalBox;
@@ -45,7 +47,10 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
           ),
         );
     return Scaffold(
-      body: Column(children: [
+      body: Loader<void>(
+        load: () => api.bookingDetail(app.bookingId),
+        skeleton: const SkPage(title: 'Booking details', child: SkCards(count: 3, height: 140)),
+        builder: (context, _) => Column(children: [
         Padding(
           padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 10),
           child: TitleBar(
@@ -222,6 +227,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
           ]),
         ),
       ]),
+      ),
     );
   }
 }

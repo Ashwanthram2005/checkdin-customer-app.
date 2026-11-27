@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 class _Txn {
   final String title, sub, date, month;
@@ -49,7 +52,10 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
     }
 
     return Scaffold(
-      body: ListView(
+      body: Loader<void>(
+        load: api.creditsHistory,
+        skeleton: const SkPage(title: 'Checkdin credits', child: SkRows(count: 6)),
+        builder: (context, _) => ListView(
         padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 32 + MediaQuery.of(context).padding.bottom),
         children: [
           const TitleBar(title: 'Checkdin credits'),
@@ -141,6 +147,7 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
             ]),
           ),
         ],
+      ),
       ),
     );
   }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import 'filter_sort.dart';
 import 'full_day_search.dart';
 import 'maps.dart';
@@ -161,7 +163,21 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
               ]),
             ),
             Expanded(
-              child: ListView(
+              child: Loader<List<Hotel>>(
+                reloadKey: '${app.place}|${app.inDate}|${app.outDate}|${app.rooms}',
+                load: () => api.searchHotels(place: app.place, fullDay: true),
+                skeleton: const SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(), padding: EdgeInsets.fromLTRB(20, 16, 20, 28), child: SkHotelList()),
+                builder: (context, _) => RefreshIndicator(
+                  color: C.ink,
+                  onRefresh: () async {
+                    try {
+                      await api.searchHotels(place: app.place, fullDay: true);
+                    } on ApiError catch (e) {
+                      if (context.mounted) toast(context, e.message);
+                    }
+                  },
+                  child: ListView(
                 padding: const EdgeInsets.fromLTRB(20, 18, 20, 30),
                 children: [
                   Text.rich(TextSpan(style: TextStyle(fontSize: 14, color: C.muted), children: [
@@ -186,6 +202,8 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
                     ),
                   for (final h in list) Padding(padding: const EdgeInsets.only(bottom: 16), child: _NightCard(h)),
                 ],
+              ),
+                ),
               ),
             ),
           ]),

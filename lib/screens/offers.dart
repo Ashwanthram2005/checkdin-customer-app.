@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 
 class OffersScreen extends StatefulWidget {
   const OffersScreen({super.key});
@@ -92,7 +94,10 @@ class _OffersScreenState extends State<OffersScreen> {
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: const BottomNav(current: 'Offers'),
-      body: ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 120), children: [
+      body: Loader<void>(
+        load: api.offers,
+        skeleton: const SkPage(title: 'Offers', child: SkCards(count: 3, height: 120)),
+        builder: (context, _) => ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 120), children: [
         const Align(alignment: Alignment.centerLeft, child: BackBtn()),
         const SizedBox(height: 14),
         const Text('Offers', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: -1)),
@@ -199,6 +204,7 @@ class _OffersScreenState extends State<OffersScreen> {
         const SizedBox(height: 16),
         Text('One coupon per booking. Offers may change.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
       ]),
+      ),
     );
   }
 }

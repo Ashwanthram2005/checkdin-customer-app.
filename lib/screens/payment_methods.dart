@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import 'add_card.dart';
 
 class PaymentMethodsScreen extends StatefulWidget {
@@ -96,7 +98,10 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 28), children: [
+      body: Loader<void>(
+        load: api.paymentMethods,
+        skeleton: const SkPage(title: 'Payments', child: SkRows(count: 4, height: 70)),
+        builder: (context, _) => ListView(padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 28), children: [
         const TitleBar(title: 'Payment methods'),
         if (_items.isEmpty) ...[
           const SizedBox(height: 24),
@@ -258,6 +263,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
         Text('Card details are saved by our payment partner, never on Checkdin.',
             textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
       ]),
+      ),
     );
   }
 }

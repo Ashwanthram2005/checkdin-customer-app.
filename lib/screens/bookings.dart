@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../loading.dart';
+import '../api/api.dart';
 import 'maps.dart';
 import 'cancel_sheet.dart';
 import 'stay.dart';
@@ -275,7 +277,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 32), children: [
+      body: Loader<void>(
+        load: api.myBookings,
+        skeleton: const SkPage(title: 'My bookings', child: SkCards(count: 3, height: 170)),
+        builder: (context, _) => ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 32), children: [
         const TitleBar(title: 'My bookings'),
         const SizedBox(height: 20),
         SegmentPill(
@@ -289,6 +294,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
           ..._pastAll.map(_pastCard),
         ],
       ]),
+      ),
     );
   }
 }
