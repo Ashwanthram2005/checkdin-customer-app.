@@ -185,8 +185,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       });
                       setState(() => _savedGender = _gender);
                       toast(context, 'Profile updated');
-                    }
-                  : null),
+                    }),
         ),
       ]),
     );
