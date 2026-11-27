@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../avatar.dart';
-import '../appearance.dart';
 import '../api/api.dart';
 import '../api/fake_api.dart';
 import '../theme.dart';
@@ -146,8 +145,6 @@ class AccountScreen extends StatelessWidget {
                 row(Icons.notifications_none_rounded, 'Notifications', 'Check-in reminders & alerts', onTap: () => Navigator.pushNamed(context, '/notifications', arguments: 'settings')),
                 row(Icons.near_me_outlined, 'Location', app.useLocation ? 'On · change permission' : 'Off',
                     onTap: () => Navigator.pushNamed(context, '/location')),
-                row(Icons.dark_mode_outlined, 'Appearance', Appearance.mode.label,
-                    onTap: () => Navigator.pushNamed(context, '/appearance')),
                 row(Icons.card_giftcard_rounded, 'Refer & earn', 'Give ₹100, get ₹100', onTap: () => Navigator.pushNamed(context, '/refer')),
                 row(Icons.help_outline_rounded, 'Help & support', 'Chat with us or report a problem',
                     onTap: () => Navigator.pushNamed(context, '/help'), last: true),

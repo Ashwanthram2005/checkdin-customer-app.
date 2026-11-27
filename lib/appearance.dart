@@ -20,11 +20,13 @@ class Appearance {
   static AppTheme mode = AppTheme.system;
   static SharedPreferences? _prefs;
 
+  /// Checkdin is light-only for now. Dark colours stay in the theme so the
+  /// option can come back later, but the app always starts in light.
   static Future<void> load() async {
+    mode = AppTheme.light;
     try {
       _prefs = await SharedPreferences.getInstance();
-      final i = _prefs!.getInt('theme');
-      if (i != null && i >= 0 && i < AppTheme.values.length) mode = AppTheme.values[i];
+      await _prefs!.remove('theme');
     } catch (_) {}
     _resolve();
   }

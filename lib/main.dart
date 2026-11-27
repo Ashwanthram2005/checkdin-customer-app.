@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'appearance.dart';
 import 'theme.dart';
-import 'screens/appearance.dart';
 import 'screens/location_settings.dart';
 import 'screens/refunds.dart';
 import 'screens/login.dart';
@@ -79,7 +78,7 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
 
   @override
   void didChangePlatformBrightness() {
-    if (Appearance.mode == AppTheme.system) Appearance.refresh();
+    // Checkdin is light-only; the phone's dark setting is ignored.
   }
 
   @override
@@ -116,7 +115,6 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
       initialRoute: '/splash',
       routes: {
         '/splash': (_) => const SplashScreen(),
-        '/appearance': (_) => const AppearanceScreen(),
         '/location': (_) => const LocationSettingsScreen(),
         '/refunds': (_) => const RefundsScreen(),
         '/policy': (_) => const PolicyDocScreen(),
