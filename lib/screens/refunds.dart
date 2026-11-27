@@ -26,15 +26,15 @@ List<Refund> get myRefunds {
   final day = DateTime(t.year, t.month, t.day);
   return [
     if (app.bookingCancelled && app.cancelRefund > 0)
-      Refund(app.hotel.name, 'CHK240204', app.cancelRefund, app.paidWith == 'UPI' ? 'UPI' : app.paidWith, RefundStatus.underReview, day,
+      Refund(app.hotel.name, app.bookingId, app.cancelRefund, app.paidWith == 'UPI' ? 'UPI' : app.paidWith, RefundStatus.underReview, day,
           reason: 'You cancelled this booking'),
-    Refund('Hotel Sapphire Inn', 'CHK239871', 540, 'Card (XXX-0121)', RefundStatus.processing, day.subtract(const Duration(days: 2))),
-    Refund('Le Royal Stays', 'CHK239655', 299, 'UPI', RefundStatus.initiated, day.subtract(const Duration(days: 1)),
+    Refund('Hotel Sapphire Inn', sampleBookingId(11, day.subtract(const Duration(days: 5))), 540, 'Card (XXX-0121)', RefundStatus.processing, day.subtract(const Duration(days: 2))),
+    Refund('Le Royal Stays', sampleBookingId(12, day.subtract(const Duration(days: 4))), 299, 'UPI', RefundStatus.initiated, day.subtract(const Duration(days: 1)),
         reason: 'Hotel couldn\'t honour the booking'),
-    Refund('The Grand Egmore', 'CHK238120', 899, 'Card (XXX-0121)', RefundStatus.completed, day.subtract(const Duration(days: 34)),
+    Refund('The Grand Egmore', sampleBookingId(13, day.subtract(const Duration(days: 37))), 899, 'Card (XXX-0121)', RefundStatus.completed, day.subtract(const Duration(days: 34)),
         rrn: '790393289617637720'),
-    Refund('OMR Business Suites', 'CHK237402', 150, 'Checkdin credits', RefundStatus.completed, day.subtract(const Duration(days: 58))),
-    Refund('Porur Comfort Rooms', 'CHK236911', 420, 'UPI', RefundStatus.completed, day.subtract(const Duration(days: 71)), rrn: '601284937551204836'),
+    Refund('OMR Business Suites', sampleBookingId(14, day.subtract(const Duration(days: 61))), 150, 'Checkdin credits', RefundStatus.completed, day.subtract(const Duration(days: 58))),
+    Refund('Porur Comfort Rooms', sampleBookingId(15, day.subtract(const Duration(days: 74))), 420, 'UPI', RefundStatus.completed, day.subtract(const Duration(days: 71)), rrn: '601284937551204836'),
   ];
 }
 

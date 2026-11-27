@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../state.dart';
 import '../theme.dart';
 
 class _Note {
@@ -24,7 +25,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   final List<_Note> _inbox = [
     _Note(Icons.alarm_rounded, 'Check-in in 2 hours', 'The Grand Residency · 2:00 PM. Carry an original photo ID for every guest.', '11:58 AM',
         'Today', '/booking-detail', lime: true, unread: true),
-    _Note(Icons.check_circle_outline_rounded, 'Booking confirmed', 'Booking ID CKD-48213 · ₹849 paid. Show this at the front desk.', '9:14 AM',
+    _Note(Icons.check_circle_outline_rounded, 'Booking confirmed', 'Booking ID ${app.bookingId} · ₹849 paid. Show this at the front desk.', '9:14 AM',
         'Today', '/booking-detail', unread: true),
     _Note(Icons.trending_down_rounded, 'Price drop on a saved stay', 'Hotel Marina Inn is now ₹100 cheaper for a 3-hour slot.', 'Yesterday',
         'Yesterday', '/saved'),

@@ -51,7 +51,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
     setState(() => _sending = true);
     await Future<void>.delayed(const Duration(milliseconds: 900));
     if (!mounted) return;
-    final id = 'CKD-T${1000 + math.Random().nextInt(9000)}';
+    final id = 'TKT-${1000 + math.Random().nextInt(9000)}';
     final urgent = _type == 'Hotel refused check-in' || _type == 'Safety concern';
     await Navigator.pushReplacement(
       context,
@@ -79,7 +79,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Text(h.name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                      Text('${app.whenShort} · Booking CKD-48213', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                      Text('${app.whenShort} · Booking ${app.bookingId}', style: TextStyle(fontSize: 12.5, color: C.muted)),
                     ]),
                   ),
                 ]),
@@ -249,7 +249,7 @@ class _TicketDone extends StatelessWidget {
                   for (final r in [
                     ['Ticket', id],
                     ['Issue', type],
-                    ['Booking', 'CKD-48213'],
+                    ['Booking', app.bookingId],
                     ['Status', 'Open'],
                   ])
                     Container(

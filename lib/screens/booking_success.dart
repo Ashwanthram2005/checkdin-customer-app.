@@ -63,14 +63,14 @@ class BookingSuccessScreen extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(999),
                     onTap: () {
-                      Clipboard.setData(const ClipboardData(text: 'CHK240204'));
+                      Clipboard.setData(ClipboardData(text: app.bookingId));
                       toast(context, 'Booking ID copied');
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text('Booking ID ', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: C.muted)),
-                        Text('CHK240204', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+                        Text(app.bookingId, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
                         SizedBox(width: 10),
                         Icon(Icons.copy_rounded, size: 15),
                         SizedBox(width: 4),

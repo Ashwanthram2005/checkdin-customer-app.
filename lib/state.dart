@@ -237,6 +237,7 @@ class AppState extends ChangeNotifier {
   // during the stay
   final String checkinOtp = '4827';
   bool checkedIn = false;
+  String bookingId = newBookingId(DateTime.now());
   DateTime? stayStart;
   int extraHours = 0;
   int extraPaid = 0;
@@ -319,3 +320,16 @@ class SavedCard {
 }
 
 double kmBetween(Hotel h, Landmark l) => _km(l.lat, l.lng, h.lat, h.lng);
+
+/// Checkdin booking ID: CKD-<city>-<YYMMDD>-<4 random chars>, e.g. CKD-MAA-261127-K7Q4.
+/// Random (not sequential) so IDs can't be guessed; no 0/O/1/I/L to avoid misreading.
+const _idChars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+String newBookingId(DateTime d, {String city = 'MAA', math.Random? rnd}) {
+  final r = rnd ?? math.Random.secure();
+  String two(int n) => n.toString().padLeft(2, '0');
+  final code = List.generate(4, (_) => _idChars[r.nextInt(_idChars.length)]).join();
+  return 'CKD-$city-${two(d.year % 100)}${two(d.month)}${two(d.day)}-$code';
+}
+
+/// Same format, fixed for sample data so it doesn't change on every rebuild.
+String sampleBookingId(int seed, DateTime d) => newBookingId(d, rnd: math.Random(seed));

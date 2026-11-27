@@ -74,6 +74,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
       app.set(() {
         app.bookingCancelled = false;
         app.checkedIn = false;
+        app.bookingId = newBookingId(DateTime.now());
+      app.bookingId = newBookingId(DateTime.now());
         app.stayStart = null;
         app.extraHours = 0;
         app.extraPaid = 0;

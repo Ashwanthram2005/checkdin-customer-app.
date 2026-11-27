@@ -99,7 +99,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                   decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(24)),
                   child: Column(children: [
                     Row(children: [
-                      const Expanded(child: Text('BOOKING ID · CHK240204', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1))),
+                      Expanded(child: Text('BOOKING ID · ${app.bookingId}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1))),
                       Material(
                         color: const Color(0xA6FFFFFF),
                         borderRadius: BorderRadius.circular(999),

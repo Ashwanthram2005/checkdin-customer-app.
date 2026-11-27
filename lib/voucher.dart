@@ -11,7 +11,8 @@ import 'theme.dart';
 String _rs(int v) => 'Rs. ${inr(v).replaceAll('₹', '')}';
 
 /// Builds the booking voucher + payment receipt PDF and opens the share/save sheet.
-Future<void> shareVoucher(BuildContext context, {String bookingId = 'CKD-48213'}) async {
+Future<void> shareVoucher(BuildContext context, {String? bookingId}) async {
+  bookingId ??= app.bookingId;
   try {
     final bytes = await buildVoucher(bookingId);
     await Printing.sharePdf(bytes: bytes, filename: 'Checkdin-$bookingId.pdf');

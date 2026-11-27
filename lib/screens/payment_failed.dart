@@ -148,6 +148,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
     app.set(() {
       app.bookingCancelled = false;
       app.checkedIn = false;
+      app.bookingId = newBookingId(DateTime.now());
       app.stayStart = null;
       app.extraHours = 0;
       app.extraPaid = 0;

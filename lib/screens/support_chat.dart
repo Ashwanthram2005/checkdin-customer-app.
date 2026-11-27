@@ -123,7 +123,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
       if (!mounted) return;
       setState(() {
         _agent = true;
-        _msgs.add(_Msg('Hi, this is Divya from Checkdin support. I can see your booking CKD-48213 at ${app.hotel.name}. How can I help?',
+        _msgs.add(_Msg('Hi, this is Divya from Checkdin support. I can see your booking ${app.bookingId} at ${app.hotel.name}. How can I help?',
             time: _now(), who: 'Divya · Checkdin'));
       });
       _toEnd();

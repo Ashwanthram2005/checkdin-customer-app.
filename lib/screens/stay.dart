@@ -94,7 +94,7 @@ class _CheckinOtpScreenState extends State<CheckinOtpScreen> {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(h.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 2),
-                  Text('${app.whenShort} · ${app.stayLabel} · Booking CKD-48213', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                  Text('${app.whenShort} · ${app.stayLabel} · Booking ${app.bookingId}', style: TextStyle(fontSize: 12.5, color: C.muted)),
                   Divider(color: C.line, height: 24),
                   for (final r in [
                     [Icons.badge_outlined, 'Carry an original photo ID for every guest'],
@@ -303,7 +303,7 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Column(children: [
               for (final r in [
-                ['Booking', 'CKD-48213'],
+                ['Booking', app.bookingId],
                 ['Slot', app.stayLabel + (app.extraHours > 0 ? ' + ${app.extraHours} hr' : '')],
                 ['Paid', inr(app.total + app.extraPaid)],
                 ['Guests', app.guestsLabel],
