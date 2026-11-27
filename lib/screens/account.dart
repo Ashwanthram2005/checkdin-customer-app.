@@ -4,6 +4,7 @@ import '../state.dart';
 import '../avatar.dart';
 import '../appearance.dart';
 import '../theme.dart';
+import 'refunds.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -102,6 +103,28 @@ class AccountScreen extends StatelessWidget {
               tile(Icons.favorite_border_rounded, 'Saved', () => Navigator.pushNamed(context, '/saved')),
               tile(Icons.credit_card_rounded, 'Payments', () => Navigator.pushNamed(context, '/payment-methods')),
             ]),
+            const SizedBox(height: 10),
+            Builder(builder: (context) {
+              final n = myRefunds.where((r) => r.ongoing).length;
+              return WhiteCard(
+                radius: 20,
+                padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+                onTap: () => Navigator.pushNamed(context, '/refunds'),
+                child: Row(children: [
+                  const IconTile(Icons.currency_exchange_rounded, size: 44, radius: 14),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      const Text('My refunds', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                      Text(n > 0 ? '$n in progress · track status' : 'All refunds completed', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                    ]),
+                  ),
+                  if (n > 0) Tag('$n ongoing'),
+                  const SizedBox(width: 4),
+                  Icon(Icons.chevron_right_rounded, color: C.muted),
+                ]),
+              );
+            }),
             const SectionLabel('Preferences & help'),
             WhiteCard(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

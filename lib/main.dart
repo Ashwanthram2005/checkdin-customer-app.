@@ -6,6 +6,7 @@ import 'appearance.dart';
 import 'theme.dart';
 import 'screens/appearance.dart';
 import 'screens/location_settings.dart';
+import 'screens/refunds.dart';
 import 'screens/login.dart';
 import 'screens/otp.dart';
 import 'screens/profile_setup.dart';
@@ -111,6 +112,7 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
         '/splash': (_) => const SplashScreen(),
         '/appearance': (_) => const AppearanceScreen(),
         '/location': (_) => const LocationSettingsScreen(),
+        '/refunds': (_) => const RefundsScreen(),
         '/policy': (_) => const PolicyDocScreen(),
         '/credits': (_) => const CreditsHistoryScreen(),
         '/gallery': (_) => const GalleryScreen(),
