@@ -188,6 +188,14 @@ class AppState extends ChangeNotifier {
   String phone = '';
   String name = 'Ashwanth';
   String email = '';
+
+  // Booking for someone else: the guest who will check in.
+  bool forSomeoneElse = false;
+  String guestName = '';
+  String guestPhone = ''; // 10 digits
+  bool notifyGuest = true;
+  String get stayGuestName => forSomeoneElse && guestName.isNotEmpty ? guestName : name;
+  String get stayGuestPhone => forSomeoneElse && guestPhone.isNotEmpty ? '+91 $guestPhone' : (phone.isEmpty ? '+91 98765 43210' : '+91 $phone');
   bool whatsappUpdates = true;
 
   // search

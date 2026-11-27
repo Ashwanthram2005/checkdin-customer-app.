@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../coupons.dart';
+import '../shake.dart';
 import '../theme.dart';
 import '../api/api.dart';
 import '../optimistic.dart';
@@ -18,13 +19,55 @@ class _ReserveScreenState extends State<ReserveScreen> {
   late final _name = TextEditingController(text: app.name);
   late final _phone = TextEditingController(text: app.phone.isEmpty ? '+91 98765 43210' : '+91 ${app.phone}');
   late final _email = TextEditingController(text: app.email);
+  late final _gName = TextEditingController(text: app.guestName);
+  late final _gPhone = TextEditingController(text: app.guestPhone);
   bool _biz = false;
+  bool _tried = false;
+  final _kMe = GlobalKey<ShakeState>(), _kGName = GlobalKey<ShakeState>(), _kGPhone = GlobalKey<ShakeState>();
+
+  String? get _meErr => _name.text.trim().length < 2 ? 'Enter your full name' : null;
+  String? get _gNameErr {
+    final n = _gName.text.trim();
+    if (n.length < 2) return 'Enter the guest\'s full name, as on their ID';
+    if (!RegExp(r"^[A-Za-z .']+$").hasMatch(n)) return 'Use letters only, as on their ID';
+    return null;
+  }
+
+  String? get _gPhoneErr {
+    final p = _gPhone.text.replaceAll(RegExp(r'\D'), '');
+    if (p.length != 10) return 'Enter the guest\'s 10-digit mobile number';
+    if (!RegExp(r'^[6-9]').hasMatch(p)) return 'Indian mobile numbers start with 6, 7, 8 or 9';
+    return null;
+  }
+
+  void _proceed() {
+    final other = app.forSomeoneElse;
+    final bad = [
+      if (_meErr != null) _kMe,
+      if (other && _gNameErr != null) _kGName,
+      if (other && _gPhoneErr != null) _kGPhone,
+    ];
+    if (bad.isNotEmpty) {
+      setState(() => _tried = true);
+      shakeAll(bad);
+      return;
+    }
+    app.set(() {
+      app.name = _name.text.trim();
+      app.email = _email.text.trim();
+      app.guestName = other ? _gName.text.trim() : '';
+      app.guestPhone = other ? _gPhone.text.replaceAll(RegExp(r'\D'), '') : '';
+    });
+    Navigator.pushNamed(context, '/payment');
+  }
 
   @override
   void dispose() {
     _name.dispose();
     _phone.dispose();
     _email.dispose();
+    _gName.dispose();
+    _gPhone.dispose();
     super.dispose();
   }
 
@@ -173,24 +216,88 @@ class _ReserveScreenState extends State<ReserveScreen> {
                     _counter('Children', 'Below 5 years, stay free', app.kids, 0, 2, (v) => app.set(() => app.kids = v), last: true),
                   ]),
                 ),
-                const SectionLabel('Guest details'),
+                const SectionLabel('I\'m booking for'),
+                SegmentPill(
+                  options: const ['Myself', 'Someone else'],
+                  selected: app.forSomeoneElse ? 1 : 0,
+                  onChanged: (i) => app.set(() => app.forSomeoneElse = i == 1),
+                ),
+                const SizedBox(height: 12),
+                if (app.forSomeoneElse) ...[
+                  WhiteCard(
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      const Text('Guest who will check in', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                      const SizedBox(height: 12),
+                      Shake(
+                        key: _kGName,
+                        child: BrandField(
+                          label: 'Guest\'s full name (as on ID)',
+                          hint: 'e.g. Priya Raman',
+                          controller: _gName,
+                          errorText: _tried ? _gNameErr : null,
+                          onChanged: (_) => setState(() {}),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Shake(
+                        key: _kGPhone,
+                        child: BrandField(
+                          label: 'Guest\'s mobile number',
+                          hint: '10-digit number',
+                          controller: _gPhone,
+                          keyboard: TextInputType.phone,
+                          errorText: _tried ? _gPhoneErr : null,
+                          onChanged: (_) => setState(() {}),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      _switchRow(Icons.chat_bubble_outline_rounded, 'Send details to the guest', 'Booking, directions and check-in OTP on WhatsApp',
+                          app.notifyGuest, (v) => app.set(() => app.notifyGuest = v),
+                          last: true),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(color: C.tint(const Color(0xFFFFF6DA)), borderRadius: BorderRadius.circular(12)),
+                        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          const Icon(Icons.badge_outlined, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text('The guest must show their own original photo ID, and the name must match it. You can\'t check in for them.',
+                                style: TextStyle(fontSize: 12.5, height: 1.4, color: C.tx(const Color(0xFF4A4030)))),
+                          ),
+                        ]),
+                      ),
+                    ]),
+                  ),
+                  const SizedBox(height: 14),
+                ],
                 WhiteCard(
-                  child: Column(children: [
-                    BrandField(label: 'Full name', controller: _name),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    if (app.forSomeoneElse) ...[
+                      const Text('Your details', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                      const SizedBox(height: 2),
+                      Text('For payment, receipt and updates', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                      const SizedBox(height: 12),
+                    ],
+                    Shake(
+                      key: _kMe,
+                      child: BrandField(label: 'Full name', controller: _name, errorText: _tried ? _meErr : null, onChanged: (_) => setState(() {})),
+                    ),
                     const SizedBox(height: 12),
                     BrandField(label: 'Mobile number', controller: _phone, keyboard: TextInputType.phone),
                     const SizedBox(height: 12),
                     BrandField(label: 'Email (for your receipt)', hint: 'you@email.com', controller: _email, keyboard: TextInputType.emailAddress),
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(12)),
-                      child: Row(children: [
-                        Icon(Icons.badge_outlined, size: 18),
-                        SizedBox(width: 8),
-                        Expanded(child: Text('Every guest needs an original photo ID at check-in.', style: TextStyle(fontSize: 12.5, color: C.tx(Color(0xFF3F3F38))))),
-                      ]),
-                    ),
+                    if (!app.forSomeoneElse) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(12)),
+                        child: Row(children: [
+                          const Icon(Icons.badge_outlined, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text('Every guest needs an original photo ID at check-in.', style: TextStyle(fontSize: 12.5, color: C.tx(const Color(0xFF3F3F38))))),
+                        ]),
+                      ),
+                    ],
                   ]),
                 ),
                 const SizedBox(height: 14),
@@ -278,19 +385,14 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                     Text(inr(app.total), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
-                    Text('${app.stayLabel} · ${app.guestsLabel}', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                    Text('${app.stayLabel} · ${app.guestsLabel}${app.forSomeoneElse && _gName.text.trim().isNotEmpty ? ' · for ${_gName.text.trim().split(' ').first}' : ''}',
+                        maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: C.muted)),
                   ]),
                 ),
                 PillBtn('Proceed to pay',
                     height: 54,
                     icon: Icons.arrow_forward_rounded,
-                    onTap: () {
-                      app.set(() {
-                        if (_name.text.trim().isNotEmpty) app.name = _name.text.trim();
-                        app.email = _email.text.trim();
-                      });
-                      Navigator.pushNamed(context, '/payment');
-                    }),
+                    onTap: _proceed),
               ]),
             ),
           ]),

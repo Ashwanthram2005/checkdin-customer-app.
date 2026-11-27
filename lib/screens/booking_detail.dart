@@ -202,8 +202,14 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 WhiteCard(
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
                   child: Column(children: [
-                    infoRow('Name', app.name),
-                    infoRow('Phone', app.phone.isEmpty ? '+91 98765 43210' : '+91 ${app.phone}'),
+                    if (app.forSomeoneElse) ...[
+                      infoRow('Guest', app.stayGuestName),
+                      infoRow('Guest phone', app.stayGuestPhone),
+                      infoRow('Booked by', app.name),
+                    ] else ...[
+                      infoRow('Name', app.name),
+                      infoRow('Phone', app.stayGuestPhone),
+                    ],
                     infoRow('Email', app.email.isEmpty ? '—' : app.email, last: true),
                   ]),
                 ),

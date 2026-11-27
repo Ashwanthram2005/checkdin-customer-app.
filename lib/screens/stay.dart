@@ -323,6 +323,7 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
                 ['Booking', app.bookingId],
                 ['Slot', app.stayLabel + (app.extraHours > 0 ? ' + ${app.extraHours} hr' : '')],
                 ['Paid', inr(app.total + app.extraPaid)],
+                if (app.forSomeoneElse) ['Guest', app.stayGuestName],
                 ['Guests', app.guestsLabel],
               ])
                 Container(

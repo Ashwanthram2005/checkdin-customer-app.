@@ -219,6 +219,27 @@ class BookingSuccessScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
+              if (app.forSomeoneElse) ...[
+                WhiteCard(
+                  radius: 20,
+                  child: Row(children: [
+                    IconTile(Icons.person_outline_rounded, bg: C.limeSoft, size: 40, radius: 12),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text('Booked for ${app.stayGuestName}', style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800)),
+                        const SizedBox(height: 2),
+                        Text(
+                            app.notifyGuest
+                                ? 'We\'ve sent the booking and check-in OTP to ${app.stayGuestPhone} on WhatsApp.'
+                                : 'Share the Booking ID and check-in OTP with them before they arrive.',
+                            style: TextStyle(fontSize: 12.5, color: C.muted, height: 1.4)),
+                      ]),
+                    ),
+                  ]),
+                ),
+                const SizedBox(height: 12),
+              ],
               WhiteCard(
                 color: C.tint(Color(0xFFFFF6DA)),
                 radius: 20,
