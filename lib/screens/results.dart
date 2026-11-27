@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'gallery.dart' show hotelHeroTag;
+import '../optimistic.dart';
 import '../loading.dart';
 import '../api/api.dart';
 import 'maps.dart';
@@ -171,6 +173,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
               child: Loader<List<Hotel>>(
                 reloadKey: '${app.place}|${app.date}|${app.hour}|${app.rooms}',
                 load: _fetch,
+                cacheKey: 'results|${app.place}|${app.date.day}|${app.hour}|${app.rooms}',
                 skeleton: const SingleChildScrollView(
                     physics: NeverScrollableScrollPhysics(), padding: EdgeInsets.fromLTRB(20, 16, 20, 28), child: SkHotelList()),
                 builder: (context, _) => RefreshIndicator(
@@ -232,7 +235,7 @@ class _HotelCard extends StatelessWidget {
         onTap: open,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Stack(children: [
-            const PhotoPlaceholder(height: 180),
+            Hero(tag: hotelHeroTag(h.id), child: const PhotoPlaceholder(height: 180)),
             Positioned(
               left: 12,
               top: 12,
@@ -250,7 +253,7 @@ class _HotelCard extends StatelessWidget {
                 size: 38,
                 shadow: false,
                 tooltip: 'Save',
-                onTap: () => app.set(() => saved ? app.saved.remove(h.id) : app.saved.add(h.id)),
+                onTap: () => toggleSaved(context, h),
               ),
             ),
           ]),

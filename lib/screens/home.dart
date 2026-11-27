@@ -263,6 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           Loader<void>(
             load: api.homeFeed,
+            cacheKey: 'home',
             skeleton: const SkHome(),
             builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _title('Continue your search'),

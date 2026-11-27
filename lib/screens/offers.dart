@@ -97,6 +97,7 @@ class _OffersScreenState extends State<OffersScreen> {
       bottomNavigationBar: const BottomNav(current: 'Offers'),
       body: Loader<void>(
         load: api.offers,
+        cacheKey: 'offers',
         skeleton: const SkPage(title: 'Offers', child: SkCards(count: 3, height: 120)),
         builder: (context, _) => ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 120), children: [
         const Align(alignment: Alignment.centerLeft, child: BackBtn()),

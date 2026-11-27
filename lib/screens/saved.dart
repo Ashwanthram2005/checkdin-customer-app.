@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'gallery.dart' show hotelHeroTag;
+import '../optimistic.dart';
 import '../loading.dart';
 import '../api/api.dart';
 
@@ -14,20 +16,7 @@ class SavedScreen extends StatefulWidget {
 class _SavedScreenState extends State<SavedScreen> {
   String _area = 'All';
 
-  void _remove(Hotel h) {
-    app.set(() => app.saved.remove(h.id));
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        content: Text('Removed ${h.name}', style: const TextStyle(fontWeight: FontWeight.w600)),
-        backgroundColor: C.inkBg,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 4),
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 100),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        action: SnackBarAction(label: 'Undo', textColor: C.lime, onPressed: () => app.set(() => app.saved.add(h.id))),
-      ));
-  }
+  void _remove(Hotel h) => toggleSaved(context, h);
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +32,7 @@ class _SavedScreenState extends State<SavedScreen> {
           bottomNavigationBar: const BottomNav(current: 'Saved'),
           body: Loader<void>(
         load: api.savedHotels,
+        cacheKey: 'saved',
         skeleton: const SkPage(title: 'Saved', child: SkHotelList(count: 2)),
         builder: (context, _) => ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 120), children: [
             const Align(alignment: Alignment.centerLeft, child: BackBtn()),
@@ -150,7 +140,7 @@ class _SavedScreenState extends State<SavedScreen> {
                       },
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Stack(children: [
-                          const PhotoPlaceholder(height: 128, label: ''),
+                          Hero(tag: hotelHeroTag(h.id), child: const PhotoPlaceholder(height: 128, label: '')),
                           Positioned(left: 8, top: 8, child: RatingBadge(h.rating, dark: false)),
                           Positioned(
                             right: 8,

@@ -92,7 +92,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
             itemCount: idx.length,
             itemBuilder: (_, k) => GestureDetector(
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PhotoViewer(start: idx[k], only: idx))),
-              child: Hero(tag: 'photo${idx[k]}', child: _Photo(idx[k], radius: 18)),
+              child: Hero(tag: photoTag(idx[k]), child: _Photo(idx[k], radius: 18)),
             ),
           ),
         ),
@@ -102,6 +102,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
 }
 
 /// Full-screen swipeable, pinch-to-zoom viewer.
+/// Hero tag for a hotel photo. The first photo shares its tag with the hotel's
+/// card in results, so the card photo grows into the hotel page.
+String photoTag(int i) => i == 0 ? hotelHeroTag(app.hotel.id) : 'photo$i';
+String hotelHeroTag(String hotelId) => 'hotel-photo-$hotelId';
+
 class PhotoViewer extends StatefulWidget {
   final int start;
   final List<int>? only;
@@ -114,10 +119,17 @@ class _PhotoViewerState extends State<PhotoViewer> {
   late final List<int> _ids = widget.only ?? List.generate(galleryPhotos.length, (i) => i);
   late int _page = _ids.indexOf(widget.start).clamp(0, _ids.length - 1).toInt();
   late final PageController _pc = PageController(initialPage: _page);
+  final _tc = <int, TransformationController>{};
+  double _drag = 0;
+  bool _dragging = false;
+  TransformationController _ctl(int i) => _tc.putIfAbsent(i, () => TransformationController());
 
   @override
   void dispose() {
     _pc.dispose();
+    for (final c in _tc.values) {
+      c.dispose();
+    }
     super.dispose();
   }
 
@@ -125,8 +137,9 @@ class _PhotoViewerState extends State<PhotoViewer> {
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
     final p = galleryPhotos[_ids[_page]];
+    final fade = (1 - _drag.abs() / 500).clamp(0.3, 1.0);
     return Scaffold(
-      backgroundColor: const Color(0xFF0E0E0E),
+      backgroundColor: Color.fromRGBO(14, 14, 14, fade),
       body: Stack(children: [
         PageView.builder(
           controller: _pc,
@@ -134,9 +147,35 @@ class _PhotoViewerState extends State<PhotoViewer> {
           onPageChanged: (i) => setState(() => _page = i),
           itemBuilder: (_, i) => Center(
             child: InteractiveViewer(
+              transformationController: _ctl(i),
               minScale: 1,
               maxScale: 4,
-              child: AspectRatio(aspectRatio: 4 / 3, child: Hero(tag: 'photo${_ids[i]}', child: _Photo(_ids[i], big: true))),
+              // Swipe down (or up) to close when the photo isn't zoomed in.
+              onInteractionUpdate: (d) {
+                if (d.pointerCount == 1 && _ctl(i).value.getMaxScaleOnAxis() <= 1.01) {
+                  setState(() {
+                    _dragging = true;
+                    _drag += d.focalPointDelta.dy;
+                  });
+                }
+              },
+              onInteractionEnd: (d) {
+                if (!_dragging) return;
+                if (_drag.abs() > 110 || d.velocity.pixelsPerSecond.dy.abs() > 900) {
+                  Navigator.pop(context);
+                } else {
+                  setState(() {
+                    _dragging = false;
+                    _drag = 0;
+                  });
+                }
+              },
+              child: AnimatedContainer(
+                duration: _dragging ? Duration.zero : const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
+                transform: Matrix4.translationValues(0, i == _page ? _drag : 0, 0),
+                child: AspectRatio(aspectRatio: 4 / 3, child: Hero(tag: photoTag(_ids[i]), child: _Photo(_ids[i], big: true))),
+              ),
             ),
           ),
         ),
@@ -167,7 +206,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
             const SizedBox(height: 8),
             Text(p[1] as String, style: TextStyle(color: C.white, fontSize: 16, fontWeight: FontWeight.w700)),
             const SizedBox(height: 4),
-            const Text('Pinch to zoom · swipe for more', style: TextStyle(color: Color(0xFF9A9A92), fontSize: 12.5)),
+            const Text('Pinch to zoom · swipe for more · swipe down to close', style: TextStyle(color: Color(0xFF9A9A92), fontSize: 12.5)),
           ]),
         ),
       ]),
@@ -187,12 +226,12 @@ class GalleryStrip extends StatelessWidget {
       child: Row(children: [
         Expanded(
           flex: 2,
-          child: GestureDetector(onTap: () => open(0), child: Hero(tag: 'photo0', child: const _Photo(0))),
+          child: GestureDetector(onTap: () => open(0), child: Hero(tag: photoTag(0), child: const _Photo(0))),
         ),
         const SizedBox(width: 3),
         Expanded(
           child: Column(children: [
-            Expanded(child: GestureDetector(onTap: () => open(4), child: Hero(tag: 'photo4', child: const _Photo(4)))),
+            Expanded(child: GestureDetector(onTap: () => open(4), child: Hero(tag: photoTag(4), child: const _Photo(4)))),
             const SizedBox(height: 3),
             Expanded(
               child: GestureDetector(

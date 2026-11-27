@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import 'gallery.dart' show hotelHeroTag;
+import '../optimistic.dart';
 import '../loading.dart';
 import '../api/api.dart';
 import 'filter_sort.dart';
@@ -166,6 +168,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
               child: Loader<List<Hotel>>(
                 reloadKey: '${app.place}|${app.inDate}|${app.outDate}|${app.rooms}',
                 load: () => api.searchHotels(place: app.place, fullDay: true),
+                cacheKey: 'fullday|${app.place}|${app.inDate.day}|${app.outDate.day}|${app.rooms}',
                 skeleton: const SingleChildScrollView(
                     physics: NeverScrollableScrollPhysics(), padding: EdgeInsets.fromLTRB(20, 16, 20, 28), child: SkHotelList()),
                 builder: (context, _) => RefreshIndicator(
@@ -343,7 +346,9 @@ class _NightCardState extends State<_NightCard> {
                 controller: _page,
                 itemCount: _shots.length,
                 onPageChanged: (i) => setState(() => _i = i),
-                itemBuilder: (_, i) => PhotoPlaceholder(height: 200, label: _shots[i]),
+                itemBuilder: (_, i) => i == 0
+                    ? Hero(tag: hotelHeroTag(h.id), child: PhotoPlaceholder(height: 200, label: _shots[i]))
+                    : PhotoPlaceholder(height: 200, label: _shots[i]),
               ),
               Positioned(left: 12, top: 12, child: RatingBadge(h.rating, reviews: h.reviews, dark: false)),
               Positioned(
@@ -355,7 +360,7 @@ class _NightCardState extends State<_NightCard> {
                   size: 38,
                   shadow: false,
                   tooltip: 'Save',
-                  onTap: () => app.set(() => saved ? app.saved.remove(h.id) : app.saved.add(h.id)),
+                  onTap: () => toggleSaved(context, h),
                 ),
               ),
               if (_i > 0) arrow(Icons.chevron_left_rounded, true),

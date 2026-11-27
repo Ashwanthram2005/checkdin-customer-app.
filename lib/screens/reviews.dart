@@ -162,6 +162,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     return Scaffold(
       body: Loader<void>(
         load: () => api.hotelReviews(app.hotel.id),
+        cacheKey: 'reviews|${app.hotel.id}',
         skeleton: const SkPage(title: 'Reviews', child: SkCards(count: 3, height: 130)),
         builder: (context, _) => ListView(
         padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 32 + MediaQuery.of(context).padding.bottom),

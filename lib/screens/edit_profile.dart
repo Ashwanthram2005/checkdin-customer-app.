@@ -78,8 +78,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Stack(clipBehavior: Clip.none, children: [
                   const Avatar(size: 92, border: 5),
                   Positioned(
-                      right: -2,
-                      bottom: -2,
+                      right: -10,
+                      bottom: -10,
                       child: CircleBtn(icon: Icons.photo_camera_outlined, size: 32, tooltip: 'Change photo', onTap: () async {
                         await changePhoto(context);
                         if (mounted) setState(() {});

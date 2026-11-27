@@ -232,7 +232,13 @@ class Loader<T> extends StatefulWidget {
   final Widget Function(BuildContext context, T data) builder;
   /// Change this to load again (e.g. when the date or place changes).
   final Object? reloadKey;
-  const Loader({super.key, required this.load, required this.skeleton, required this.builder, this.reloadKey});
+  /// Stale-while-revalidate: if this screen was loaded before with the same
+  /// key, show that copy instantly and refresh quietly in the background.
+  /// Leave null for anything that must be fresh (prices, availability).
+  final String? cacheKey;
+  const Loader({super.key, required this.load, required this.skeleton, required this.builder, this.reloadKey, this.cacheKey});
+
+  static final Map<String, Object?> _cache = {};
   @override
   State<Loader<T>> createState() => _LoaderState<T>();
 }
@@ -257,6 +263,21 @@ class _LoaderState<T> extends State<Loader<T>> {
 
   Future<void> _run() async {
     final gen = ++_gen;
+    final key = widget.cacheKey;
+    if (key != null && Loader._cache.containsKey(key)) {
+      // Show the last copy now, refresh behind it. Errors keep the old copy.
+      setState(() {
+        _err = null;
+        _data = Loader._cache[key] as T;
+        _has = true;
+      });
+      try {
+        final d = await widget.load();
+        Loader._cache[key] = d;
+        if (mounted && gen == _gen) setState(() => _data = d);
+      } catch (_) {}
+      return;
+    }
     setState(() {
       _err = null;
       _showSkel = false;
@@ -271,6 +292,7 @@ class _LoaderState<T> extends State<Loader<T>> {
     });
     try {
       final d = await widget.load();
+      if (key != null) Loader._cache[key] = d;
       t.cancel();
       if (shownAt != null) {
         final left = 400 - DateTime.now().difference(shownAt!).inMilliseconds;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../optimistic.dart';
 import '../loading.dart';
 import '../api/api.dart';
 import 'gallery.dart';
@@ -90,7 +91,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           icon: saved ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                           iconColor: saved ? const Color(0xFFE5484D) : C.ink,
                           tooltip: 'Save',
-                          onTap: () => app.set(() => saved ? app.saved.remove(h.id) : app.saved.add(h.id)),
+                          onTap: () => toggleSaved(context, h),
                         ),
                         const SizedBox(width: 8),
                         CircleBtn(icon: Icons.share_outlined, tooltip: 'Share', onTap: () => shareHotel(context, h)),
@@ -123,7 +124,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         top: MediaQuery.of(context).padding.top,
                         title: h.name,
                         saved: saved,
-                        onSave: () => app.set(() => saved ? app.saved.remove(h.id) : app.saved.add(h.id)),
+                        onSave: () => toggleSaved(context, h),
                         onShare: () => shareHotel(context, h))),
 SliverToBoxAdapter(
                   child: Padding(
@@ -131,6 +132,7 @@ SliverToBoxAdapter(
                     child: Loader<Hotel>(
                       reloadKey: h.id,
                       load: () => api.hotelDetails(h.id),
+                      cacheKey: 'hotel|${h.id}',
                       skeleton: const SkHotelBody(),
                       builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                       const SizedBox(height: 16),
@@ -291,11 +293,9 @@ SliverToBoxAdapter(
                           const SizedBox(height: 14),
                           const ReviewsPreview(),
                           const SizedBox(height: 6),
-                          GestureDetector(
-                            onTap: () => Navigator.pushNamed(context, '/reviews'),
-                            child: Text('See all ${h.reviews} reviews',
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
-                          ),
+                          TapLink('See all ${h.reviews} reviews',
+                              onTap: () => Navigator.pushNamed(context, '/reviews'),
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
                         ]),
                       ),
                       SectionLabel('Location', key: _keys['Location']),
@@ -349,8 +349,12 @@ SliverToBoxAdapter(
                         style: TextStyle(fontSize: 12.5, color: C.muted)),
                     GestureDetector(
                       onTap: _priceSheet,
-                      child: const Text('Price details',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+                      behavior: HitTestBehavior.opaque,
+                      child: const Padding(
+                        padding: EdgeInsets.only(top: 6, bottom: 10, right: 24),
+                        child: Text('Price details',
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+                      ),
                     ),
                   ]),
                 ),
@@ -527,8 +531,9 @@ class _Policies extends StatelessWidget {
                                 alignment: Alignment.centerLeft,
                                 child: GestureDetector(
                                   onTap: () => Navigator.pushNamed(context, '/cancel-policy'),
+                                  behavior: HitTestBehavior.opaque,
                                   child: const Padding(
-                                    padding: EdgeInsets.only(top: 2),
+                                    padding: EdgeInsets.symmetric(vertical: 14),
                                     child: Text('Read full policy',
                                         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
                                   ),

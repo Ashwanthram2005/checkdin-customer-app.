@@ -54,6 +54,7 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
     return Scaffold(
       body: Loader<void>(
         load: api.creditsHistory,
+        cacheKey: 'credits',
         skeleton: const SkPage(title: 'Checkdin credits', child: SkRows(count: 6)),
         builder: (context, _) => ListView(
         padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 32 + MediaQuery.of(context).padding.bottom),

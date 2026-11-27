@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// Apple-style continuous ("squircle") corners. [r] is the radius you'd
+/// give a normal rounded rectangle; the curve starts earlier and eases in.
+ShapeBorder smooth(double r, {BorderSide side = BorderSide.none}) =>
+    r <= 0 ? RoundedRectangleBorder(side: side) : ContinuousRectangleBorder(borderRadius: BorderRadius.circular(r * 2.25), side: side);
+
 /// Checkdin brand colours. Every colour is a getter so the whole app can
 /// switch between light and dark at runtime (see [ThemeModeX]).
 class C {
@@ -89,22 +94,30 @@ class CircleBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final btn = Material(
+      color: Colors.transparent,
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(color: bg, shape: BoxShape.circle, boxShadow: shadow ? kShadow : null),
+          child: Icon(icon, size: size * 0.48, color: iconColor),
+        ),
+      ),
+    );
+    // Small buttons still get a 48 x 48 touch area.
     return Semantics(
       button: true,
       label: tooltip,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: onTap,
-          child: Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(color: bg, shape: BoxShape.circle, boxShadow: shadow ? kShadow : null),
-            child: Icon(icon, size: size * 0.48, color: iconColor),
-          ),
-        ),
-      ),
+      child: size >= 48
+          ? btn
+          : GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: onTap,
+              child: SizedBox(width: 48, height: 48, child: Center(child: btn)),
+            ),
     );
   }
 }
@@ -197,13 +210,13 @@ class WhiteCard extends StatelessWidget {
     final box = Container(
       width: double.infinity,
       padding: padding,
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(radius), border: border),
+      decoration: ShapeDecoration(color: color, shape: smooth(radius, side: border?.top ?? BorderSide.none)),
       child: child,
     );
     if (onTap == null) return box;
     return Material(
       color: Colors.transparent,
-      child: InkWell(borderRadius: BorderRadius.circular(radius), onTap: onTap, child: box),
+      child: InkWell(customBorder: smooth(radius), onTap: onTap, child: box),
     );
   }
 }
@@ -361,7 +374,7 @@ class IconTile extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(radius)),
+        decoration: ShapeDecoration(color: bg, shape: smooth(radius)),
         child: Icon(icon, size: size * 0.48, color: fg),
       );
 }
@@ -448,7 +461,7 @@ class PhotoPlaceholder extends StatelessWidget {
     return Container(
       height: height,
       width: double.infinity,
-      decoration: BoxDecoration(color: C.tint(Color(0xFFE2E3DA)), borderRadius: BorderRadius.circular(radius)),
+      decoration: ShapeDecoration(color: C.tint(const Color(0xFFE2E3DA)), shape: smooth(radius)),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Icon(Icons.image_outlined, size: 32, color: Color(0xFF7C7C74)),
         if (label.isNotEmpty) ...[
@@ -584,9 +597,50 @@ void toast(BuildContext context, String msg) {
       ]),
       backgroundColor: C.inkBg,
       behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: smooth(16),
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
     ));
+}
+
+/// Toast with an Undo button, for quick reversible actions.
+void undoToast(BuildContext context, String msg, VoidCallback onUndo) {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(SnackBar(
+      content: Text(msg, style: const TextStyle(fontWeight: FontWeight.w600)),
+      backgroundColor: C.inkBg,
+      behavior: SnackBarBehavior.floating,
+      shape: smooth(16),
+      duration: const Duration(seconds: 5),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+      action: SnackBarAction(label: 'UNDO', textColor: C.lime, onPressed: onUndo),
+    ));
+}
+
+/// Makes a small text link easy to hit (at least 48 px tall) without
+/// changing how it looks.
+class TapLink extends StatelessWidget {
+  final String text;
+  final VoidCallback onTap;
+  final TextStyle? style;
+  const TapLink(this.text, {super.key, required this.onTap, this.style});
+  @override
+  Widget build(BuildContext context) => Semantics(
+        button: true,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 48),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              widthFactor: 1,
+              child: Text(text,
+                  style: style ?? const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
+            ),
+          ),
+        ),
+      );
 }
 
 

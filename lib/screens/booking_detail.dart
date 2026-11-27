@@ -49,6 +49,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
     return Scaffold(
       body: Loader<void>(
         load: () => api.bookingDetail(app.bookingId),
+        cacheKey: 'booking|${app.bookingId}',
         skeleton: const SkPage(title: 'Booking details', child: SkCards(count: 3, height: 140)),
         builder: (context, _) => Column(children: [
         Padding(

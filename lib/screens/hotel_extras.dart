@@ -252,11 +252,7 @@ class RoomCard extends StatelessWidget {
           ),
         ]),
         const SizedBox(height: 6),
-        GestureDetector(
-          onTap: () => _roomPolicy(context, name, size, view, bed),
-          child: const Text('Room & cancellation policy details',
-              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
-        ),
+        TapLink('Room & cancellation policy details', onTap: () => _roomPolicy(context, name, size, view, bed)),
       ]),
     );
   }

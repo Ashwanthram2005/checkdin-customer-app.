@@ -32,6 +32,9 @@ jobs:
           sed -i 's/android:label="checkdin"/android:label="Checkdin"/' "$MANIFEST"
           grep -q 'android.permission.INTERNET' "$MANIFEST" || \
             sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>\n    <application#' "$MANIFEST"
+          # Android 14+ predictive back gesture (peek at the previous screen)
+          grep -q 'enableOnBackInvokedCallback' "$MANIFEST" || \
+            sed -i '0,/<application/s#<application#<application android:enableOnBackInvokedCallback="true"#' "$MANIFEST"
           # Checkdin app icon (adaptive + legacy)
           cp -r android_res/. android/app/src/main/res/
           # Native launch screen: brand cream instead of white, so it flows into the logo animation

@@ -279,6 +279,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     return Scaffold(
       body: Loader<void>(
         load: api.myBookings,
+        cacheKey: 'bookings',
         skeleton: const SkPage(title: 'My bookings', child: SkCards(count: 3, height: 170)),
         builder: (context, _) => ListView(padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 32), children: [
         const TitleBar(title: 'My bookings'),

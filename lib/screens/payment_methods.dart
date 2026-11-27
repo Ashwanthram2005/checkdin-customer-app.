@@ -100,6 +100,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
     return Scaffold(
       body: Loader<void>(
         load: api.paymentMethods,
+        cacheKey: 'payment-methods',
         skeleton: const SkPage(title: 'Payments', child: SkRows(count: 4, height: 70)),
         builder: (context, _) => ListView(padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 28), children: [
         const TitleBar(title: 'Payment methods'),
@@ -190,11 +191,38 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     shadow: false,
                     size: 40,
                     tooltip: 'Remove',
-                    onTap: () => setState(() {
-                      final c = _items[i].card;
-                      if (c != null) app.cards.remove(c);
-                      _items.removeAt(i);
-                    }),
+                    onTap: () {
+                      final item = _items[i];
+                      final c = item.card;
+                      final at = i;
+                      final cardAt = c == null ? -1 : app.cards.indexOf(c);
+                      setState(() {
+                        if (c != null) app.cards.remove(c);
+                        _items.removeAt(at);
+                      });
+                      void restore() {
+                        if (!mounted) return;
+                        setState(() {
+                          if (c != null && !app.cards.contains(c)) app.cards.insert(cardAt.clamp(0, app.cards.length), c);
+                          if (!_items.contains(item)) _items.insert(at.clamp(0, _items.length), item);
+                        });
+                      }
+                      // Removed on screen now; the server is only told once Undo has expired.
+                      var undone = false;
+                      undoToast(context, 'Removed ${item.kind}', () {
+                        undone = true;
+                        restore();
+                      });
+                      Future<void>.delayed(const Duration(seconds: 5), () async {
+                        if (undone || c == null) return;
+                        try {
+                          await api.removeCard(c.last4);
+                        } on ApiError catch (e) {
+                          restore();
+                          if (mounted) toast(context, e.message);
+                        }
+                      });
+                    },
                   ),
                 ]),
               ),

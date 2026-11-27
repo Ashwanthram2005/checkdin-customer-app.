@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../theme.dart';
+import '../optimistic.dart';
 import '../loading.dart';
 import '../api/api.dart';
 
@@ -152,13 +153,30 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         SectionLabel(groups[g],
             trailing: g == 0 && _unread > 0
                 ? GestureDetector(
-                    onTap: () => setState(() {
-                      for (final n in _inbox) {
-                        n.unread = false;
-                      }
-                    }),
-                    child: const Text('Mark all read',
-                        style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+                    onTap: () {
+                      final was = _inbox.where((n) => n.unread).toList();
+                      optimistic(context,
+                          apply: () => setState(() {
+                                for (final n in _inbox) {
+                                  n.unread = false;
+                                }
+                              }),
+                          revert: () {
+                            if (!mounted) return;
+                            setState(() {
+                              for (final n in was) {
+                                n.unread = true;
+                              }
+                            });
+                          },
+                          call: api.markNotificationsRead);
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 6),
+                      child: Text('Mark all read',
+                          style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+                    ),
                   )
                 : null),
         for (final n in _inbox.where((x) => x.group == groups[g]))
@@ -206,7 +224,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       ]),
                     ),
                     const SizedBox(width: 8),
-                    BrandSwitch(value: _on[keys[i]]!, onChanged: (v) => setState(() => _on[keys[i]] = v)),
+                    BrandSwitch(
+                        value: _on[keys[i]]!,
+                        onChanged: (v) => optimistic(context,
+                            apply: () => setState(() => _on[keys[i]] = v),
+                            revert: () {
+                              if (mounted) setState(() => _on[keys[i]] = !v);
+                            },
+                            call: () => api.setPreference(keys[i], v))),
                   ]),
                 ),
             ]),
@@ -259,6 +284,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Scaffold(
       body: Loader<void>(
         load: api.notifications,
+        cacheKey: 'notifications',
         skeleton: const SkPage(title: 'Notifications', child: SkRows(count: 6)),
         builder: (context, _) => ListView(
         padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 32 + MediaQuery.of(context).padding.bottom),

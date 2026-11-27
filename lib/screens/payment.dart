@@ -120,7 +120,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     var ok = true;
     String? id;
     try {
-      id = await api.pay(method: _sel, amount: app.total, simulateFailure: _willFail);
+      id = await api.pay(method: _sel, amount: app.total, idempotencyKey: newIdempotencyKey(), simulateFailure: _willFail);
     } on ApiError {
       ok = false;
     }

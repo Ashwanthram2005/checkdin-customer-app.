@@ -408,6 +408,8 @@ Future<void> showExtendSheet(BuildContext context) async {
   final rate = app.extendRate;
   var pick = 1;
   var paying = false;
+  // One key per extend sheet so a repeated request never charges twice.
+  final extendKey = newIdempotencyKey();
   const maxExtra = 3;
   final avail = maxExtra - app.extraHours;
   await showModalBottomSheet<void>(
@@ -494,7 +496,7 @@ Future<void> showExtendSheet(BuildContext context) async {
                     : () async {
                         set(() => paying = true);
                         try {
-                          await api.extendStay(app.bookingId, pick);
+                          await api.extendStay(app.bookingId, pick, idempotencyKey: extendKey);
                         } on ApiError catch (e) {
                           set(() => paying = false);
                           if (context.mounted) toast(context, e.message);

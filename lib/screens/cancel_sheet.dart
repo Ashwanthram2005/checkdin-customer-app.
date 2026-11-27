@@ -36,6 +36,8 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
   final shake = GlobalKey<ShakeState>();
   var tried = false;
   var cancelling = false;
+  // One key for this cancel sheet: repeats of the same request cancel once.
+  final cancelKey = newIdempotencyKey();
   final ok = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
@@ -81,8 +83,9 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                   Navigator.pop(ctx, false);
                   Navigator.pushNamed(context, '/cancel-policy');
                 },
+                behavior: HitTestBehavior.opaque,
                 child: const Padding(
-                  padding: EdgeInsets.only(top: 8),
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   child: Text('View cancellation policy',
                       style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
                 ),
@@ -159,7 +162,7 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                             if (cancelling) return;
                             setSheet(() => cancelling = true);
                             try {
-                              await api.cancelBooking(app.bookingId, isOther ? other.text.trim() : picked!);
+                              await api.cancelBooking(app.bookingId, isOther ? other.text.trim() : picked!, idempotencyKey: cancelKey);
                               if (ctx.mounted) Navigator.pop(ctx, true);
                             } on ApiError catch (e) {
                               setSheet(() => cancelling = false);

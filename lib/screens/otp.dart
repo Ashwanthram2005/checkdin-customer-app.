@@ -163,11 +163,9 @@ class _OtpScreenState extends State<OtpScreen> {
               const TextSpan(text: "We've sent an OTP on WhatsApp to "),
               TextSpan(text: '+91 $phone', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
             ])),
-            GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: const Text('Edit number',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
-            ),
+            TapLink('Edit number',
+                onTap: () => Navigator.pop(context),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
           ]),
           const SizedBox(height: 16),
           Shake(
@@ -185,7 +183,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       autofocus: i == 0,
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(1)],
+                      // Keyboard OTP suggestions and paste put the whole code in one box; it's spread out below.
+                      autofillHints: i == 0 ? const [AutofillHints.oneTimeCode] : null,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(4)],
                       style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
                       decoration: InputDecoration(
                         counterText: '',
@@ -198,6 +198,22 @@ class _OtpScreenState extends State<OtpScreen> {
                             OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: _bad ? C.red : C.ink, width: 1.5)),
                       ),
                       onChanged: (v) {
+                        if (v.length > 1) {
+                          // Pasted or autofilled: spread the digits from this box onwards.
+                          final digits = v.split('');
+                          var last = i;
+                          for (var k = 0; k < digits.length && i + k < 4; k++) {
+                            _ctrls[i + k].text = digits[k];
+                            last = i + k;
+                          }
+                          _nodes[last].requestFocus();
+                          _ctrls[last].selection = TextSelection.collapsed(offset: _ctrls[last].text.length);
+                          setState(() {
+                            if (_tries > 0) _err = null;
+                          });
+                          if (_ok) _verify();
+                          return;
+                        }
                         if (v.isNotEmpty && i < 3) _nodes[i + 1].requestFocus();
                         if (v.isEmpty && i > 0) _nodes[i - 1].requestFocus();
                         setState(() {

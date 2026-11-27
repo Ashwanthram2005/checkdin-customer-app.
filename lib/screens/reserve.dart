@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../coupons.dart';
 import '../theme.dart';
+import '../api/api.dart';
+import '../optimistic.dart';
 import 'coupon_sheet.dart';
 import 'hotel_detail.dart' show billRow, totalBox;
 
@@ -206,13 +208,24 @@ class _ReserveScreenState extends State<ReserveScreen> {
                         ]),
                       ),
                     _switchRow(Icons.chat_bubble_outline_rounded, 'Booking details on WhatsApp', 'Confirmation, directions & reminders', app.whatsappUpdates,
-                        (v) => app.set(() => app.whatsappUpdates = v),
+                        (v) => optimistic(context,
+                            apply: () => app.set(() => app.whatsappUpdates = v),
+                            revert: () => app.set(() => app.whatsappUpdates = !v),
+                            call: () => api.setPreference('whatsapp', v)),
                         last: true),
                   ]),
                 ),
                 const SizedBox(height: 14),
                 GestureDetector(
-                  onTap: () => app.coupon ? app.set(() => app.couponCode = null) : showCouponSheet(context),
+                  onTap: () {
+                    if (!app.coupon) {
+                      showCouponSheet(context);
+                      return;
+                    }
+                    final code = app.couponCode;
+                    app.set(() => app.couponCode = null);
+                    undoToast(context, '$code removed', () => app.set(() => app.couponCode = code));
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                     decoration: BoxDecoration(

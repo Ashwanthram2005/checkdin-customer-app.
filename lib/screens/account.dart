@@ -6,6 +6,7 @@ import '../appearance.dart';
 import '../api/api.dart';
 import '../api/fake_api.dart';
 import '../theme.dart';
+import '../optimistic.dart';
 import '../loading.dart';
 import 'refunds.dart';
 
@@ -79,6 +80,7 @@ class AccountScreen extends StatelessWidget {
             const SizedBox(height: 14),
             Loader<void>(
               load: api.account,
+              cacheKey: 'account',
               skeleton: const Skeleton(child: Bone(height: 96, radius: 24)),
               builder: (context, _) => WhiteCard(
               color: C.inkBg,
@@ -137,7 +139,10 @@ class AccountScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Column(children: [
                 row(Icons.chat_bubble_outline_rounded, 'WhatsApp updates', 'Booking updates & deals',
-                    trailing: BrandSwitch(value: app.whatsappUpdates, onChanged: (v) => app.set(() => app.whatsappUpdates = v))),
+                    trailing: BrandSwitch(value: app.whatsappUpdates, onChanged: (v) => optimistic(context,
+                            apply: () => app.set(() => app.whatsappUpdates = v),
+                            revert: () => app.set(() => app.whatsappUpdates = !v),
+                            call: () => api.setPreference('whatsapp', v)))),
                 row(Icons.notifications_none_rounded, 'Notifications', 'Check-in reminders & alerts', onTap: () => Navigator.pushNamed(context, '/notifications', arguments: 'settings')),
                 row(Icons.near_me_outlined, 'Location', app.useLocation ? 'On · change permission' : 'Off',
                     onTap: () => Navigator.pushNamed(context, '/location')),

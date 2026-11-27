@@ -27,14 +27,20 @@ abstract class CheckdinApi {
   Future<int?> quote(String hotelId);
 
   // booking & payment
-  Future<String> pay({required String method, required int amount, bool simulateFailure = false});
+  /// [idempotencyKey]: one key per payment attempt. If the same request
+  /// reaches the server twice (double tap, network retry), it charges once.
+  Future<String> pay({required String method, required int amount, required String idempotencyKey, bool simulateFailure = false});
   Future<bool> verifyUpiId(String vpa);
   Future<void> checkCoupon(String code);
-  Future<int> cancelBooking(String bookingId, String reason);
-  Future<void> extendStay(String bookingId, int hours);
+  Future<int> cancelBooking(String bookingId, String reason, {required String idempotencyKey});
+  Future<void> extendStay(String bookingId, int hours, {required String idempotencyKey});
   Future<void> checkOut(String bookingId);
 
   // account
+  Future<void> setSaved(String hotelId, bool saved);
+  Future<void> setPreference(String key, bool on);
+  Future<void> markNotificationsRead();
+  Future<void> removeCard(String last4);
   Future<void> myBookings();
   Future<void> bookingDetail(String bookingId);
   Future<void> savedHotels();
@@ -71,6 +77,12 @@ extension NetModeLabel on NetMode {
 }
 
 final rng = math.Random();
+
+/// A fresh random key for one money-moving attempt (pay, cancel, extend).
+String newIdempotencyKey() {
+  final r = math.Random.secure();
+  return List.generate(16, (_) => r.nextInt(256).toRadixString(16).padLeft(2, '0')).join();
+}
 
 /// The one line to change when the real backend is ready.
 final CheckdinApi api = FakeApi();

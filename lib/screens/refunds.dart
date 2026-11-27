@@ -171,11 +171,9 @@ class _RefundsScreenState extends State<RefundsScreen> {
                         ]),
                       ),
                       const SizedBox(height: 6),
-                      GestureDetector(
-                        onTap: _whatIsRrn,
-                        child: Text('What is RRN?',
-                            style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: C.ink, decoration: TextDecoration.underline)),
-                      ),
+                      TapLink('What is RRN?',
+                          onTap: _whatIsRrn,
+                          style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: C.ink, decoration: TextDecoration.underline)),
                     ],
                   ]),
                 ),
@@ -322,6 +320,7 @@ class _RefundsScreenState extends State<RefundsScreen> {
       backgroundColor: C.bg,
       body: Loader<void>(
         load: api.refunds,
+        cacheKey: 'refunds',
         skeleton: const SkPage(title: 'My refunds', child: SkCards(count: 3, height: 160)),
         builder: (context, _) => SafeArea(
         child: ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 30), children: [

@@ -6,6 +6,21 @@ import 'api.dart';
 class FakeApi implements CheckdinApi {
   static NetMode mode = NetMode.fast;
 
+  /// Results already given for an idempotency key; a repeat returns the same
+  /// answer instead of charging or cancelling again (what the real server must do).
+  final Map<String, Object> _done = {};
+
+  Future<R> _once<R extends Object>(String key, Future<R> Function() run) async {
+    final prev = _done[key];
+    if (prev != null) {
+      await _wait(200);
+      return prev as R;
+    }
+    final r = await run();
+    _done[key] = r;
+    return r;
+  }
+
   Future<void> _wait([int fastMs = 650]) async {
     switch (mode) {
       case NetMode.fast:
@@ -73,11 +88,12 @@ class FakeApi implements CheckdinApi {
 
   // ---------------------------------------------------------------- booking
   @override
-  Future<String> pay({required String method, required int amount, bool simulateFailure = false}) async {
-    await _wait(1600);
-    if (simulateFailure) throw const ApiError('payment_failed', 'Your bank declined this payment.');
-    return newBookingId(DateTime.now());
-  }
+  Future<String> pay({required String method, required int amount, required String idempotencyKey, bool simulateFailure = false}) =>
+      _once(idempotencyKey, () async {
+        await _wait(1600);
+        if (simulateFailure) throw const ApiError('payment_failed', 'Your bank declined this payment.');
+        return newBookingId(DateTime.now());
+      });
 
   @override
   Future<bool> verifyUpiId(String vpa) async {
@@ -89,18 +105,29 @@ class FakeApi implements CheckdinApi {
   Future<void> checkCoupon(String code) => _wait(500);
 
   @override
-  Future<int> cancelBooking(String bookingId, String reason) async {
-    await _wait(900);
-    return app.cancelRefund;
-  }
+  Future<int> cancelBooking(String bookingId, String reason, {required String idempotencyKey}) => _once(idempotencyKey, () async {
+        await _wait(900);
+        return app.cancelRefund;
+      });
 
   @override
-  Future<void> extendStay(String bookingId, int hours) => _wait(1100);
+  Future<void> extendStay(String bookingId, int hours, {required String idempotencyKey}) => _once<bool>(idempotencyKey, () async {
+        await _wait(1100);
+        return true;
+      });
 
   @override
   Future<void> checkOut(String bookingId) => _wait(800);
 
   // ---------------------------------------------------------------- account
+  @override
+  Future<void> setSaved(String hotelId, bool saved) => _wait(400);
+  @override
+  Future<void> setPreference(String key, bool on) => _wait(400);
+  @override
+  Future<void> markNotificationsRead() => _wait(400);
+  @override
+  Future<void> removeCard(String last4) => _wait(500);
   @override
   Future<void> myBookings() => _wait(700);
   @override

@@ -1,3 +1,5 @@
+import 'dart:ui' show FontFeature;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -98,12 +100,17 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
       ),
       iconTheme: IconThemeData(color: C.ink),
       splashFactory: InkRipple.splashFactory,
+      // Android back swipe shows the screen underneath before you let go.
+      pageTransitionsTheme: const PageTransitionsTheme(builders: {
+        TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      }),
     );
     return MaterialApp(
       title: 'Checkdin',
       debugShowCheckedModeBanner: false,
       theme: base.copyWith(
-        textTheme: GoogleFonts.plusJakartaSansTextTheme(base.textTheme).apply(bodyColor: C.ink, displayColor: C.ink),
+        textTheme: tabularDigits(GoogleFonts.plusJakartaSansTextTheme(base.textTheme).apply(bodyColor: C.ink, displayColor: C.ink)),
         textSelectionTheme: TextSelectionThemeData(cursorColor: C.ink, selectionColor: C.limeSoft, selectionHandleColor: C.ink),
       ),
       builder: (context, child) => OfflineGate(child: child ?? const SizedBox()),
@@ -156,4 +163,28 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
       },
     );
   }
+}
+
+
+/// Same-width digits everywhere (prices, timers, IDs) so numbers don't jump.
+TextTheme tabularDigits(TextTheme t) {
+  const f = [FontFeature.tabularFigures()];
+  TextStyle? x(TextStyle? s) => s?.copyWith(fontFeatures: f);
+  return t.copyWith(
+    displayLarge: x(t.displayLarge),
+    displayMedium: x(t.displayMedium),
+    displaySmall: x(t.displaySmall),
+    headlineLarge: x(t.headlineLarge),
+    headlineMedium: x(t.headlineMedium),
+    headlineSmall: x(t.headlineSmall),
+    titleLarge: x(t.titleLarge),
+    titleMedium: x(t.titleMedium),
+    titleSmall: x(t.titleSmall),
+    bodyLarge: x(t.bodyLarge),
+    bodyMedium: x(t.bodyMedium),
+    bodySmall: x(t.bodySmall),
+    labelLarge: x(t.labelLarge),
+    labelMedium: x(t.labelMedium),
+    labelSmall: x(t.labelSmall),
+  );
 }
