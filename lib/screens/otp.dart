@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../state.dart';
+import '../shake.dart';
 import '../theme.dart';
 import 'login.dart';
 
@@ -78,6 +79,47 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   bool get _ok => _ctrls.every((c) => c.text.isNotEmpty);
+  final _shake = GlobalKey<ShakeState>();
+  String? _err;
+  bool _bad = false;
+  int _tries = 3;
+
+  /// Demo: the correct OTP is 1234 until a real SMS/WhatsApp service is connected.
+  static const _demoOtp = '1234';
+
+  Future<void> _verify() async {
+    final code = _ctrls.map((c) => c.text).join();
+    if (_tries == 0) {
+      setState(() => _err = 'Too many wrong tries. Tap Resend to get a new OTP.');
+      _shake.currentState?.shake();
+      return;
+    }
+    if (code.length < 4) {
+      setState(() {
+        _err = 'Enter all 4 digits';
+        _bad = true;
+      });
+      _shake.currentState?.shake();
+      return;
+    }
+    if (code != _demoOtp) {
+      _tries--;
+      setState(() {
+        _bad = true;
+        _err = _tries == 0 ? 'Wrong OTP. Tap Resend to get a new one.' : 'That OTP is wrong. $_tries ${_tries == 1 ? 'try' : 'tries'} left.';
+      });
+      _shake.currentState?.shake();
+      await Future<void>.delayed(const Duration(milliseconds: 450));
+      if (!mounted) return;
+      for (final c in _ctrls) {
+        c.clear();
+      }
+      setState(() => _bad = false);
+      if (_tries > 0) _nodes[0].requestFocus();
+      return;
+    }
+    Navigator.pushNamedAndRemoveUntil(context, '/profile-setup', (_) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +152,9 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
           ]),
           const SizedBox(height: 16),
-          Row(
+          Shake(
+            key: _shake,
+            child: Row(
             children: List.generate(4, (i) {
               return Expanded(
                 child: Padding(
@@ -128,15 +172,20 @@ class _OtpScreenState extends State<OtpScreen> {
                       decoration: InputDecoration(
                         counterText: '',
                         contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                        filled: _bad,
+                        fillColor: C.redSoft,
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFDADAD2), width: 1.5)),
+                            borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: _bad ? C.red : const Color(0xFFDADAD2), width: 1.5)),
                         focusedBorder:
-                            OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: C.ink, width: 1.5)),
+                            OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: _bad ? C.red : C.ink, width: 1.5)),
                       ),
                       onChanged: (v) {
                         if (v.isNotEmpty && i < 3) _nodes[i + 1].requestFocus();
                         if (v.isEmpty && i > 0) _nodes[i - 1].requestFocus();
-                        setState(() {});
+                        setState(() {
+                          if (_tries > 0) _err = null;
+                        });
+                        if (v.isNotEmpty && i == 3 && _ok) _verify();
                       },
                     ),
                   ),
@@ -144,12 +193,16 @@ class _OtpScreenState extends State<OtpScreen> {
               );
             }),
           ),
+          ),
+          FieldError(_err),
           const SizedBox(height: 18),
           PillBtn('Verify & continue',
               kind: BtnKind.dark,
               height: 56,
               expand: true,
-              onTap: _ok ? () => Navigator.pushNamedAndRemoveUntil(context, '/profile-setup', (_) => false) : null),
+              onTap: _verify),
+          const SizedBox(height: 6),
+          Text('Demo OTP: 1234', style: TextStyle(fontSize: 12, color: C.muted2)),
           const SizedBox(height: 10),
           Row(children: [
             Expanded(child: Text("Didn't get the code?", style: TextStyle(fontSize: 15, color: C.muted))),
@@ -160,6 +213,10 @@ class _OtpScreenState extends State<OtpScreen> {
               TextButton.icon(
                 onPressed: () {
                   _start();
+                  setState(() {
+                    _tries = 3;
+                    _err = null;
+                  });
                   toast(context, 'New OTP sent on WhatsApp');
                 },
                 icon: Icon(Icons.refresh_rounded, size: 18, color: C.ink),

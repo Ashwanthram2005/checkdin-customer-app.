@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../shake.dart';
 import '../theme.dart';
 
 /// Result returned to Payment methods when a card is saved.
@@ -119,6 +120,21 @@ class _AddCardScreenState extends State<AddCardScreen> {
   bool get _cvvOk => RegExp(r'^\d{3}$').hasMatch(_cvv.text);
   bool get _nameOk => _name.text.trim().length >= 3;
   bool get _valid => _luhn && _expError == null && _cvvOk && _nameOk;
+  final _kNum = GlobalKey<ShakeState>(), _kExp = GlobalKey<ShakeState>(), _kCvv = GlobalKey<ShakeState>(), _kName = GlobalKey<ShakeState>();
+  bool _tried = false;
+
+  void _submit() {
+    if (_valid) {
+      FocusScope.of(context).unfocus();
+      Navigator.pop(context, NewCard(_brand.isEmpty ? 'Card' : _brand, _digits.substring(_digits.length - 4), _exp.text, _name.text.trim(), save: _save));
+      return;
+    }
+    setState(() {
+      _tried = true;
+      _touchedNum = _touchedExp = _touchedCvv = true;
+    });
+    shakeAll([if (!_luhn) _kNum, if (_expError != null) _kExp, if (!_cvvOk) _kCvv, if (!_nameOk) _kName]);
+  }
 
   InputDecoration _dec(String hint, {String? error, Widget? suffix}) {
     final b = OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: C.border, width: 1.5));
@@ -246,9 +262,10 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final numErr = _touchedNum && _digits.isNotEmpty && !_luhn ? 'Check the card number' : null;
-    final expErr = _touchedExp && _exp.text.isNotEmpty ? _expError : null;
-    final cvvErr = _touchedCvv && _cvv.text.isNotEmpty && !_cvvOk ? '3 digits' : null;
+    final numErr = _touchedNum && (_digits.isNotEmpty || _tried) && !_luhn ? (_digits.isEmpty ? 'Enter the card number' : 'Check the card number') : null;
+    final expErr = _touchedExp && (_exp.text.isNotEmpty || _tried) ? (_exp.text.isEmpty ? 'Enter expiry' : _expError) : null;
+    final cvvErr = _touchedCvv && (_cvv.text.isNotEmpty || _tried) && !_cvvOk ? '3 digits' : null;
+    final nameErr = _tried && !_nameOk ? 'Enter the name as printed on the card' : null;
     return Scaffold(
       body: Column(children: [
         Expanded(
@@ -260,7 +277,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               _preview(),
               const SizedBox(height: 22),
               _label('Card number'),
-              TextField(
+              Shake(key: _kNum, child: TextField(
                 controller: _num,
                 keyboardType: TextInputType.number,
                 inputFormatters: [CardNumberFormatter()],
@@ -273,13 +290,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 decoration: _dec('1234 5678 9012 3456',
                     error: numErr,
                     suffix: _luhn ? Icon(Icons.check_circle_rounded, color: C.green) : Icon(Icons.credit_card_rounded, color: C.faint)),
-              ),
+              )),
               const SizedBox(height: 14),
               Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     _label('Expiry date'),
-                    TextField(
+                    Shake(key: _kExp, child: TextField(
                       controller: _exp,
                       keyboardType: TextInputType.number,
                       inputFormatters: [ExpiryFormatter()],
@@ -289,14 +306,14 @@ class _AddCardScreenState extends State<AddCardScreen> {
                         if (_exp.text.length == 5) _touchedExp = true;
                       }),
                       decoration: _dec('MM/YY', error: expErr),
-                    ),
+                    )),
                   ]),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     _label('CVV'),
-                    TextField(
+                    Shake(key: _kCvv, child: TextField(
                       controller: _cvv,
                       focusNode: _cvvFocus,
                       keyboardType: TextInputType.number,
@@ -308,21 +325,21 @@ class _AddCardScreenState extends State<AddCardScreen> {
                         if (_cvv.text.length == 3) _touchedCvv = true;
                       }),
                       decoration: _dec('•••', error: cvvErr, suffix: Icon(Icons.help_outline_rounded, color: C.faint, size: 20)),
-                    ),
+                    )),
                   ]),
                 ),
               ]),
               const SizedBox(height: 14),
               _label('Name on card'),
-              TextField(
+              Shake(key: _kName, child: TextField(
                 controller: _name,
                 textCapitalization: TextCapitalization.characters,
                 autofillHints: const [AutofillHints.creditCardName],
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z .']"))],
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 onChanged: (_) => setState(() {}),
-                decoration: _dec('As printed on the card'),
-              ),
+                decoration: _dec('As printed on the card', error: nameErr),
+              )),
               const SizedBox(height: 16),
               WhiteCard(
                 radius: 18,
@@ -352,16 +369,10 @@ class _AddCardScreenState extends State<AddCardScreen> {
         ),
         BottomBar(
           child: PillBtn(
-            _valid ? 'Save card' : 'Enter card details',
+            'Save card',
             kind: BtnKind.dark,
             expand: true,
-            onTap: _valid
-                ? () {
-                    FocusScope.of(context).unfocus();
-                    Navigator.pop(
-                        context, NewCard(_brand.isEmpty ? 'Card' : _brand, _digits.substring(_digits.length - 4), _exp.text, _name.text.trim(), save: _save));
-                  }
-                : null,
+            onTap: _submit,
           ),
         ),
       ]),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../shake.dart';
 import '../theme.dart';
 import 'package:flutter/services.dart';
 
@@ -21,6 +22,36 @@ class _PaymentScreenState extends State<PaymentScreen> {
   int _left = 600;
   Timer? _t;
   final _vpa = TextEditingController();
+  final _kMore = GlobalKey<ShakeState>(), _kVpa = GlobalKey<ShakeState>(), _kNote = GlobalKey<ShakeState>();
+  String? _vpaErr;
+  bool _vpaOk = false;
+
+  void _verifyVpa() {
+    final v = _vpa.text.trim();
+    final ok = RegExp(r'^[a-zA-Z0-9._-]{2,}@[a-zA-Z]{2,}$').hasMatch(v);
+    setState(() {
+      _vpaOk = ok;
+      _vpaErr = v.isEmpty ? 'Enter your UPI ID' : (ok ? null : 'That doesn\'t look like a UPI ID. It should be like name@okhdfc');
+    });
+    if (ok) {
+      toast(context, 'UPI ID verified');
+    } else {
+      _kVpa.currentState?.shake();
+    }
+  }
+
+  void _tryPay() {
+    if (_sel == 'upiid' && !_vpaOk) {
+      _verifyVpa();
+      if (!_vpaOk) return;
+    }
+    if (!_canPay) {
+      setState(() {});
+      shakeAll([_kMore, _kNote]);
+      return;
+    }
+    _pay();
+  }
 
   @override
   void initState() {
@@ -519,26 +550,42 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 if (_sel == 'upiid')
                   Padding(
                     padding: const EdgeInsets.fromLTRB(64, 4, 12, 12),
-                    child: Row(children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _vpa,
-                          decoration: InputDecoration(
-                            hintText: 'yourname@okbank',
-                            isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    child: Column(children: [
+                      Shake(
+                        key: _kVpa,
+                        child: Row(children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _vpa,
+                              onChanged: (_) => setState(() {
+                                _vpaErr = null;
+                                _vpaOk = false;
+                              }),
+                              onSubmitted: (_) => _verifyVpa(),
+                              decoration: InputDecoration(
+                                hintText: 'yourname@okbank',
+                                isDense: true,
+                                suffixIcon: _vpaOk ? Icon(Icons.check_circle_rounded, color: C.green) : null,
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: _vpaErr != null ? C.red : C.border, width: 1.5)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: _vpaErr != null ? C.red : C.ink, width: 1.5)),
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(width: 8),
+                          PillBtn('Verify', kind: BtnKind.dark, height: 46, fontSize: 14, onTap: _verifyVpa),
+                        ]),
                       ),
-                      const SizedBox(width: 8),
-                      PillBtn('Verify', kind: BtnKind.dark, height: 46, fontSize: 14, onTap: () => toast(context, 'UPI ID verified')),
+                      FieldError(_vpaErr),
                     ]),
                   ),
               ]),
             ),
             const SectionLabel('More ways to pay'),
-            WhiteCard(
+            Shake(key: _kMore, child: WhiteCard(
               radius: 20,
               padding: const EdgeInsets.all(5),
               child: Column(children: [
@@ -549,7 +596,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     _bank == null ? '${allBanks.length} Indian banks' : bankName(_bank!)),
                 if (_sel == 'netbank') _bankPanel(),
               ]),
-            ),
+            )),
           ]),
         ),
         BottomBar(
@@ -561,7 +608,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ]),
             if (!_canPay) ...[
               const SizedBox(height: 6),
-              Text(_payNote, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.red)),
+              Shake(key: _kNote, child: Text(_payNote, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.red))),
             ],
             const SizedBox(height: 10),
             PillBtn('Pay ${inr(app.total)}',
@@ -569,7 +616,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 height: 56,
                 expand: true,
                 icon: Icons.arrow_forward_rounded,
-                onTap: _left == 0 || !_canPay ? null : _pay),
+                onTap: _left == 0 ? null : _tryPay),
           ]),
         ),
       ]),

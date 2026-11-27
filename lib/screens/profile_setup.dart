@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../shake.dart';
 import '../theme.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
@@ -21,9 +22,14 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     super.dispose();
   }
 
+  final _kName = GlobalKey<ShakeState>(), _kEmail = GlobalKey<ShakeState>();
+  bool _tried = false;
+  bool get _emailBad => _email.text.trim().isNotEmpty && !RegExp(r'^[\w.+-]+@[\w-]+\.[\w.]+$').hasMatch(_email.text.trim());
+
   @override
   Widget build(BuildContext context) {
-    final ok = _name.text.trim().length > 1;
+    final nameBad = _name.text.trim().length < 2;
+    final ok = !nameBad && !_emailBad;
     return Scaffold(
       body: Column(children: [
         Padding(
@@ -46,9 +52,24 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
             child: Column(children: [
               Expanded(
                 child: ListView(padding: const EdgeInsets.fromLTRB(24, 26, 24, 12), children: [
-                  BrandField(label: 'Your name *', hint: 'What should we call you?', controller: _name, onChanged: (_) => setState(() {})),
+                  Shake(
+                      key: _kName,
+                      child: BrandField(
+                          label: 'Your name *',
+                          hint: 'What should we call you?',
+                          controller: _name,
+                          errorText: _tried && nameBad ? 'Enter your name (at least 2 letters)' : null,
+                          onChanged: (_) => setState(() {}))),
                   const SizedBox(height: 18),
-                  BrandField(label: 'Email (optional)', hint: 'For booking receipts', controller: _email, keyboard: TextInputType.emailAddress),
+                  Shake(
+                      key: _kEmail,
+                      child: BrandField(
+                          label: 'Email (optional)',
+                          hint: 'For booking receipts',
+                          controller: _email,
+                          keyboard: TextInputType.emailAddress,
+                          errorText: _tried && _emailBad ? 'That email doesn\'t look right' : null,
+                          onChanged: (_) => setState(() {}))),
                   const SizedBox(height: 18),
                   GestureDetector(
                     onTap: () => setState(() => _wa = !_wa),
@@ -103,7 +124,10 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                               });
                               Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
                             }
-                          : null),
+                          : () {
+                              setState(() => _tried = true);
+                              shakeAll([if (nameBad) _kName, if (_emailBad) _kEmail]);
+                            }),
                 ]),
               ),
             ]),

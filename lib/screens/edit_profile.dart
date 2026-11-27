@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../avatar.dart';
+import '../shake.dart';
 import '../theme.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -50,9 +51,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ]),
       );
 
+  final _kName = GlobalKey<ShakeState>(), _kEmail = GlobalKey<ShakeState>();
+  bool _tried = false;
+
   @override
   Widget build(BuildContext context) {
-    final ok = _changed && _name.text.trim().length > 1 && !_emailBad;
+    final nameBad = _name.text.trim().length < 2;
+    final ok = _changed && !nameBad && !_emailBad;
     const inputDeco = InputDecoration(border: InputBorder.none, isDense: true, contentPadding: EdgeInsets.only(top: 3));
     const inputStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
     return Scaffold(
@@ -83,11 +88,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Center(child: Text(_name.text.trim().isEmpty ? 'Your name' : _name.text.trim(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
             Center(child: Text('Tap the photo to change it', style: TextStyle(fontSize: 13, color: C.muted))),
             const SectionLabel('Personal details'),
-            _field(
+            Shake(key: _kName, child: _field(
               Icons.person_outline_rounded,
               'Full name',
               TextField(controller: _name, style: inputStyle, decoration: inputDeco, onChanged: (_) => setState(() {})),
-            ),
+            )),
+            FieldError(_tried && nameBad ? 'Enter your name (at least 2 letters)' : null),
             const SizedBox(height: 10),
             _field(
               Icons.smartphone_rounded,
@@ -99,7 +105,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               trailing: Tag('✓ Verified', bg: C.limeBg, fg: C.ink),
             ),
             const SizedBox(height: 10),
-            _field(
+            Shake(key: _kEmail, child: _field(
               Icons.mail_outline_rounded,
               'Email (optional)',
               TextField(
@@ -110,7 +116,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 onChanged: (_) => setState(() {}),
               ),
               error: _emailBad,
-            ),
+            )),
             if (_emailBad)
               Padding(
                 padding: EdgeInsets.fromLTRB(6, 6, 6, 0),
@@ -165,8 +171,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               kind: BtnKind.dark,
               height: 56,
               expand: true,
-              onTap: ok
+              onTap: !_changed
+                  ? null
+                  : !ok
                   ? () {
+                      setState(() => _tried = true);
+                      shakeAll([if (nameBad) _kName, if (_emailBad) _kEmail]);
+                    }
+                  : () {
                       app.set(() {
                         app.name = _name.text.trim();
                         app.email = _email.text.trim();

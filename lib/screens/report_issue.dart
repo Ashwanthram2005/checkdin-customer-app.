@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../state.dart';
+import '../shake.dart';
 import '../theme.dart';
 
 class ReportIssueScreen extends StatefulWidget {
@@ -37,6 +38,17 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
   }
 
   bool get _ok => _type != null && _text.text.trim().length >= 15;
+  final _kType = GlobalKey<ShakeState>(), _kText = GlobalKey<ShakeState>();
+  bool _tried = false;
+
+  void _trySubmit() {
+    if (_ok) {
+      _submit();
+      return;
+    }
+    setState(() => _tried = true);
+    shakeAll([if (_type == null) _kType, if (_text.text.trim().length < 15) _kText]);
+  }
 
   Future<void> _addPhoto() async {
     try {
@@ -85,7 +97,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                 ]),
               ),
               const SectionLabel('What went wrong?'),
-              GridView.count(
+              Shake(key: _kType, child: GridView.count(
                 crossAxisCount: 2,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -114,7 +126,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                       ),
                     ),
                 ],
-              ),
+              )),
+              FieldError(_tried && _type == null ? 'Pick what went wrong' : null),
               if (urgent) ...[
                 const SizedBox(height: 12),
                 Container(
@@ -133,7 +146,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                 ),
               ],
               const SectionLabel('Tell us more'),
-              TextField(
+              Shake(key: _kText, child: TextField(
                 controller: _text,
                 maxLines: 5,
                 minLines: 4,
@@ -151,7 +164,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                   enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.border, width: 1.5)),
                   focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.ink, width: 1.5)),
                 ),
-              ),
+              )),
+              FieldError(_tried && _text.text.trim().length < 15 ? 'Add a little more detail (at least 15 characters)' : null),
               SectionLabel('Add photos (optional)',
                   trailing: Text('${_photos.length}/4', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: C.muted))),
               SizedBox(
@@ -205,7 +219,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
             kind: BtnKind.dark,
             height: 54,
             expand: true,
-            onTap: _ok && !_sending ? _submit : null,
+            onTap: _sending ? null : _trySubmit,
           ),
         ),
       ]),

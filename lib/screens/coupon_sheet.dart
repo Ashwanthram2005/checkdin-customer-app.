@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../coupons.dart';
 import '../state.dart';
+import '../shake.dart';
 import '../theme.dart';
 
 /// Coupon picker for the current booking. Applies the chosen code to [app].
 Future<void> showCouponSheet(BuildContext context) async {
   final ctrl = TextEditingController();
   String? error;
+  final shake = GlobalKey<ShakeState>();
   final applied = await showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
@@ -15,15 +17,21 @@ Future<void> showCouponSheet(BuildContext context) async {
     builder: (ctx) => StatefulBuilder(builder: (ctx, set) {
       void tryCode(String raw) {
         final code = raw.trim().toUpperCase();
-        if (code.isEmpty) return;
+        if (code.isEmpty) {
+          set(() => error = 'Enter a coupon code');
+          shake.currentState?.shake();
+          return;
+        }
         final c = couponByCode(code);
         if (c == null) {
           set(() => error = 'That code isn\'t valid. Check it and try again.');
+          shake.currentState?.shake();
           return;
         }
         final p = couponProblem(c.code);
         if (p != null) {
           set(() => error = '${c.code}: $p');
+          shake.currentState?.shake();
           return;
         }
         Navigator.pop(ctx, c.code);
@@ -107,7 +115,7 @@ Future<void> showCouponSheet(BuildContext context) async {
             ),
             Flexible(
               child: ListView(shrinkWrap: true, padding: const EdgeInsets.fromLTRB(20, 8, 20, 24), children: [
-                Container(
+                Shake(key: shake, child: Container(
                   padding: const EdgeInsets.fromLTRB(14, 4, 6, 4),
                   decoration: BoxDecoration(
                     color: C.card,
@@ -131,7 +139,7 @@ Future<void> showCouponSheet(BuildContext context) async {
                     ),
                     PillBtn('Apply', kind: BtnKind.dark, height: 40, fontSize: 13.5, onTap: () => tryCode(ctrl.text)),
                   ]),
-                ),
+                )),
                 if (error != null)
                   Padding(
                     padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),

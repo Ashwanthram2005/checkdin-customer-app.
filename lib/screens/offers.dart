@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../state.dart';
+import '../shake.dart';
 import '../theme.dart';
 
 class OffersScreen extends StatefulWidget {
@@ -25,6 +26,7 @@ List<_Coupon> get _coupons => [
 class _OffersScreenState extends State<OffersScreen> {
   final _code = TextEditingController();
   bool? _valid;
+  final _shake = GlobalKey<ShakeState>();
 
   @override
   void dispose() {
@@ -114,7 +116,7 @@ class _OffersScreenState extends State<OffersScreen> {
           ]),
         ),
         const SizedBox(height: 14),
-        Container(
+        Shake(key: _shake, child: Container(
           height: 56,
           padding: const EdgeInsets.fromLTRB(16, 6, 6, 6),
           decoration: BoxDecoration(
@@ -138,12 +140,16 @@ class _OffersScreenState extends State<OffersScreen> {
                 kind: BtnKind.dark,
                 height: 44,
                 fontSize: 14,
-                onTap: code.isEmpty ? null : () => setState(() {
-                  _valid = _coupons.any((c) => c.code == code);
-                  if (_valid!) app.set(() => app.couponCode = code);
-                })),
+                onTap: () {
+                  setState(() => _valid = code.isNotEmpty && _coupons.any((c) => c.code == code));
+                  if (_valid!) {
+                    app.set(() => app.couponCode = code);
+                  } else {
+                    _shake.currentState?.shake();
+                  }
+                }),
           ]),
-        ),
+        )),
         if (_valid != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../shake.dart';
 import '../theme.dart';
 
 /// Cancel an upcoming booking: shows the refund, asks for a reason, confirms.
@@ -30,6 +31,8 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
 
   String? picked;
   final other = TextEditingController();
+  final shake = GlobalKey<ShakeState>();
+  var tried = false;
   final ok = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
@@ -92,6 +95,7 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
               const SizedBox(height: 16),
               const Text('Why are you cancelling?', style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
               const SizedBox(height: 10),
+              Shake(key: shake, child: Column(children: [
               for (final r in reasons)
                 GestureDetector(
                   onTap: () => setSheet(() => picked = r),
@@ -139,13 +143,22 @@ Future<bool> showCancelBookingSheet(BuildContext context) async {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
                   ),
                 ),
+              ])),
+              FieldError(tried && !started && !ready ? (picked == null ? 'Pick a reason to continue' : 'Tell us the reason in a few words') : null),
               const SizedBox(height: 10),
               Row(children: [
                 Expanded(child: PillBtn('Keep booking', kind: BtnKind.outline, expand: true, onTap: () => Navigator.pop(ctx, false))),
                 const SizedBox(width: 12),
                 Expanded(
                   child: GestureDetector(
-                    onTap: ready ? () => Navigator.pop(ctx, true) : null,
+                    onTap: ready
+                        ? () => Navigator.pop(ctx, true)
+                        : started
+                            ? null
+                            : () {
+                                setSheet(() => tried = true);
+                                shake.currentState?.shake();
+                              },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 150),
                       height: 52,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../state.dart';
+import '../shake.dart';
 import '../theme.dart';
 
 /// Shared top half used by login / OTP: logo + headline + illustration.
@@ -117,15 +118,35 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _ctrl = TextEditingController();
 
+  final _shake = GlobalKey<ShakeState>();
+  String? _err;
+
   @override
   void dispose() {
     _ctrl.dispose();
     super.dispose();
   }
 
+  void _getOtp() {
+    final n = _ctrl.text;
+    final err = n.isEmpty
+        ? 'Enter your mobile number'
+        : n.length != 10
+            ? 'Mobile numbers have 10 digits'
+            : !RegExp(r'^[6-9]').hasMatch(n)
+                ? 'Indian mobile numbers start with 6, 7, 8 or 9'
+                : null;
+    if (err != null) {
+      setState(() => _err = err);
+      _shake.currentState?.shake();
+      return;
+    }
+    app.set(() => app.phone = n);
+    Navigator.pushNamed(context, '/otp');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ok = _ctrl.text.length == 10;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Column(children: [
@@ -143,10 +164,13 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(height: 4),
           Text("We'll send your OTP on WhatsApp", style: TextStyle(fontSize: 15, color: C.muted)),
           const SizedBox(height: 20),
-          Container(
+          Shake(
+            key: _shake,
+            child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
             height: 56,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(border: Border.all(color: const Color(0xFFDADAD2), width: 1.5), borderRadius: BorderRadius.circular(14)),
+            decoration: BoxDecoration(border: Border.all(color: _err != null ? C.red : const Color(0xFFDADAD2), width: 1.5), borderRadius: BorderRadius.circular(14)),
             child: Row(children: [
               const Text('+91', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
               Container(width: 1.5, height: 20, color: C.inkBg, margin: const EdgeInsets.symmetric(horizontal: 12)),
@@ -155,7 +179,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: _ctrl,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
-                  onChanged: (_) => setState(() {}),
+                  onChanged: (_) => setState(() => _err = null),
+                  onSubmitted: (_) => _getOtp(),
                   style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -166,17 +191,14 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ]),
           ),
+          ),
+          FieldError(_err),
           const SizedBox(height: 14),
           PillBtn('Get OTP on WhatsApp',
               kind: BtnKind.dark,
               height: 56,
               expand: true,
-              onTap: ok
-                  ? () {
-                      app.set(() => app.phone = _ctrl.text);
-                      Navigator.pushNamed(context, '/otp');
-                    }
-                  : null),
+              onTap: _getOtp),
           const SizedBox(height: 14),
           Row(children: [
             Expanded(child: Divider(color: C.border)),
