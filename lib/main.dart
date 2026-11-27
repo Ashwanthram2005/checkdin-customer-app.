@@ -101,7 +101,7 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
       iconTheme: IconThemeData(color: C.ink),
       splashFactory: InkRipple.splashFactory,
       // Android back swipe shows the screen underneath before you let go.
-      pageTransitionsTheme: const PageTransitionsTheme(builders: {
+      pageTransitionsTheme: PageTransitionsTheme(builders: {
         TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
         TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       }),
