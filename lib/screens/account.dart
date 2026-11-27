@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../avatar.dart';
 import '../appearance.dart';
+import '../api/api.dart';
+import '../api/fake_api.dart';
 import '../theme.dart';
 import 'refunds.dart';
 
@@ -164,10 +166,55 @@ class AccountScreen extends StatelessWidget {
                 trailingIcon: false,
                 onTap: () => Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false)),
             const SizedBox(height: 12),
-            const Center(child: Text('Checkdin · v1.0.0', style: TextStyle(fontSize: 12, color: Color(0xFF7C7C74)))),
+            Center(
+              child: GestureDetector(
+                // Hidden test switch for the fake backend: long-press the version line.
+                onLongPress: () => _netSheet(context),
+                child: Text('Checkdin · v1.0.0${FakeApi.mode == NetMode.fast ? '' : ' · ${FakeApi.mode.label}'}',
+                    style: const TextStyle(fontSize: 12, color: Color(0xFF7C7C74))),
+              ),
+            ),
           ]),
         );
       },
     );
   }
+}
+
+
+/// Test-only: choose how the fake backend behaves.
+void _netSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent,
+    builder: (ctx) => StatefulBuilder(
+      builder: (ctx, set) => Container(
+        padding: EdgeInsets.fromLTRB(20, 14, 20, 20 + MediaQuery.of(ctx).padding.bottom),
+        decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Test network', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 4),
+          Text('For testing only. Changes how fast the sample backend answers, so you can see loading and error screens.',
+              style: TextStyle(fontSize: 13, color: C.muted, height: 1.4)),
+          const SizedBox(height: 12),
+          for (final m in NetMode.values)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(FakeApi.mode == m ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded, color: C.ink),
+              title: Text(m.label, style: const TextStyle(fontWeight: FontWeight.w700)),
+              subtitle: Text(switch (m) {
+                NetMode.fast => 'About 0.6–1 s, like good 4G',
+                NetMode.slow => 'About 2–3 s per request',
+                NetMode.fail => 'Every request fails, to see error screens',
+              }),
+              onTap: () {
+                FakeApi.mode = m;
+                set(() {});
+                app.set(() {});
+              },
+            ),
+        ]),
+      ),
+    ),
+  );
 }

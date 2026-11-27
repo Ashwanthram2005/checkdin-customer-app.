@@ -219,6 +219,8 @@ class PillBtn extends StatelessWidget {
   final bool trailingIcon;
   final double fontSize;
   final bool expand;
+  /// Shows a spinner in place of the label and ignores taps.
+  final bool loading;
   const PillBtn(this.label,
       {super.key,
       this.onTap,
@@ -227,11 +229,12 @@ class PillBtn extends StatelessWidget {
       this.icon,
       this.trailingIcon = true,
       this.fontSize = 15.5,
-      this.expand = false});
+      this.expand = false,
+      this.loading = false});
 
   @override
   Widget build(BuildContext context) {
-    final enabled = onTap != null;
+    final enabled = onTap != null || loading;
     Color bg, fg;
     Border? border;
     switch (kind) {
@@ -267,13 +270,24 @@ class PillBtn extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(999),
-        onTap: onTap,
+        onTap: loading ? null : onTap,
         child: Container(
           height: height,
           width: expand ? double.infinity : null,
           padding: const EdgeInsets.symmetric(horizontal: 22),
           decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999), border: border),
-          child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: children),
+          child: Stack(alignment: Alignment.center, children: [
+            Opacity(
+              opacity: loading ? 0 : 1,
+              child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: children),
+            ),
+            if (loading)
+              SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2.4, valueColor: AlwaysStoppedAnimation(fg)),
+              ),
+          ]),
         ),
       ),
     );
