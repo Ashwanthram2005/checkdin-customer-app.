@@ -198,7 +198,9 @@ void _netSheet(BuildContext context) {
       builder: (ctx, set) => Container(
         padding: EdgeInsets.fromLTRB(20, 14, 20, 20 + MediaQuery.of(ctx).padding.bottom),
         decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
-        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Material(
+          type: MaterialType.transparency,
+          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Text('Test network', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
           const SizedBox(height: 4),
           Text('For testing only. Changes how fast the sample backend answers, so you can see loading and error screens.',
@@ -221,6 +223,7 @@ void _netSheet(BuildContext context) {
               },
             ),
         ]),
+        ),
       ),
     ),
   );

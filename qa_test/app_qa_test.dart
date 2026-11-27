@@ -76,6 +76,15 @@ List<String> screenTexts() => find
 Future<void> tapText(WidgetTester t, String s, {bool last = false}) async {
   var f = find.text(s, skipOffstage: false);
   if (f.evaluate().isEmpty) f = find.textContaining(s, findRichText: true, skipOffstage: false);
+  if (f.evaluate().isEmpty && vScroll().evaluate().isNotEmpty) {
+    // Long lists only build what is near the screen: scroll to find it.
+    try {
+      await t.scrollUntilVisible(find.textContaining(s, findRichText: true), 250,
+          scrollable: vScroll().first, maxScrolls: 30);
+    } catch (_) {}
+    f = find.text(s, skipOffstage: false);
+    if (f.evaluate().isEmpty) f = find.textContaining(s, findRichText: true, skipOffstage: false);
+  }
   if (f.evaluate().isEmpty) {
     throw StateError('Button "$s" not found. On screen: ${screenTexts().join(' | ')}');
   }
