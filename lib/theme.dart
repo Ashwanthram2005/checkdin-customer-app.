@@ -206,13 +206,22 @@ class WhiteCard extends StatelessWidget {
   Color get color => _color ?? C.card;
   final VoidCallback? onTap;
   final Border? border;
+  /// Fill the available width. Turn off inside horizontal lists.
+  final bool expand;
   const WhiteCard(
-      {super.key, required this.child, this.padding = const EdgeInsets.all(16), this.radius = 22, Color? color, this.onTap, this.border})
+      {super.key,
+      required this.child,
+      this.padding = const EdgeInsets.all(16),
+      this.radius = 22,
+      Color? color,
+      this.onTap,
+      this.border,
+      this.expand = true})
       : _color = color;
   @override
   Widget build(BuildContext context) {
     final box = Container(
-      width: double.infinity,
+      width: expand ? double.infinity : null,
       padding: padding,
       decoration: ShapeDecoration(color: color, shape: smooth(radius, side: border?.top ?? BorderSide.none)),
       child: child,
@@ -281,7 +290,8 @@ class PillBtn extends StatelessWidget {
     final children = <Widget>[];
     final ic = icon == null ? null : Icon(icon, size: 18, color: fg);
     if (ic != null && !trailingIcon) children.addAll([ic, const SizedBox(width: 8)]);
-    children.add(Text(label, style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w800, color: fg)));
+    children.add(Flexible(
+        child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w800, color: fg))));
     if (ic != null && trailingIcon) children.addAll([const SizedBox(width: 8), ic]);
     return Material(
       color: Colors.transparent,
@@ -466,13 +476,16 @@ class PhotoPlaceholder extends StatelessWidget {
       height: height,
       width: double.infinity,
       decoration: ShapeDecoration(color: C.tint(const Color(0xFFE2E3DA)), shape: smooth(radius)),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [
         const Icon(Icons.image_outlined, size: 32, color: Color(0xFF7C7C74)),
         if (label.isNotEmpty) ...[
           const SizedBox(height: 6),
           Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: C.muted2)),
         ],
       ]),
+      )
     );
   }
 }

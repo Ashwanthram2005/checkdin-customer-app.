@@ -165,8 +165,10 @@ SliverToBoxAdapter(
                             )
                           else
                           SizedBox(
-                            height: 92,
-                            child: ListView(
+                            height: 100,
+                            child: MediaQuery.withClampedTextScaling(
+                              maxScaleFactor: 1.1,
+                              child: ListView(
                               scrollDirection: Axis.horizontal,
                               children: [3, 6, 9, 12].map((hrs) {
                                 final p = h.priceFor(hrs);
@@ -200,6 +202,7 @@ SliverToBoxAdapter(
                                   ),
                                 );
                               }).toList(),
+                            ),
                             ),
                           ),
                           const SizedBox(height: 12),

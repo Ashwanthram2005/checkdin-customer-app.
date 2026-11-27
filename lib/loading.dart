@@ -122,7 +122,7 @@ class SkCards extends StatelessWidget {
           children: List.generate(
             count,
             (i) => Container(
-              height: height,
+              constraints: BoxConstraints(minHeight: height),
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(22)),
@@ -132,7 +132,7 @@ class SkCards extends StatelessWidget {
                 const Bone(width: 180),
                 _gap(),
                 const Bone(width: 130),
-                const Spacer(),
+                _gap(16),
                 const Bone(height: 36, radius: 999),
               ]),
             ),

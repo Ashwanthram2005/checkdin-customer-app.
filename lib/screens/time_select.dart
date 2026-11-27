@@ -73,7 +73,9 @@ class _TimeSelectScreenState extends State<TimeSelectScreen> {
                   ),
                 ]),
                 const SizedBox(height: 12),
-                Row(
+                MediaQuery.withClampedTextScaling(
+                  maxScaleFactor: 1.1,
+                  child: Row(
                   children: List.generate(_parts.length, (i) {
                     final p = _parts[i];
                     final open = p.hours.where((h) => !_past(h)).length;
@@ -101,6 +103,7 @@ class _TimeSelectScreenState extends State<TimeSelectScreen> {
                       ),
                     );
                   }),
+                ),
                 ),
               ]),
             ),

@@ -72,7 +72,7 @@ class BookingSuccessScreen extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text('Booking ID ', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: C.muted)),
-                        Text(app.bookingId, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+                        Flexible(child: Text(app.bookingId, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800))),
                         SizedBox(width: 10),
                         Icon(Icons.copy_rounded, size: 15),
                         SizedBox(width: 4),

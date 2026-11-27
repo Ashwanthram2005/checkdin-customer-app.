@@ -275,6 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: recent.length,
               separatorBuilder: (_, __) => const SizedBox(width: 10),
               itemBuilder: (_, i) => WhiteCard(
+                expand: false,
                 radius: 16,
                 padding: const EdgeInsets.fromLTRB(10, 10, 14, 10),
                 onTap: () {
@@ -299,10 +300,13 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 22),
           SizedBox(
             height: 160,
-            child: PageView(
+            child: MediaQuery.withClampedTextScaling(
+              maxScaleFactor: 1.1,
+              child: PageView(
               controller: PageController(viewportFraction: 0.92),
               onPageChanged: (i) => setState(() => _offer = i),
               children: [_offerCard(true), _offerCard(false)],
+            ),
             ),
           ),
           const SizedBox(height: 10),
@@ -352,7 +356,9 @@ class _HomeScreenState extends State<HomeScreen> {
           _title('Top rated near you', link: 'See all', onLink: () => Navigator.pushNamed(context, '/search')),
           SizedBox(
             height: 218,
-            child: ListView.separated(
+            child: MediaQuery.withClampedTextScaling(
+              maxScaleFactor: 1.1,
+              child: ListView.separated(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               itemCount: hotels.length,
@@ -392,6 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
+            ),
             ),
           ),
           Padding(

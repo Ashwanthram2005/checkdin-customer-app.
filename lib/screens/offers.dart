@@ -77,7 +77,7 @@ class _OffersScreenState extends State<OffersScreen> {
                         child: Text(c.code, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1)),
                       ),
                       const Spacer(),
-                      PillBtn('Copy code', kind: BtnKind.dark, height: 34, fontSize: 12.5, onTap: () => _copy(c.code)),
+                      Flexible(flex: 3, child: PillBtn('Copy code', kind: BtnKind.dark, height: 34, fontSize: 12.5, onTap: () => _copy(c.code))),
                     ]),
                   ]),
                 ),

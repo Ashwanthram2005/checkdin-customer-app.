@@ -103,7 +103,10 @@ class KeyCard extends StatelessWidget {
           Row(children: [
             Icon(Icons.schedule_rounded, size: 14, color: C.faint),
             SizedBox(width: 6),
-            Text('Check-in 2:00 PM · Check-out 5:00 PM', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: C.faint)),
+            Flexible(
+              child: Text('Check-in 2:00 PM · Check-out 5:00 PM',
+                  maxLines: 1, overflow: TextOverflow.fade, softWrap: false, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: C.faint)),
+            ),
           ]),
         ]),
       ),
