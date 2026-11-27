@@ -26,6 +26,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final results = <int, Map<String, String>>{};
 final layoutIssues = <Map<String, String>>[];
 final shotsTaken = <String>[];
+final _seen = <String>{};
 
 void ok(int row, bool pass, String note) {
   final prev = results[row];
@@ -102,9 +103,12 @@ Future<void> run(WidgetTester t, String name, List<int> rows, Future<void> Funct
   FlutterError.onError = (d) {
     final msg = d.exceptionAsString().split('\n').first;
     final full = d.toString();
-    final culprit = RegExp(r'The relevant error-causing widget was:\s*\n\s*(.+)').firstMatch(full)?.group(1)?.trim() ?? '';
+    final m = RegExp(r'The relevant error-causing widget was:\s*\n(.*)\n(.*)').firstMatch(full);
+    final culprit = m == null ? '' : '${m.group(1)!.trim()} ${m.group(2)!.trim()}';
+    final seenKey = '$msg|$culprit';
+    final detail = _seen.add(seenKey) ? (full.length > 2500 ? full.substring(0, 2500) : full) : '';
     final frames = (d.stack?.toString() ?? '').split('\n').where((l) => l.contains('package:checkdin') || l.contains('qa_test')).take(2).join(' <- ');
-    layoutIssues.add({'where': name, 'issue': msg, 'widget': culprit, 'at': frames});
+    layoutIssues.add({'where': name, 'issue': msg, 'widget': culprit, 'at': frames, if (detail.isNotEmpty) 'detail': detail});
   };
   try {
     await body();
