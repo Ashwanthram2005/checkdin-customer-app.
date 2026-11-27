@@ -6,10 +6,12 @@ import 'package:url_launcher/url_launcher.dart';
 import '../state.dart';
 import '../theme.dart';
 
-TileLayer _tiles() => TileLayer(
-      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      userAgentPackageName: 'com.checkdin.checkdin',
-    );
+Widget _tiles() => kQaMode
+    ? Container(color: const Color(0xFFE6EBE0))
+    : TileLayer(
+        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        userAgentPackageName: 'com.checkdin.checkdin',
+      );
 
 /// Opens Google Maps (app or web) with directions to the hotel.
 Future<void> openDirections(BuildContext context, Hotel h) async {

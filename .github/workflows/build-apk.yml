@@ -73,3 +73,37 @@ jobs:
           name: Checkdin build ${{ github.run_number }}
           body: Test build of the Checkdin customer app. Download checkdin.apk below and install it on an Android phone.
           files: checkdin.apk
+
+  qa:
+    # Automated QA: runs the app's flows and captures every screen.
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install packages
+        run: flutter pub get
+
+      - name: Run QA tests
+        run: flutter test qa_test --update-goldens --reporter expanded > qa_log.txt 2>&1 || true
+
+      - name: Pack results
+        run: |
+          mkdir -p qa_out
+          cp qa_report.json qa_out/ 2>/dev/null || echo '{"error":"no report"}' > qa_out/qa_report.json
+          cp qa_log.txt qa_out/
+          if [ -d qa_test/shots ]; then (cd qa_test && zip -qr ../qa_out/qa-screens.zip shots); fi
+
+      - name: Publish QA results to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          files: |
+            qa_out/qa_report.json
+            qa_out/qa_log.txt
+            qa_out/qa-screens.zip

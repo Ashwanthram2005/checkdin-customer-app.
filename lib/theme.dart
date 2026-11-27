@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// True only inside automated QA tests: skips network map tiles and the
+/// connectivity check so screens can be captured offline.
+bool kQaMode = false;
+
 /// Apple-style continuous ("squircle") corners. [r] is the radius you'd
 /// give a normal rounded rectangle; the curve starts earlier and eases in.
 ShapeBorder smooth(double r, {BorderSide side = BorderSide.none}) =>

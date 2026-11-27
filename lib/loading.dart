@@ -239,6 +239,9 @@ class Loader<T> extends StatefulWidget {
   const Loader({super.key, required this.load, required this.skeleton, required this.builder, this.reloadKey, this.cacheKey});
 
   static final Map<String, Object?> _cache = {};
+
+  /// Forget every cached screen (tests, or after logout).
+  static void clearCache() => _cache.clear();
   @override
   State<Loader<T>> createState() => _LoaderState<T>();
 }

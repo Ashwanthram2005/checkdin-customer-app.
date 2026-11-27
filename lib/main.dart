@@ -52,13 +52,23 @@ import 'screens/refer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Appearance.load();
-  await loadLocationChoice();
+  await setUpApp();
   runApp(const CheckdinApp());
 }
 
+/// One-time setup before the first frame (also used by the QA tests).
+Future<void> setUpApp() async {
+  GoogleFonts.config.allowRuntimeFetching = false; // fonts are bundled
+  await Appearance.load();
+  await loadLocationChoice();
+}
+
+/// Lets tests (and later deep links) open any screen.
+final appNavigator = GlobalKey<NavigatorState>();
+
 class CheckdinApp extends StatefulWidget {
-  const CheckdinApp({super.key});
+  final String initialRoute;
+  const CheckdinApp({super.key, this.initialRoute = '/splash'});
   @override
   State<CheckdinApp> createState() => _CheckdinAppState();
 }
@@ -112,7 +122,8 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
         textSelectionTheme: TextSelectionThemeData(cursorColor: C.ink, selectionColor: C.limeSoft, selectionHandleColor: C.ink),
       ),
       builder: (context, child) => OfflineGate(child: child ?? const SizedBox()),
-      initialRoute: '/splash',
+      navigatorKey: appNavigator,
+      initialRoute: widget.initialRoute,
       routes: {
         '/splash': (_) => const SplashScreen(),
         '/location': (_) => const LocationSettingsScreen(),

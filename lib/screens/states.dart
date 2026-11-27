@@ -77,6 +77,7 @@ class _OfflineGateState extends State<OfflineGate> {
   @override
   void initState() {
     super.initState();
+    if (kQaMode) return;
     Connectivity().checkConnectivity().then((r) {
       if (mounted) setState(() => _offline = _isOff(r));
     });
