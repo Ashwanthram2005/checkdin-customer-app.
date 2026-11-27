@@ -103,7 +103,6 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
       // Android back swipe shows the screen underneath before you let go.
       pageTransitionsTheme: PageTransitionsTheme(builders: {
         TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
-        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       }),
     );
     return MaterialApp(
