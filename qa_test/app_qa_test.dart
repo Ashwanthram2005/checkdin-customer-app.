@@ -60,16 +60,33 @@ Future<void> wait(WidgetTester t, [int ms = 1500]) async {
   }
 }
 
+// skipOffstage: false so items just below the visible area still count.
 bool has(String s) =>
-    find.text(s).evaluate().isNotEmpty || find.textContaining(s, findRichText: true).evaluate().isNotEmpty;
+    find.text(s, skipOffstage: false).evaluate().isNotEmpty ||
+    find.textContaining(s, findRichText: true, skipOffstage: false).evaluate().isNotEmpty;
+
+List<String> screenTexts() => find
+    .byType(Text)
+    .evaluate()
+    .map((e) => (e.widget as Text).data ?? '')
+    .where((x) => x.trim().isNotEmpty)
+    .take(30)
+    .toList();
 
 Future<void> tapText(WidgetTester t, String s, {bool last = false}) async {
-  var f = find.text(s);
-  if (f.evaluate().isEmpty) f = find.textContaining(s, findRichText: true);
+  var f = find.text(s, skipOffstage: false);
+  if (f.evaluate().isEmpty) f = find.textContaining(s, findRichText: true, skipOffstage: false);
+  if (f.evaluate().isEmpty) {
+    throw StateError('Button "$s" not found. On screen: ${screenTexts().join(' | ')}');
+  }
   final one = last ? f.last : f.first;
   await t.ensureVisible(one);
-  await t.pump(const Duration(milliseconds: 200));
-  await t.tap(one, warnIfMissed: false);
+  await t.pump(const Duration(milliseconds: 250));
+  // Re-find after scrolling: the element can be rebuilt.
+  var g = find.text(s);
+  if (g.evaluate().isEmpty) g = find.textContaining(s, findRichText: true);
+  final target = g.evaluate().isEmpty ? one : (last ? g.last : g.first);
+  await t.tap(target, warnIfMissed: false);
   await t.pump(const Duration(milliseconds: 100));
 }
 
@@ -374,6 +391,7 @@ void main() {
       appNavigator.currentState!.pop(); // picker
       await wait(t, 800);
 
+      app.set(() => app.place = 'T. Nagar');
       await openRoute(t, '/search');
       await shot(t, '17_search');
       await tapText(t, '6');

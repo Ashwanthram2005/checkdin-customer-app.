@@ -164,7 +164,7 @@ class SearchScreen extends StatelessWidget {
                   WhiteCard(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                     child: Column(children: [
-                      _stepper('Rooms', 'Up to 3 guests per room', app.rooms, 1, 5, (v) => app.set(() {
+                      _stepper('Rooms', 'Up to 3 guests per room', app.rooms, 1, 4, (v) => app.set(() {
                             app.rooms = v;
                             if (app.adults < v) app.adults = v;
                             if (app.adults > v * 3) app.adults = v * 3;

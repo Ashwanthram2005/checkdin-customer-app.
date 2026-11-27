@@ -598,6 +598,10 @@ class BrandField extends StatelessWidget {
   }
 }
 
+/// Toasts float above bottom bars (Pay, Continue, the tab bar) so they
+/// never block the main button.
+EdgeInsets toastMargin(BuildContext context) => const EdgeInsets.fromLTRB(16, 0, 16, 96);
+
 void toast(BuildContext context, String msg) {
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
@@ -615,7 +619,7 @@ void toast(BuildContext context, String msg) {
       backgroundColor: C.inkBg,
       behavior: SnackBarBehavior.floating,
       shape: smooth(16),
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+      margin: toastMargin(context),
     ));
 }
 
@@ -629,7 +633,7 @@ void undoToast(BuildContext context, String msg, VoidCallback onUndo) {
       behavior: SnackBarBehavior.floating,
       shape: smooth(16),
       duration: const Duration(seconds: 5),
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+      margin: toastMargin(context),
       action: SnackBarAction(label: 'UNDO', textColor: C.lime, onPressed: onUndo),
     ));
 }

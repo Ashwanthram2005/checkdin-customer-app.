@@ -27,7 +27,7 @@ const _past = [
 ];
 
 class _BookingsScreenState extends State<BookingsScreen> {
-  int _tab = 1;
+  late int _tab = app.bookingCancelled ? 1 : 0;
   bool _menu = false;
   bool _incog = false;
   int _rating = 0;
