@@ -335,6 +335,7 @@ void main() {
     await run(t, 'onboarding', [], () async {
       resetState();
       app.onboarded = false;
+      app.name = ''; // logged out, so the splash goes to onboarding
       await boot(t, '/splash');
       await wait(t, 3000);
       final s1 = has('Book by the');
@@ -1092,7 +1093,7 @@ void main() {
     '/', '/home', '/search', '/picker', '/date', '/time', '/fullday', '/fullday-results', '/results', '/hotel', '/gallery', '/reviews',
     '/reserve', '/payment', '/add-card', '/success', '/payment-failed', '/bookings', '/booking-detail', '/checkin', '/live', '/rate',
     '/report', '/chat', '/account', '/edit-profile', '/saved', '/payment-methods', '/refunds', '/credits', '/offers', '/refer',
-    '/notifications', '/location', '/help', '/cancel-policy', '/legal', '/delete-account', '/coming-soon', '/profile-setup', '/otp',
+    '/notifications', '/location', '/help', '/cancel-policy', '/legal', '/delete-account', '/coming-soon', '/profile-setup', '/otp', '/onboarding',
   ];
 
   for (final size in const [
