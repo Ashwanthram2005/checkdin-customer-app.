@@ -146,7 +146,7 @@ Future<void> editGuests(BuildContext context) async {
                 if (app.adults < v) app.adults = v;
                 if (app.adults > v * 3) app.adults = v * 3;
               })),
-          stepper('Guests', 'Aged 12 and above', app.adults, app.rooms, app.rooms * 3, (v) => app.set(() => app.adults = v)),
+          stepper('Guests', 'Aged 5+ · main guest 18+', app.adults, app.rooms, app.rooms * 3, (v) => app.set(() => app.adults = v)),
           stepper('Children', 'Below 5 years, stay free', app.kids, 0, 2, (v) => app.set(() => app.kids = v)),
           const SizedBox(height: 8),
           PillBtn('Done', kind: BtnKind.dark, expand: true, onTap: () => Navigator.pop(ctx)),

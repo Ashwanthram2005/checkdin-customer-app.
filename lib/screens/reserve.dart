@@ -212,7 +212,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                               app.rooms = v;
                               if (app.adults > v * 3) app.adults = v * 3;
                             })),
-                    _counter('Guests', '18 years and above', app.adults, 1, app.rooms * 3, (v) => app.set(() => app.adults = v)),
+                    _counter('Guests', 'Aged 5+ · main guest 18+', app.adults, 1, app.rooms * 3, (v) => app.set(() => app.adults = v)),
                     _counter('Children', 'Below 5 years, stay free', app.kids, 0, 2, (v) => app.set(() => app.kids = v), last: true),
                   ]),
                 ),
@@ -261,7 +261,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                           const Icon(Icons.badge_outlined, size: 18),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: Text('The guest must show their own original photo ID, and the name must match it. You can\'t check in for them.',
+                            child: Text('The guest must be 18 or older and show their own original photo ID, and the name must match it. You can\'t check in for them.',
                                 style: TextStyle(fontSize: 12.5, height: 1.4, color: C.tx(const Color(0xFF4A4030)))),
                           ),
                         ]),
@@ -294,7 +294,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                         child: Row(children: [
                           const Icon(Icons.badge_outlined, size: 18),
                           const SizedBox(width: 8),
-                          Expanded(child: Text('Every guest needs an original photo ID at check-in.', style: TextStyle(fontSize: 12.5, color: C.tx(const Color(0xFF3F3F38))))),
+                          Expanded(child: Text('The main guest must be 18 or older. Every guest needs an original photo ID at check-in.', style: TextStyle(fontSize: 12.5, color: C.tx(const Color(0xFF3F3F38))))),
                         ]),
                       ),
                     ],

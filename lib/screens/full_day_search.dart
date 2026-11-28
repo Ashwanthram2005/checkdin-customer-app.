@@ -178,7 +178,7 @@ class FullDaySearchScreen extends StatelessWidget {
                             app.rooms = v;
                             if (app.adults < v) app.adults = v;
                           })),
-                      _stepper('Guests', 'Aged 12 and above', app.adults, app.rooms, app.rooms * 3,
+                      _stepper('Guests', 'Aged 5+ · main guest 18+', app.adults, app.rooms, app.rooms * 3,
                           (v) => app.set(() => app.adults = v), last: true),
                     ]),
                   ),
