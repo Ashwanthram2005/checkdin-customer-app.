@@ -161,6 +161,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               kind: last ? BtnKind.lime : BtnKind.dark,
               icon: Icons.arrow_forward_rounded,
               trailingIcon: true,
+              expand: true,
               onTap: () => last ? _finish() : _pc.nextPage(duration: const Duration(milliseconds: 380), curve: Curves.easeOutCubic),
             ),
           ]),
@@ -322,12 +323,11 @@ class _OtpArt extends StatelessWidget {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const Text('CHECK-IN OTP', style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, color: Color(0xFFA0A398), letterSpacing: 1)),
                 const SizedBox(height: Sp.md),
-                Row(children: [
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   for (final d in '4827'.split(''))
                     Container(
                       width: 50,
                       height: 60,
-                      margin: const EdgeInsets.only(right: Sp.sm),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(color: const Color(0xFF2C2E28), borderRadius: BorderRadius.circular(R.md)),
                       child: Text(d, style: const TextStyle(fontSize: Fs.h2 + 2, fontWeight: FontWeight.w800, color: P.lime)),
