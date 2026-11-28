@@ -161,6 +161,7 @@ Future<T?> _sheet<T>(BuildContext context, Widget child, {bool dismissible = tru
     builder: (ctx) => PopScope(
       canPop: dismissible,
       child: Container(
+        width: double.infinity,
         padding: EdgeInsets.fromLTRB(Sp.xl, Sp.md, Sp.xl, Sp.lg + MediaQuery.of(ctx).padding.bottom),
         decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(R.xl))),
         child: Material(
