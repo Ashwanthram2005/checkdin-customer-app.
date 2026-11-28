@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../avatar.dart';
+import '../photos.dart';
 import '../theme.dart';
 import '../loading.dart';
 import '../api/api.dart';
@@ -381,7 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Stack(children: [
-                          const PhotoPlaceholder(height: 120, label: ''),
+                          NetPhoto(coverOf(h), height: 120, w: 500),
                           Positioned(left: 10, top: 10, child: RatingBadge(h.rating, dark: false)),
                         ]),
                         Padding(

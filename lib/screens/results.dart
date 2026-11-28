@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../photos.dart';
 import '../theme.dart';
 import 'gallery.dart' show hotelHeroTag;
 import '../optimistic.dart';
@@ -235,7 +236,7 @@ class _HotelCard extends StatelessWidget {
         onTap: open,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Stack(children: [
-            Hero(tag: hotelHeroTag(h.id), child: const PhotoPlaceholder(height: 180)),
+            Hero(tag: hotelHeroTag(h.id), child: NetPhoto(coverOf(h), height: 180)),
             Positioned(
               left: 12,
               top: 12,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../photos.dart';
 import '../theme.dart';
 import 'gallery.dart' show hotelHeroTag;
 import '../optimistic.dart';
@@ -347,8 +348,8 @@ class _NightCardState extends State<_NightCard> {
                 itemCount: _shots.length,
                 onPageChanged: (i) => setState(() => _i = i),
                 itemBuilder: (_, i) => i == 0
-                    ? Hero(tag: hotelHeroTag(h.id), child: PhotoPlaceholder(height: 200, label: _shots[i]))
-                    : PhotoPlaceholder(height: 200, label: _shots[i]),
+                    ? Hero(tag: hotelHeroTag(h.id), child: NetPhoto(photosFor(h)[0][2], height: 200))
+                    : NetPhoto(photosFor(h)[[0, 4, 6, 7][i % 4]][2], height: 200),
               ),
               Positioned(left: 12, top: 12, child: RatingBadge(h.rating, reviews: h.reviews, dark: false)),
               Positioned(

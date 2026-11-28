@@ -8,6 +8,7 @@ import 'appearance.dart';
 import 'theme.dart';
 import 'screens/location_settings.dart';
 import 'screens/refunds.dart';
+import 'screens/onboarding.dart';
 import 'screens/login.dart';
 import 'screens/otp.dart';
 import 'screens/profile_setup.dart';
@@ -61,6 +62,7 @@ Future<void> setUpApp() async {
   GoogleFonts.config.allowRuntimeFetching = false; // fonts are bundled
   await Appearance.load();
   await loadLocationChoice();
+  await loadOnboarded();
 }
 
 /// Lets tests (and later deep links) open any screen.
@@ -126,6 +128,7 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
       initialRoute: widget.initialRoute,
       routes: {
         '/splash': (_) => const SplashScreen(),
+        '/onboarding': (_) => const OnboardingScreen(),
         '/location': (_) => const LocationSettingsScreen(),
         '/refunds': (_) => const RefundsScreen(),
         '/policy': (_) => const PolicyDocScreen(),

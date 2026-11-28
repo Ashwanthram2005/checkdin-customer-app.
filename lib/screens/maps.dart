@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../state.dart';
+import '../photos.dart';
 import '../theme.dart';
 
 Widget _tiles() => kQaMode
@@ -179,7 +180,7 @@ class _StaysMapScreenState extends State<StaysMapScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(Sp.md),
                 child: Row(children: [
-                  const SizedBox(width: 78, height: 78, child: PhotoPlaceholder(height: 78, radius: 16, label: '')),
+                  SizedBox(width: 78, height: 78, child: NetPhoto(coverOf(_sel), height: 78, radius: R.lg, w: 300)),
                   const SizedBox(width: Sp.md),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

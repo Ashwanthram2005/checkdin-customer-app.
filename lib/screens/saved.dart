@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../photos.dart';
 import '../theme.dart';
 import 'gallery.dart' show hotelHeroTag;
 import '../optimistic.dart';
@@ -140,7 +141,7 @@ class _SavedScreenState extends State<SavedScreen> {
                       },
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Stack(children: [
-                          Hero(tag: hotelHeroTag(h.id), child: const PhotoPlaceholder(height: 128, label: '')),
+                          Hero(tag: hotelHeroTag(h.id), child: NetPhoto(coverOf(h), height: 128, w: 500)),
                           Positioned(left: 8, top: 8, child: RatingBadge(h.rating, dark: false)),
                           Positioned(
                             right: 8,

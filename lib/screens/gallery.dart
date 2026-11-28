@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../photos.dart';
 import '../theme.dart';
 
-/// Sample photo set until real hotel photos come from the backend.
-const galleryPhotos = [
-  ['Room', 'Deluxe room · king bed', 0xFFE6DDD0],
-  ['Room', 'Work desk and Smart TV', 0xFFDCE3E6],
-  ['Room', 'Window view', 0xFFE2E3DA],
-  ['Room', 'Seating corner', 0xFFE8E2C8],
-  ['Bathroom', 'Attached bathroom', 0xFFD6E0E6],
-  ['Bathroom', 'Hot water and toiletries', 0xFFDDE8E4],
-  ['Lobby', 'Reception · 24×7 desk', 0xFFE6D6D6],
-  ['Outside', 'Hotel entrance', 0xFFDDE8C8],
-];
+/// This hotel's photos: [category, caption, photo id].
+List<List<String>> get galleryPhotos => photosFor(app.hotel);
 
 class _Photo extends StatelessWidget {
   final int i;
@@ -23,19 +15,8 @@ class _Photo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = galleryPhotos[i];
-    return Container(
-      decoration: BoxDecoration(color: Color(p[2] as int), borderRadius: BorderRadius.circular(radius)),
-      child: Center(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Icon(p[0] == 'Bathroom' ? Icons.bathtub_rounded : p[0] == 'Lobby' ? Icons.room_service_rounded : p[0] == 'Outside' ? Icons.apartment_rounded : Icons.bed_rounded,
-              size: big ? 64 : 28, color: P.grey51),
-          if (big) ...[
-            const SizedBox(height: Sp.md),
-            Text(p[1] as String, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w600, color: P.grey38)),
-          ],
-        ]),
-      ),
-    );
+    if (!big) return NetPhoto(p[2], radius: radius, w: 600);
+    return NetPhoto(p[2], w: 1400);
   }
 }
 

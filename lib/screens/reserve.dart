@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../coupons.dart';
 import '../shake.dart';
+import '../photos.dart';
 import '../theme.dart';
 import '../api/api.dart';
 import '../optimistic.dart';
@@ -142,7 +143,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 WhiteCard(
                   padding: const EdgeInsets.all(Sp.lg),
                   child: Row(children: [
-                    const SizedBox(width: 84, child: PhotoPlaceholder(height: 84, radius: 16, label: '')),
+                    SizedBox(width: 84, child: NetPhoto(coverOf(app.hotel), height: 84, radius: R.lg, w: 300)),
                     const SizedBox(width: Sp.lg),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -181,6 +181,7 @@ void resetState() {
   app.slot = 3;
   app.place = null;
   app.useLocation = true;
+  app.onboarded = true;
   if (app.name.isEmpty) app.name = 'Ashwanth';
   if (app.phone.isEmpty) app.phone = '9876543210';
 }
@@ -326,6 +327,30 @@ void main() {
       await wait(t, 2500);
       final home = has('Hourly stay');
       ok(12, nameErr && mailErr && home, 'Empty name error: $nameErr; bad email error: $mailErr; goes Home: $home');
+    });
+  });
+
+  testWidgets('onboarding first launch', (t) async {
+    phone(t);
+    await run(t, 'onboarding', [], () async {
+      resetState();
+      app.onboarded = false;
+      await boot(t, '/splash');
+      await wait(t, 3000);
+      final s1 = has('Book by the');
+      await shot(t, '02a_onboarding_1');
+      await tapText(t, 'Next');
+      await wait(t, 700);
+      final s2 = has('Stays you can');
+      await shot(t, '02b_onboarding_2');
+      await tapText(t, 'Next');
+      await wait(t, 700);
+      final s3 = has('Check in with an') && has('Get started');
+      await shot(t, '02c_onboarding_3');
+      await tapText(t, 'Get started');
+      await wait(t, 1200);
+      final login = has('Get OTP on WhatsApp') && app.onboarded;
+      layoutIssues.add({'where': 'onboarding', 'issue': 'INFO slides $s1 $s2 $s3 login $login'});
     });
   });
 

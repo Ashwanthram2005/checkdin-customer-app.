@@ -242,6 +242,8 @@ class AppState extends ChangeNotifier {
   bool googleAccount = false;
   String? photoPath;
   bool useLocation = true;
+  /// Onboarding carousel seen (shown on first launch only).
+  bool onboarded = false;
   // during the stay
   final String checkinOtp = '4827';
   bool checkedIn = false;

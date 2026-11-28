@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../photos.dart';
 import '../theme.dart';
 import '../loading.dart';
 import '../api/api.dart';
@@ -69,7 +70,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 onPageChanged: (i) => setState(() => _photo = i),
                 itemBuilder: (_, i) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Sp.xs),
-                  child: PhotoPlaceholder(height: 200, radius: 22, label: ['Room photo', 'Bathroom photo', 'Lobby photo'][i]),
+                  child: NetPhoto(photosFor(app.hotel)[[0, 4, 6][i]][2], height: 200, radius: R.xl),
                 ),
               ),
             ),

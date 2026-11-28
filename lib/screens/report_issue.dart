@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../state.dart';
 import '../shake.dart';
+import '../photos.dart';
 import '../theme.dart';
 import '../loading.dart';
 import '../api/api.dart';
@@ -95,7 +96,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
               WhiteCard(
                 padding: const EdgeInsets.all(Sp.md),
                 child: Row(children: [
-                  const SizedBox(width: 54, height: 54, child: PhotoPlaceholder(height: 54, radius: 12, label: '')),
+                  SizedBox(width: 54, height: 54, child: NetPhoto(coverOf(app.hotel), height: 54, radius: R.md, w: 200)),
                   const SizedBox(width: Sp.md),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

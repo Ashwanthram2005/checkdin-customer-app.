@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../photos.dart';
 import '../theme.dart';
 import '../loading.dart';
 import '../api/api.dart';
@@ -88,12 +89,9 @@ class _ReviewCard extends StatelessWidget {
         const SizedBox(height: Sp.md),
         Row(children: [
           for (var i = 0; i < r.photos; i++)
-            Container(
-              width: 64,
-              height: 64,
-              margin: const EdgeInsets.only(right: Sp.sm),
-              decoration: BoxDecoration(color: i.isEven ? C.tint(P.orange86) : C.tint(P.blue87), borderRadius: BorderRadius.circular(R.md)),
-              child: const Icon(Icons.image_rounded, color: P.grey51),
+            Padding(
+              padding: const EdgeInsets.only(right: Sp.sm),
+              child: NetPhoto(photosFor(app.hotel)[(i * 3 + r.name.length) % 8][2], width: 64, height: 64, radius: R.md, w: 200),
             ),
         ]),
       ],

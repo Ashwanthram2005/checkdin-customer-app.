@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../state.dart';
+import '../photos.dart';
 import '../theme.dart';
 import 'full_day_search.dart';
 
@@ -218,7 +219,7 @@ class RoomCard extends StatelessWidget {
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/gallery'),
             child: Stack(children: [
-              const SizedBox(width: 128, child: PhotoPlaceholder(height: 104, radius: 16, label: 'Room')),
+              SizedBox(width: 128, child: NetPhoto(photosFor(app.hotel)[1][2], height: 104, radius: R.lg, w: 400)),
               Positioned(
                 right: 6,
                 bottom: 6,
@@ -329,7 +330,7 @@ class ReviewSummary extends StatelessWidget {
                 padding: const EdgeInsets.only(right: Sp.sm),
                 child: GestureDetector(
                   onTap: () => Navigator.pushNamed(context, '/gallery'),
-                  child: PhotoPlaceholder(height: 72, radius: 14, label: ['Room', 'Bathroom', 'Lobby'][i]),
+                  child: NetPhoto(photosFor(app.hotel)[[2, 5, 6][i]][2], height: 72, radius: R.md, w: 300),
                 ),
               ),
             ),

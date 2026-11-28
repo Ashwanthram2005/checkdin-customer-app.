@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../state.dart';
+import '../photos.dart';
 import '../theme.dart';
 import '../loading.dart';
 import '../api/api.dart';
@@ -154,7 +155,7 @@ class _RateStayScreenState extends State<RateStayScreen> {
               WhiteCard(
                 padding: const EdgeInsets.all(Sp.md),
                 child: Row(children: [
-                  const SizedBox(width: 64, height: 64, child: PhotoPlaceholder(height: 64, radius: 14, label: '')),
+                  SizedBox(width: 64, height: 64, child: NetPhoto(coverOf(app.hotel), height: 64, radius: R.md, w: 240)),
                   const SizedBox(width: Sp.md),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
