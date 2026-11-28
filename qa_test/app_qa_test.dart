@@ -15,8 +15,6 @@ import 'package:checkdin/coupons.dart';
 import 'package:checkdin/loading.dart';
 import 'package:checkdin/main.dart';
 import 'package:checkdin/screens/system_screens.dart';
-
-typedef LinkScreenMarker = LinkScreen;
 import 'package:checkdin/state.dart';
 import 'package:checkdin/theme.dart';
 import 'package:flutter/material.dart';
@@ -1113,7 +1111,7 @@ void main() {
       await wait(t, 1200);
       appNavigator.currentState!.pushNamed('/b/${app.bookingId}');
       await wait(t, 2500);
-      r['myBookingLink'] = has('Tax invoice') && find.byType(LinkScreenMarker).evaluate().isEmpty;
+      r['myBookingLink'] = has('Tax invoice') && find.byType(LinkScreen).evaluate().isEmpty;
       await shot(t, '93a_link_opened');
       appNavigator.currentState!.pushNamed('/b/CKD-MAA-000000-ZZZZ');
       await wait(t, 2500);
