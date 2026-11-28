@@ -73,22 +73,22 @@ class _LocationSettingsScreenState extends State<LocationSettingsScreen> with Wi
       builder: (context, _) => Scaffold(
         backgroundColor: C.bg,
         body: SafeArea(
-          child: ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 30), children: [
+          child: ListView(padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.sm, Sp.xl, Sp.x3), children: [
             const TitleBar(title: 'Location'),
-            const SizedBox(height: 10),
+            const SizedBox(height: Sp.md),
             Text('Checkdin uses your location only while you search, to show the closest stays. We never track you in the background.',
-                style: TextStyle(fontSize: 14, color: C.muted, height: 1.45)),
+                style: TextStyle(fontSize: Fs.md, color: C.muted, height: 1.45)),
             const SectionLabel('In Checkdin'),
             WhiteCard(
               child: Row(children: [
-                IconTile(Icons.near_me_outlined, bg: app.useLocation ? C.limeSoft : C.bg),
-                const SizedBox(width: 12),
+                IconTile(Icons.near_me_rounded, bg: app.useLocation ? C.limeSoft : C.bg),
+                const SizedBox(width: Sp.md),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const Text('Use my location', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 2),
+                    const Text('Use my location', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                    const SizedBox(height: Sp.xxs),
                     Text(app.useLocation ? 'On · "Use my current location" works' : 'Off · we won\'t read your location',
-                        style: TextStyle(fontSize: 12.5, color: C.muted)),
+                        style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                   ]),
                 ),
                 BrandSwitch(value: app.useLocation, onChanged: (v) => setLocationChoice(v)),
@@ -98,24 +98,24 @@ class _LocationSettingsScreenState extends State<LocationSettingsScreen> with Wi
             WhiteCard(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
-                  IconTile(_allowed ? Icons.check_circle_outline_rounded : Icons.location_disabled_outlined,
+                  IconTile(_allowed ? Icons.check_circle_outline_rounded : Icons.location_disabled_rounded,
                       bg: _allowed ? C.limeSoft : C.redSoft, fg: _allowed ? C.ink : C.red),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: Sp.md),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      const Text('Location permission', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-                      const SizedBox(height: 2),
-                      Text(status, style: TextStyle(fontSize: 12.5, color: C.muted)),
+                      const Text('Location permission', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                      const SizedBox(height: Sp.xxs),
+                      Text(status, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                     ]),
                   ),
                 ]),
-                const SizedBox(height: 12),
+                const SizedBox(height: Sp.md),
                 Text(
                     'Android only lets you take back a permission from the phone\'s settings. Tap below, open Permissions › Location and choose "Don\'t allow". Come back here and it updates.',
-                    style: TextStyle(fontSize: 12.5, color: C.muted, height: 1.45)),
-                const SizedBox(height: 12),
+                    style: TextStyle(fontSize: Fs.sm, color: C.muted, height: 1.45)),
+                const SizedBox(height: Sp.md),
                 PillBtn(_allowed ? 'Change in phone settings' : 'Allow in phone settings',
-                    kind: BtnKind.dark, expand: true, icon: Icons.settings_outlined, trailingIcon: false, onTap: () => Geolocator.openAppSettings()),
+                    kind: BtnKind.dark, expand: true, icon: Icons.settings_rounded, trailingIcon: false, onTap: () => Geolocator.openAppSettings()),
               ]),
             ),
           ]),

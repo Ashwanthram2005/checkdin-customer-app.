@@ -137,21 +137,21 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
         SheetHeader(
           child: Row(children: [
             BackBtn(bg: C.bg, shadow: false),
-            const SizedBox(width: 10),
+            const SizedBox(width: Sp.md),
             Container(
               width: 40,
               height: 40,
               decoration: BoxDecoration(color: _agent ? C.inkBg : C.limeBg, shape: BoxShape.circle),
-              child: Icon(_agent ? Icons.support_agent_rounded : Icons.smart_toy_outlined, color: _agent ? C.lime : C.ink, size: 22),
+              child: Icon(_agent ? Icons.support_agent_rounded : Icons.smart_toy_rounded, color: _agent ? C.lime : C.ink, size: Ic.md),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: Sp.md),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(_agent ? 'Divya · Checkdin support' : 'Checkdin support', style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
+                Text(_agent ? 'Divya · Checkdin support' : 'Checkdin support', style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
                 Row(children: [
                   Container(width: 7, height: 7, decoration: BoxDecoration(color: C.green, shape: BoxShape.circle)),
-                  const SizedBox(width: 5),
-                  Text(_agent ? 'Online now' : 'Replies in about 2 min · 24×7', style: TextStyle(fontSize: 12, color: C.muted)),
+                  const SizedBox(width: Sp.xs),
+                  Text(_agent ? 'Online now' : 'Replies in about 2 min · 24×7', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                 ]),
               ]),
             ),
@@ -160,13 +160,13 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
         Expanded(
           child: ListView.builder(
             controller: _scroll,
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+            padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, Sp.lg),
             itemCount: _msgs.length + (_typing ? 1 : 0) + 1,
             itemBuilder: (_, i) {
               if (i == 0) {
                 return Padding(
-                  padding: EdgeInsets.only(bottom: 14),
-                  child: Center(child: Text('Today', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: C.muted2))),
+                  padding: EdgeInsets.only(bottom: Sp.lg),
+                  child: Center(child: Text('Today', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.muted2))),
                 );
               }
               final k = i - 1;
@@ -174,60 +174,60 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                 return Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(18)),
-                    child: Text('typing…', style: TextStyle(fontSize: 13, color: C.muted, fontStyle: FontStyle.italic)),
+                    margin: const EdgeInsets.only(bottom: Sp.md),
+                    padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.md),
+                    decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.lg)),
+                    child: Text('typing…', style: TextStyle(fontSize: Fs.base, color: C.muted, fontStyle: FontStyle.italic)),
                   ),
                 );
               }
               final m = _msgs[k];
               return Column(crossAxisAlignment: m.me ? CrossAxisAlignment.end : CrossAxisAlignment.start, children: [
                 if (m.who != null)
-                  Padding(padding: const EdgeInsets.only(left: 4, bottom: 3), child: Text(m.who!, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: C.muted))),
+                  Padding(padding: const EdgeInsets.only(left: Sp.xs, bottom: Sp.xs), child: Text(m.who!, style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, color: C.muted))),
                 Container(
                   constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.78),
-                  margin: const EdgeInsets.only(bottom: 4),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+                  margin: const EdgeInsets.only(bottom: Sp.xs),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.md),
                   decoration: BoxDecoration(
                     color: m.me ? C.inkBg : C.card,
                     borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(18),
-                      topRight: const Radius.circular(18),
+                      topLeft: const Radius.circular(R.lg),
+                      topRight: const Radius.circular(R.lg),
                       bottomLeft: Radius.circular(m.me ? 18 : 4),
                       bottomRight: Radius.circular(m.me ? 4 : 18),
                     ),
                   ),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(m.text, style: TextStyle(fontSize: 14, height: 1.45, color: m.me ? C.white : C.ink)),
+                    Text(m.text, style: TextStyle(fontSize: Fs.md, height: 1.45, color: m.me ? C.white : C.ink)),
                     if (m.link != null) ...[
-                      const SizedBox(height: 10),
+                      const SizedBox(height: Sp.md),
                       GestureDetector(
                         onTap: () => Navigator.pushNamed(context, m.link!),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(999)),
-                          child: Text('${m.linkLabel} →', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+                          padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.sm),
+                          decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(R.pill)),
+                          child: Text('${m.linkLabel} →', style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700)),
                         ),
                       ),
                     ],
                   ]),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 4, bottom: 10),
-                  child: Text(m.me ? '${m.time} · Seen' : m.time, style: TextStyle(fontSize: 10.5, color: C.muted2)),
+                  padding: const EdgeInsets.only(left: Sp.xs, right: Sp.xs, bottom: Sp.md),
+                  child: Text(m.me ? '${m.time} · Seen' : m.time, style: TextStyle(fontSize: Fs.xs, color: C.muted2)),
                 ),
                 if (m.chips.isNotEmpty && k == _msgs.length - 1)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: Sp.md),
                     child: Wrap(spacing: 8, runSpacing: 8, children: [
                       for (final c in m.chips)
                         GestureDetector(
                           onTap: () => _send(c),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-                            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(999), border: Border.all(color: C.ink, width: 1.5)),
-                            child: Text(c, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                            padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.sm),
+                            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.pill), border: Border.all(color: C.ink, width: 1.5)),
+                            child: Text(c, style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700)),
                           ),
                         ),
                     ]),
@@ -238,11 +238,11 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
         ),
         Container(
           padding: EdgeInsets.fromLTRB(12, 10, 12, 10 + MediaQuery.of(context).padding.bottom),
-          decoration: BoxDecoration(color: C.card, boxShadow: [BoxShadow(color: Color(0x14111111), blurRadius: 20, offset: Offset(0, -6))]),
+          decoration: BoxDecoration(color: C.card, boxShadow: [BoxShadow(color: P.inkA8, blurRadius: 20, offset: Offset(0, -6))]),
           child: Row(children: [
             CircleBtn(
-                icon: Icons.add_photo_alternate_outlined, size: 44, bg: C.bg, shadow: false, tooltip: 'Attach photo', onTap: () => toast(context, 'Photo attachments arrive with the backend')),
-            const SizedBox(width: 8),
+                icon: Icons.add_photo_alternate_rounded, size: 44, bg: C.bg, shadow: false, tooltip: 'Attach photo', onTap: () => toast(context, 'Photo attachments arrive with the backend')),
+            const SizedBox(width: Sp.sm),
             Expanded(
               child: TextField(
                 controller: _ctrl,
@@ -258,12 +258,12 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                   isDense: true,
                   filled: true,
                   fillColor: C.bg,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(22), borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.md),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(R.xl), borderSide: BorderSide.none),
                 ),
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: Sp.sm),
             CircleBtn(
               icon: Icons.send_rounded,
               size: 44,

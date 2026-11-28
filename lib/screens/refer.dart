@@ -40,27 +40,27 @@ class ReferScreen extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 24),
             children: [
               const TitleBar(title: 'Refer & earn'),
-              const SizedBox(height: 18),
+              const SizedBox(height: Sp.lg),
               Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(26)),
+                padding: const EdgeInsets.all(Sp.xl),
+                decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(R.xl)),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  const Text('Give ₹100,\nget ₹100', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, letterSpacing: -1.2, height: 1.05)),
-                  const SizedBox(height: 8),
+                  const Text('Give ₹100,\nget ₹100', style: TextStyle(fontSize: Fs.h1, fontWeight: FontWeight.w800, letterSpacing: -1.2, height: 1.05)),
+                  const SizedBox(height: Sp.sm),
                   Text('Your friend gets ₹100 off their first stay. You get ₹100 in Checkdin credits when they check in.',
-                      style: TextStyle(fontSize: 13.5, height: 1.45, color: C.limeInk)),
-                  const SizedBox(height: 16),
+                      style: TextStyle(fontSize: Fs.base, height: 1.45, color: C.limeInk)),
+                  const SizedBox(height: Sp.lg),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-                    decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(16)),
+                    padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.sm, Sp.sm, Sp.sm),
+                    decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.lg)),
                     child: Row(children: [
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('YOUR CODE', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: C.muted)),
-                          Text(referCode, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: 2)),
+                          Text('YOUR CODE', style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: C.muted)),
+                          Text(referCode, style: TextStyle(fontSize: Fs.h2, fontWeight: FontWeight.w800, letterSpacing: 2)),
                         ]),
                       ),
-                      PillBtn('Copy', kind: BtnKind.soft, height: 40, fontSize: 13, icon: Icons.copy_rounded, trailingIcon: false, onTap: () {
+                      PillBtn('Copy', kind: BtnKind.soft, height: 40, fontSize: Fs.base, icon: Icons.copy_rounded, trailingIcon: false, onTap: () {
                         Clipboard.setData(const ClipboardData(text: referCode));
                         toast(context, 'Code copied');
                       }),
@@ -68,13 +68,13 @@ class ReferScreen extends StatelessWidget {
                   ),
                 ]),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: Sp.md),
               Row(children: [
                 Expanded(
                   child: PillBtn('Share on WhatsApp',
                       kind: BtnKind.dark, height: 54, icon: Icons.chat_rounded, trailingIcon: false, expand: true, onTap: () => shareOnWhatsApp(context)),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: Sp.md),
                 CircleBtn(
                   icon: Icons.link_rounded,
                   size: 54,
@@ -90,14 +90,14 @@ class ReferScreen extends StatelessWidget {
               const SectionLabel('Your rewards'),
               Row(children: [
                 Expanded(child: _stat('Earned', inr(earned), C.limeSoft)),
-                const SizedBox(width: 10),
+                const SizedBox(width: Sp.md),
                 Expanded(child: _stat('Friends joined', '${_friends.where((f) => f.status != 'Invite sent').length}', C.white)),
-                const SizedBox(width: 10),
+                const SizedBox(width: Sp.md),
                 Expanded(child: _stat('Pending', inr(100 * _friends.where((f) => f.earned == 0 && f.status != 'Invite sent').length), C.white)),
               ]),
               const SectionLabel('Friends you invited'),
               WhiteCard(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xxs),
                 child: Column(children: [
                   for (var i = 0; i < _friends.length; i++)
                     Container(
@@ -109,21 +109,21 @@ class ReferScreen extends StatelessWidget {
                           height: 40,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(color: _friends[i].earned > 0 ? C.limeBg : C.bg, shape: BoxShape.circle),
-                          child: Icon(_friends[i].earned > 0 ? Icons.check_rounded : Icons.person_outline_rounded, size: 20),
+                          child: Icon(_friends[i].earned > 0 ? Icons.check_rounded : Icons.person_outline_rounded, size: Ic.md),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: Sp.md),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text(_friends[i].name, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-                            Text('${_friends[i].status} · ${_friends[i].when}', style: TextStyle(fontSize: 12, color: C.muted)),
+                            Text(_friends[i].name, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                            Text('${_friends[i].status} · ${_friends[i].when}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                           ]),
                         ),
                         if (_friends[i].earned > 0)
-                          Text('+${inr(_friends[i].earned)}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: C.green))
+                          Text('+${inr(_friends[i].earned)}', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: C.green))
                         else
                           GestureDetector(
                             onTap: () => shareOnWhatsApp(context),
-                            child: const Text('Remind', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
+                            child: const Text('Remind', style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
                           ),
                       ]),
                     ),
@@ -136,27 +136,27 @@ class ReferScreen extends StatelessWidget {
                 ['3', 'You earn', '₹100 credits land in your wallet after they check in.'],
               ])
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: Sp.md),
                   child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Container(
                       width: 30,
                       height: 30,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(color: C.inkBg, shape: BoxShape.circle),
-                      child: Text(s[0], style: TextStyle(color: C.lime, fontWeight: FontWeight.w800, fontSize: 13)),
+                      child: Text(s[0], style: TextStyle(color: C.lime, fontWeight: FontWeight.w700, fontSize: Fs.base)),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: Sp.md),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(s[1], style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800)),
-                        Text(s[2], style: TextStyle(fontSize: 13, color: C.muted, height: 1.4)),
+                        Text(s[1], style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                        Text(s[2], style: TextStyle(fontSize: Fs.base, color: C.muted, height: 1.4)),
                       ]),
                     ),
                   ]),
                 ),
-              const SizedBox(height: 6),
+              const SizedBox(height: Sp.sm),
               Text('Up to 10 rewards per month. Credits expire 90 days after they\'re added. Self-referrals and fake accounts aren\'t eligible.',
-                  style: TextStyle(fontSize: 12, color: C.muted2, height: 1.45)),
+                  style: TextStyle(fontSize: Fs.sm, color: C.muted2, height: 1.45)),
             ],
           ),
         ),
@@ -165,12 +165,12 @@ class ReferScreen extends StatelessWidget {
   }
 
   static Widget _stat(String k, String v, Color bg) => Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(18)),
+        padding: const EdgeInsets.all(Sp.lg),
+        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(R.lg)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(v, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
-          const SizedBox(height: 2),
-          Text(k, style: TextStyle(fontSize: 12, color: C.muted)),
+          Text(v, style: const TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
+          const SizedBox(height: Sp.xxs),
+          Text(k, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
         ]),
       );
 }

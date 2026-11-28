@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'tokens.dart';
+export 'tokens.dart';
 
 /// True only inside automated QA tests: skips network map tiles and the
 /// connectivity check so screens can be captured offline.
@@ -35,17 +37,17 @@ class C {
   static Color get track => _p(0xFFE9E9E2, 0xFF2A2E26);
   static Color get red => _p(0xFFC8281C, 0xFFFF7A6E);
   static Color get redSoft => _p(0xFFFDE8E6, 0xFF3A1D1A);
-  static Color get gold => const Color(0xFFF2B705);
+  static Color get gold => P.amber48;
 
   /// A hard-coded light fill (pastel tile, placeholder) toned down in dark mode.
-  static Color tint(Color c) => dark ? Color.lerp(c, const Color(0xFF1B1E19), 0.82)! : c;
+  static Color tint(Color c) => dark ? Color.lerp(c, P.inkCard, 0.82)! : c;
 
   /// A hard-coded dark text colour lifted so it stays readable in dark mode.
-  static Color tx(Color c) => dark ? Color.lerp(c, const Color(0xFFF1F2EC), 0.7)! : c;
+  static Color tx(Color c) => dark ? Color.lerp(c, P.grey94, 0.7)! : c;
 }
 
-const kShadow = [BoxShadow(color: Color(0x14111111), blurRadius: 14, offset: Offset(0, 4))];
-const kSheetShadow = [BoxShadow(color: Color(0x14111111), blurRadius: 30, offset: Offset(0, -8))];
+const kShadow = [BoxShadow(color: P.inkA8, blurRadius: 14, offset: Offset(0, 4))];
+const kSheetShadow = [BoxShadow(color: P.inkA8, blurRadius: 30, offset: Offset(0, -8))];
 
 String inr(num v) {
   final s = v.round().toString();
@@ -74,6 +76,32 @@ const _days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 String dateLabel(DateTime d) => '${_days[d.weekday - 1]}, ${d.day} ${_months[d.month - 1]}';
 
 /// Round white button with an icon (back, close, help...).
+/// What a screen reader says for an icon-only button.
+String iconLabel(IconData i) {
+  final labels = <IconData, String>{
+    Icons.arrow_back_rounded: 'Back',
+    Icons.close_rounded: 'Close',
+    Icons.share_rounded: 'Share',
+    Icons.favorite_rounded: 'Remove from saved',
+    Icons.favorite_border_rounded: 'Save',
+    Icons.add_rounded: 'Increase',
+    Icons.remove_rounded: 'Decrease',
+    Icons.edit_rounded: 'Edit',
+    Icons.delete_outline_rounded: 'Delete',
+    Icons.directions_rounded: 'Directions',
+    Icons.help_outline_rounded: 'Help',
+    Icons.link_rounded: 'Copy link',
+    Icons.mail_outline_rounded: 'Email us',
+    Icons.more_vert_rounded: 'More options',
+    Icons.notifications_none_rounded: 'Notifications',
+    Icons.photo_camera_rounded: 'Change photo',
+    Icons.add_photo_alternate_rounded: 'Add photos',
+    Icons.send_rounded: 'Send',
+    Icons.chevron_right_rounded: 'Open',
+  };
+  return labels[i] ?? 'Button';
+}
+
 class CircleBtn extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
@@ -114,7 +142,7 @@ class CircleBtn extends StatelessWidget {
     // Small buttons still get a 48 x 48 touch area.
     return Semantics(
       button: true,
-      label: tooltip,
+      label: tooltip.isNotEmpty ? tooltip : iconLabel(icon),
       child: size >= 48
           ? btn
           : GestureDetector(
@@ -152,8 +180,8 @@ class TitleBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(children: [
       BackBtn(onTap: onBack),
-      Expanded(child: Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700))),
-      trailing ?? const SizedBox(width: 44),
+      Expanded(child: Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w700))),
+      trailing ?? const SizedBox(width: Sp.x5),
     ]);
   }
 }
@@ -169,8 +197,8 @@ class SheetHeader extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 16),
       decoration: BoxDecoration(
         color: C.card,
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
-        boxShadow: [BoxShadow(color: Color(0x0F111111), blurRadius: 24, offset: Offset(0, 8))],
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(R.xl)),
+        boxShadow: [BoxShadow(color: P.inkA6, blurRadius: 24, offset: Offset(0, 8))],
       ),
       child: child,
     );
@@ -184,13 +212,13 @@ class SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 24, bottom: 12),
+      padding: const EdgeInsets.only(top: Sp.xxl, bottom: Sp.md),
       child: Row(children: [
-        Container(width: 4, height: 14, decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(2))),
-        const SizedBox(width: 8),
+        Container(width: 4, height: 14, decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(R.xs))),
+        const SizedBox(width: Sp.sm),
         Expanded(
           child: Text(text.toUpperCase(),
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.3, color: C.muted)),
+              style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, letterSpacing: 1.3, color: C.muted)),
         ),
         if (trailing != null) trailing!,
       ]),
@@ -211,7 +239,7 @@ class WhiteCard extends StatelessWidget {
   const WhiteCard(
       {super.key,
       required this.child,
-      this.padding = const EdgeInsets.all(16),
+      this.padding = const EdgeInsets.all(Sp.lg),
       this.radius = 22,
       Color? color,
       this.onTap,
@@ -252,7 +280,7 @@ class PillBtn extends StatelessWidget {
       this.height = 52,
       this.icon,
       this.trailingIcon = true,
-      this.fontSize = 15.5,
+      this.fontSize = Fs.lg,
       this.expand = false,
       this.loading = false});
 
@@ -273,7 +301,7 @@ class PillBtn extends StatelessWidget {
       case BtnKind.outline:
         bg = C.white;
         fg = C.ink;
-        border = Border.all(color: const Color(0xFFDADAD2), width: 1.5);
+        border = Border.all(color: P.border, width: 1.5);
         break;
       case BtnKind.soft:
         bg = C.bg;
@@ -281,26 +309,26 @@ class PillBtn extends StatelessWidget {
         break;
     }
     if (!enabled) {
-      bg = const Color(0xFFEFEFEA);
+      bg = P.line;
       fg = C.muted2;
       border = null;
     }
     final children = <Widget>[];
-    final ic = icon == null ? null : Icon(icon, size: 18, color: fg);
-    if (ic != null && !trailingIcon) children.addAll([ic, const SizedBox(width: 8)]);
+    final ic = icon == null ? null : Icon(icon, size: Ic.md, color: fg);
+    if (ic != null && !trailingIcon) children.addAll([ic, const SizedBox(width: Sp.sm)]);
     children.add(Flexible(
         child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w800, color: fg))));
-    if (ic != null && trailingIcon) children.addAll([const SizedBox(width: 8), ic]);
+    if (ic != null && trailingIcon) children.addAll([const SizedBox(width: Sp.sm), ic]);
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(R.pill),
         onTap: loading ? null : onTap,
         child: Container(
           height: height,
           width: expand ? double.infinity : null,
-          padding: const EdgeInsets.symmetric(horizontal: 22),
-          decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999), border: border),
+          padding: const EdgeInsets.symmetric(horizontal: Sp.xxl),
+          decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(R.pill), border: border),
           child: Stack(alignment: Alignment.center, children: [
             Opacity(
               opacity: loading ? 0 : 1,
@@ -329,7 +357,7 @@ class BottomBar extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(20, 14, 20, 14 + MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
         color: C.card,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl)),
         boxShadow: kSheetShadow,
       ),
       child: child,
@@ -406,8 +434,8 @@ class BrandSwitch extends StatelessWidget {
         duration: const Duration(milliseconds: 180),
         width: 46,
         height: 28,
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(color: value ? onColor : C.tint(Color(0xFFCFCFC7)), borderRadius: BorderRadius.circular(999)),
+        padding: const EdgeInsets.all(Sp.xs),
+        decoration: BoxDecoration(color: value ? onColor : C.tint(P.dotIdle), borderRadius: BorderRadius.circular(R.pill)),
         child: AnimatedAlign(
           duration: const Duration(milliseconds: 180),
           alignment: value ? Alignment.centerRight : Alignment.centerLeft,
@@ -434,8 +462,8 @@ class SegmentPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(color: track, borderRadius: BorderRadius.circular(999)),
+      padding: const EdgeInsets.all(Sp.xs),
+      decoration: BoxDecoration(color: track, borderRadius: BorderRadius.circular(R.pill)),
       child: Row(
         children: List.generate(options.length, (i) {
           final on = i == selected;
@@ -448,11 +476,11 @@ class SegmentPill extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: on ? C.card : Colors.transparent,
-                  borderRadius: BorderRadius.circular(999),
-                  boxShadow: on ? const [BoxShadow(color: Color(0x1A111111), blurRadius: 8, offset: Offset(0, 2))] : null,
+                  borderRadius: BorderRadius.circular(R.pill),
+                  boxShadow: on ? const [BoxShadow(color: P.inkA10, blurRadius: 8, offset: Offset(0, 2))] : null,
                 ),
                 child: Text(options[i],
-                    style: TextStyle(fontSize: 14, fontWeight: on ? FontWeight.w800 : FontWeight.w700, color: on ? C.ink : C.muted2)),
+                    style: TextStyle(fontSize: Fs.md, fontWeight: on ? FontWeight.w700 : FontWeight.w700, color: on ? C.ink : C.muted2)),
               ),
             ),
           );
@@ -473,14 +501,14 @@ class PhotoPlaceholder extends StatelessWidget {
     return Container(
       height: height,
       width: double.infinity,
-      decoration: ShapeDecoration(color: C.tint(const Color(0xFFE2E3DA)), shape: smooth(radius)),
+      decoration: ShapeDecoration(color: C.tint(P.grey87), shape: smooth(radius)),
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Icon(Icons.image_outlined, size: 32, color: Color(0xFF7C7C74)),
+        const Icon(Icons.image_rounded, size: Ic.xl, color: P.hint),
         if (label.isNotEmpty) ...[
-          const SizedBox(height: 6),
-          Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: C.muted2)),
+          const SizedBox(height: Sp.sm),
+          Text(label, style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w600, color: C.muted2)),
         ],
       ]),
       )
@@ -496,14 +524,14 @@ class RatingBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-      decoration: BoxDecoration(color: dark ? C.inkBg : C.card, borderRadius: BorderRadius.circular(8)),
+      padding: const EdgeInsets.symmetric(horizontal: Sp.sm, vertical: Sp.xs),
+      decoration: BoxDecoration(color: dark ? C.inkBg : C.card, borderRadius: BorderRadius.circular(R.sm)),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
-        Icon(Icons.star_rounded, size: 14, color: C.gold),
-        const SizedBox(width: 3),
-        Text(rating, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: dark ? C.white : C.ink)),
+        Icon(Icons.star_rounded, size: Ic.sm, color: C.gold),
+        const SizedBox(width: Sp.xs),
+        Text(rating, style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: dark ? C.white : C.ink)),
         if (reviews != null)
-          Text(' ($reviews)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: dark ? C.faint : C.muted2)),
+          Text(' ($reviews)', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w500, color: dark ? C.faint : C.muted2)),
       ]),
     );
   }
@@ -514,15 +542,15 @@ class Tag extends StatelessWidget {
   final Color? _bg;
   Color get bg => _bg ?? C.limeSoft;
   final Color? _fg;
-  Color get fg => _fg ?? C.tx(const Color(0xFF3D5200));
+  Color get fg => _fg ?? C.tx(P.lime16);
   const Tag(this.text, {super.key, Color? bg, Color? fg})
       : _bg = bg,
         _fg = fg;
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999)),
-        child: Text(text, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: fg)),
+        padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.xs),
+        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(R.pill)),
+        child: Text(text, style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, color: fg)),
       );
 }
 
@@ -537,18 +565,18 @@ class StayTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget col(String label, String time, String date, CrossAxisAlignment a) => Column(crossAxisAlignment: a, children: [
-          Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: C.muted)),
-          const SizedBox(height: 3),
-          Text(time, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+          Text(label, style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: C.muted)),
+          const SizedBox(height: Sp.xs),
+          Text(time, style: const TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
           const SizedBox(height: 1),
-          Text(date, style: TextStyle(fontSize: 12, color: C.muted)),
+          Text(date, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
         ]);
     return Row(children: [
       Expanded(child: col('CHECK-IN', inTime, inDate, CrossAxisAlignment.start)),
       Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-        decoration: BoxDecoration(color: chip, borderRadius: BorderRadius.circular(999)),
-        child: Text(slot, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+        padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.xs),
+        decoration: BoxDecoration(color: chip, borderRadius: BorderRadius.circular(R.pill)),
+        child: Text(slot, style: const TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700)),
       ),
       Expanded(child: col('CHECK-OUT', outTime, outDate, CrossAxisAlignment.end)),
     ]);
@@ -568,24 +596,24 @@ class BrandField extends StatelessWidget {
       {super.key, required this.label, this.hint, this.controller, this.keyboard, this.onChanged, this.errorText, this.enabled = true});
   @override
   Widget build(BuildContext context) {
-    final b = OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: C.border, width: 1.5));
+    final b = OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: C.border, width: 1.5));
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted)),
-      const SizedBox(height: 6),
+      Text(label, style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, color: C.muted)),
+      const SizedBox(height: Sp.sm),
       TextField(
         controller: controller,
         keyboardType: keyboard,
         onChanged: onChanged,
         enabled: enabled,
-        style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w600),
+        style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w600),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(color: Color(0xFF8A8A82), fontWeight: FontWeight.w400),
+          hintStyle: const TextStyle(color: P.hint, fontWeight: FontWeight.w400),
           errorText: errorText,
           isDense: true,
           filled: true,
           fillColor: C.card,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
+          contentPadding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.lg),
           border: b,
           enabledBorder: b,
           disabledBorder: b,
@@ -598,7 +626,7 @@ class BrandField extends StatelessWidget {
 
 /// Toasts float above bottom bars (Pay, Continue, the tab bar) so they
 /// never block the main button.
-EdgeInsets toastMargin(BuildContext context) => const EdgeInsets.fromLTRB(16, 0, 16, 96);
+EdgeInsets toastMargin(BuildContext context) => const EdgeInsets.fromLTRB(Sp.lg, 0, Sp.lg, 96);
 
 void toast(BuildContext context, String msg) {
   ScaffoldMessenger.of(context)
@@ -609,14 +637,14 @@ void toast(BuildContext context, String msg) {
           width: 22,
           height: 22,
           decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle),
-          child: Icon(Icons.check_rounded, size: 15, color: C.ink),
+          child: Icon(Icons.check_rounded, size: Ic.sm, color: C.ink),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: Sp.md),
         Expanded(child: Text(msg, style: const TextStyle(fontWeight: FontWeight.w600))),
       ]),
       backgroundColor: C.inkBg,
       behavior: SnackBarBehavior.floating,
-      shape: smooth(16),
+      shape: smooth(R.lg),
       margin: toastMargin(context),
     ));
 }
@@ -629,7 +657,7 @@ void undoToast(BuildContext context, String msg, VoidCallback onUndo) {
       content: Text(msg, style: const TextStyle(fontWeight: FontWeight.w600)),
       backgroundColor: C.inkBg,
       behavior: SnackBarBehavior.floating,
-      shape: smooth(16),
+      shape: smooth(R.lg),
       duration: const Duration(seconds: 5),
       margin: toastMargin(context),
       action: SnackBarAction(label: 'UNDO', textColor: C.lime, onPressed: onUndo),
@@ -655,7 +683,7 @@ class TapLink extends StatelessWidget {
               alignment: Alignment.centerLeft,
               widthFactor: 1,
               child: Text(text,
-                  style: style ?? const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
+                  style: style ?? const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
             ),
           ),
         ),
@@ -690,8 +718,8 @@ class BottomNav extends StatelessWidget {
   static const _icons = {
     'Home': Icons.home_rounded,
     'Saved': Icons.favorite_border_rounded,
-    'Bookings': Icons.calendar_month_outlined,
-    'Offers': Icons.confirmation_number_outlined,
+    'Bookings': Icons.calendar_month_rounded,
+    'Offers': Icons.confirmation_number_rounded,
     'Account': Icons.person_outline_rounded,
   };
 
@@ -711,13 +739,13 @@ class BottomNav extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Container(
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+        margin: const EdgeInsets.fromLTRB(Sp.lg, 0, Sp.lg, Sp.lg),
         height: 68,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: Sp.md),
         decoration: BoxDecoration(
           color: C.card,
-          borderRadius: BorderRadius.circular(999),
-          boxShadow: const [BoxShadow(color: Color(0x24111111), blurRadius: 34, offset: Offset(0, 12))],
+          borderRadius: BorderRadius.circular(R.pill),
+          boxShadow: const [BoxShadow(color: P.inkA14, blurRadius: 34, offset: Offset(0, 12))],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -733,13 +761,13 @@ class BottomNav extends StatelessWidget {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 180),
                   height: 50,
-                  padding: EdgeInsets.symmetric(horizontal: on ? 18 : 13),
-                  decoration: BoxDecoration(color: on ? C.inkBg : Colors.transparent, borderRadius: BorderRadius.circular(999)),
+                  padding: EdgeInsets.symmetric(horizontal: on ? Sp.lg : 13),
+                  decoration: BoxDecoration(color: on ? C.inkBg : Colors.transparent, borderRadius: BorderRadius.circular(R.pill)),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(icon, size: 22, color: on ? C.lime : C.ink),
+                    Icon(icon, size: Ic.md, color: on ? C.lime : C.ink),
                     if (on) ...[
-                      const SizedBox(width: 8),
-                      Text(t[0], style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800, color: C.lime)),
+                      const SizedBox(width: Sp.sm),
+                      Text(t[0], style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: C.lime)),
                     ],
                   ]),
                 ),
@@ -761,9 +789,9 @@ class LegalLine extends StatelessWidget {
   const LegalLine({super.key, this.lead = 'By continuing, I accept the ', this.terms = 'Terms & Conditions', this.underline = false});
   @override
   Widget build(BuildContext context) {
-    final base = TextStyle(fontSize: 12.5, color: C.muted, height: 1.5);
+    final base = TextStyle(fontSize: Fs.sm, color: C.muted, height: 1.5);
     final link = TextStyle(
-        fontSize: 12.5,
+        fontSize: Fs.sm,
         height: 1.5,
         color: C.ink,
         fontWeight: FontWeight.w700,

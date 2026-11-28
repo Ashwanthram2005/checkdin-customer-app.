@@ -67,24 +67,24 @@ class _CheckinOtpScreenState extends State<CheckinOtpScreen> {
             padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 24),
             children: [
               const TitleBar(title: 'Check-in OTP'),
-              const SizedBox(height: 24),
+              const SizedBox(height: Sp.xxl),
               Center(
                 child: Text('Show this at the front desk',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: C.muted)),
+                    style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w600, color: C.muted)),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: Sp.lg),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 for (final d in digits)
                   Container(
                     width: 66,
                     height: 82,
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    margin: const EdgeInsets.symmetric(horizontal: Sp.xs),
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(18)),
-                    child: Text(d, style: TextStyle(fontSize: 44, fontWeight: FontWeight.w800, color: C.lime)),
+                    decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(R.lg)),
+                    child: Text(d, style: TextStyle(fontSize: Fs.display, fontWeight: FontWeight.w800, color: C.lime)),
                   ),
               ]),
-              const SizedBox(height: 14),
+              const SizedBox(height: Sp.lg),
               Center(
                 child: GestureDetector(
                   onTap: () {
@@ -92,45 +92,45 @@ class _CheckinOtpScreenState extends State<CheckinOtpScreen> {
                     toast(context, 'OTP copied');
                   },
                   child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(Icons.copy_rounded, size: 16),
-                    SizedBox(width: 6),
-                    Text('Copy OTP', style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+                    Icon(Icons.copy_rounded, size: Ic.sm),
+                    SizedBox(width: Sp.sm),
+                    Text('Copy OTP', style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
                   ]),
                 ),
               ),
-              const SizedBox(height: 22),
+              const SizedBox(height: Sp.xxl),
               WhiteCard(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(Sp.lg),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(h.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                  const SizedBox(height: 2),
-                  Text('${app.whenShort} · ${app.stayLabel} · Booking ${app.bookingId}', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                  Text(h.name, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: Sp.xxs),
+                  Text('${app.whenShort} · ${app.stayLabel} · Booking ${app.bookingId}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                   Divider(color: C.line, height: 24),
                   for (final r in [
-                    [Icons.badge_outlined, 'Carry an original photo ID for every guest'],
+                    [Icons.badge_rounded, 'Carry an original photo ID for every guest'],
                     [Icons.schedule_rounded, 'The OTP works from 30 minutes before check-in'],
                     [Icons.lock_outline_rounded, 'Share it only with hotel staff, in person'],
                   ])
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: Sp.md),
                       child: Row(children: [
-                        Icon(r[0] as IconData, size: 18, color: C.muted),
-                        const SizedBox(width: 10),
-                        Expanded(child: Text(r[1] as String, style: const TextStyle(fontSize: 13.5))),
+                        Icon(r[0] as IconData, size: Ic.md, color: C.muted),
+                        const SizedBox(width: Sp.md),
+                        Expanded(child: Text(r[1] as String, style: const TextStyle(fontSize: Fs.base))),
                       ]),
                     ),
                 ]),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: Sp.lg),
               Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(16)),
+                padding: const EdgeInsets.all(Sp.lg),
+                decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(R.lg)),
                 child: const Row(children: [
-                  Icon(Icons.info_outline_rounded, size: 20),
-                  SizedBox(width: 10),
+                  Icon(Icons.info_outline_rounded, size: Ic.md),
+                  SizedBox(width: Sp.md),
                   Expanded(
                     child: Text('Once the hotel enters this OTP, your stay starts and the timer begins.',
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4)),
+                        style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w600, height: 1.4)),
                   ),
                 ]),
               ),
@@ -142,7 +142,7 @@ class _CheckinOtpScreenState extends State<CheckinOtpScreen> {
             Expanded(
                 child: PillBtn('Directions',
                     kind: BtnKind.outline, height: 52, icon: Icons.near_me_rounded, trailingIcon: false, expand: true, onTap: () => openDirections(context, app.hotel))),
-            const SizedBox(width: 12),
+            const SizedBox(width: Sp.md),
             Expanded(
               child: PillBtn('I\'m checked in', kind: BtnKind.dark, height: 52, expand: true, loading: _checking, onTap: _refresh),
             ),
@@ -185,15 +185,15 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Check out now?', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
-          Text('Return the key at the front desk. Leaving early isn\'t refunded.', style: TextStyle(fontSize: 14, color: C.muted, height: 1.4)),
-          const SizedBox(height: 18),
+          const Text('Check out now?', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+          const SizedBox(height: Sp.sm),
+          Text('Return the key at the front desk. Leaving early isn\'t refunded.', style: TextStyle(fontSize: Fs.md, color: C.muted, height: 1.4)),
+          const SizedBox(height: Sp.lg),
           Row(children: [
             Expanded(child: PillBtn('Stay', kind: BtnKind.outline, expand: true, onTap: () => Navigator.pop(ctx, false))),
-            const SizedBox(width: 12),
+            const SizedBox(width: Sp.md),
             Expanded(
                 child: AsyncBtn('Check out', kind: BtnKind.dark, expand: true, onTap: () async {
               try {
@@ -232,19 +232,19 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
             const BackBtn(),
             const Spacer(),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(999)),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.sm),
+              decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(R.pill)),
               child: Row(mainAxisSize: MainAxisSize.min, children: [
                 _Pulse(),
-                SizedBox(width: 6),
-                Text('Checked in', style: TextStyle(color: C.lime, fontSize: 12.5, fontWeight: FontWeight.w800)),
+                SizedBox(width: Sp.sm),
+                Text('Checked in', style: TextStyle(color: C.lime, fontSize: Fs.sm, fontWeight: FontWeight.w700)),
               ]),
             ),
           ]),
-          const SizedBox(height: 18),
-          Text(h.name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-          Text('${h.area} · Deluxe room', textAlign: TextAlign.center, style: TextStyle(fontSize: 13.5, color: C.muted)),
-          const SizedBox(height: 22),
+          const SizedBox(height: Sp.lg),
+          Text(h.name, textAlign: TextAlign.center, style: const TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+          Text('${h.area} · Deluxe room', textAlign: TextAlign.center, style: TextStyle(fontSize: Fs.base, color: C.muted)),
+          const SizedBox(height: Sp.xxl),
           Center(
             child: SizedBox(
               width: 250,
@@ -254,62 +254,62 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
                 child: Center(
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     Text(over ? 'Time\'s up' : 'TIME LEFT',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: over ? C.red : C.muted)),
-                    const SizedBox(height: 4),
-                    Text(_hm(left), style: const TextStyle(fontSize: 42, fontWeight: FontWeight.w800, letterSpacing: -1.5, fontFeatures: [])),
-                    const SizedBox(height: 4),
-                    Text('Check-out ${_clock(end)}', style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                        style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, letterSpacing: 1.2, color: over ? C.red : C.muted)),
+                    const SizedBox(height: Sp.xs),
+                    Text(_hm(left), style: const TextStyle(fontSize: Fs.display, fontWeight: FontWeight.w800, letterSpacing: -1.5, fontFeatures: [])),
+                    const SizedBox(height: Sp.xs),
+                    Text('Check-out ${_clock(end)}', style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700)),
                   ]),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: Sp.md),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text('Checked in ${_clock(start)}', style: TextStyle(fontSize: 12.5, color: C.muted)),
+            Text('Checked in ${_clock(start)}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
             if (app.extraHours > 0) ...[
-              const SizedBox(width: 8),
+              const SizedBox(width: Sp.sm),
               Tag('+${app.extraHours} hr${app.extraHours > 1 ? 's' : ''} added', bg: C.limeSoft, fg: C.ink),
             ],
           ]),
           if (soon) ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: Sp.lg),
             Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(16)),
+              padding: const EdgeInsets.all(Sp.lg),
+              decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(R.lg)),
               child: Row(children: [
-                Icon(Icons.timer_outlined, color: C.red),
-                const SizedBox(width: 10),
+                Icon(Icons.timer_rounded, color: C.red),
+                const SizedBox(width: Sp.md),
                 Expanded(
                   child: Text(over ? 'Your slot has ended. Extend now or check out to avoid overstay charges.' : 'Less than 30 minutes left. Need more time?',
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: C.tx(Color(0xFFA3241A)), height: 1.4)),
+                      style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w600, color: C.tx(P.redDark), height: 1.4)),
                 ),
               ]),
             ),
           ],
-          const SizedBox(height: 18),
+          const SizedBox(height: Sp.lg),
           PillBtn('Extend stay', kind: BtnKind.dark, height: 56, icon: Icons.more_time_rounded, trailingIcon: false, expand: true, onTap: () async {
             await showExtendSheet(context);
             if (mounted) setState(() {});
           }),
-          const SizedBox(height: 12),
+          const SizedBox(height: Sp.md),
           Row(children: [
             for (final a in [
-              [Icons.call_outlined, 'Call hotel', () { callHotel(context); }],
+              [Icons.call_rounded, 'Call hotel', () { callHotel(context); }],
               [Icons.report_gmailerrorred_rounded, 'Report issue', () { Navigator.pushNamed(context, '/report'); }],
               [Icons.chat_bubble_outline_rounded, 'Chat', () { Navigator.pushNamed(context, '/chat'); }],
             ])
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.xs),
                   child: WhiteCard(
-                    radius: 18,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    radius: R.lg,
+                    padding: const EdgeInsets.symmetric(vertical: Sp.lg),
                     onTap: a[2] as VoidCallback,
                     child: Column(children: [
                       Icon(a[0] as IconData),
-                      const SizedBox(height: 6),
-                      Text(a[1] as String, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700)),
+                      const SizedBox(height: Sp.sm),
+                      Text(a[1] as String, style: const TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700)),
                     ]),
                   ),
                 ),
@@ -317,7 +317,7 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
           ]),
           const SectionLabel('Your stay'),
           WhiteCard(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xs),
             child: Column(children: [
               for (final r in [
                 ['Booking', app.bookingId],
@@ -327,17 +327,17 @@ class _LiveStayScreenState extends State<LiveStayScreen> {
                 ['Guests', app.guestsLabel],
               ])
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Sp.md),
                   decoration: BoxDecoration(border: r[0] == 'Guests' ? null : Border(bottom: BorderSide(color: C.line))),
                   child: Row(children: [
-                    Text(r[0], style: TextStyle(fontSize: 13.5, color: C.muted)),
+                    Text(r[0], style: TextStyle(fontSize: Fs.base, color: C.muted)),
                     const Spacer(),
-                    Text(r[1], style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                    Text(r[1], style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700)),
                   ]),
                 ),
             ]),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: Sp.lg),
           Center(
             child: TextButton(
               onPressed: _checkout,
@@ -423,70 +423,70 @@ Future<void> showExtendSheet(BuildContext context) async {
       final fees = (price * 0.106).round();
       return Container(
         padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2)))),
-          const SizedBox(height: 16),
-          const Text('Extend your stay', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 4),
+          Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(R.xs)))),
+          const SizedBox(height: Sp.lg),
+          const Text('Extend your stay', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+          const SizedBox(height: Sp.xs),
           Text('Your room is free for up to $avail more hour${avail == 1 ? '' : 's'}. ${inr(rate)} per hour.',
-              style: TextStyle(fontSize: 13.5, color: C.muted)),
-          const SizedBox(height: 16),
+              style: TextStyle(fontSize: Fs.base, color: C.muted)),
+          const SizedBox(height: Sp.lg),
           if (avail <= 0)
             Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(16)),
+              padding: const EdgeInsets.all(Sp.lg),
+              decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(R.lg)),
               child: Text('This room is booked right after your slot, so it can\'t be extended further. Try booking a new slot.',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: C.tx(Color(0xFFA3241A)), height: 1.4)),
+                  style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w600, color: C.tx(P.redDark), height: 1.4)),
             )
           else ...[
             Row(children: [
               for (var n = 1; n <= 3; n++)
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: Sp.xs),
                     child: GestureDetector(
                       onTap: n <= avail ? () => set(() => pick = n) : null,
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 150),
                         height: 86,
                         decoration: BoxDecoration(
-                          color: n > avail ? C.tint(Color(0xFFF2F2EC)) : (pick == n ? C.lime : C.white),
-                          borderRadius: BorderRadius.circular(18),
+                          color: n > avail ? C.tint(P.grey94) : (pick == n ? C.lime : C.white),
+                          borderRadius: BorderRadius.circular(R.lg),
                           border: Border.all(color: pick == n && n <= avail ? C.lime : C.border, width: 1.5),
                         ),
                         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          Text('+$n hr', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: n > avail ? C.faint : C.ink)),
-                          const SizedBox(height: 2),
+                          Text('+$n hr', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800, color: n > avail ? C.faint : C.ink)),
+                          const SizedBox(height: Sp.xxs),
                           Text(n > avail ? 'Not free' : inr(rate * n),
-                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: n > avail ? C.faint : C.muted)),
+                              style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, color: n > avail ? C.faint : C.muted)),
                         ]),
                       ),
                     ),
                   ),
                 ),
             ]),
-            const SizedBox(height: 14),
+            const SizedBox(height: Sp.lg),
             Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(16)),
+              padding: const EdgeInsets.all(Sp.lg),
+              decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(R.lg)),
               child: Column(children: [
                 Row(children: [
-                  Text('New check-out', style: TextStyle(fontSize: 13.5, color: C.muted)),
+                  Text('New check-out', style: TextStyle(fontSize: Fs.base, color: C.muted)),
                   const Spacer(),
-                  Text(_clock(newEnd), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                  Text(_clock(newEnd), style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
                 ]),
-                const SizedBox(height: 8),
+                const SizedBox(height: Sp.sm),
                 Row(children: [
-                  Text('$pick hr × ${inr(rate)} + taxes', style: TextStyle(fontSize: 13.5, color: C.muted)),
+                  Text('$pick hr × ${inr(rate)} + taxes', style: TextStyle(fontSize: Fs.base, color: C.muted)),
                   const Spacer(),
-                  Text(inr(price + fees), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                  Text(inr(price + fees), style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
                 ]),
               ]),
             ),
-            const SizedBox(height: 8),
-            Text('Paid with ${app.paidWith}. Extensions can\'t be cancelled.', style: TextStyle(fontSize: 12, color: C.muted2)),
-            const SizedBox(height: 14),
+            const SizedBox(height: Sp.sm),
+            Text('Paid with ${app.paidWith}. Extensions can\'t be cancelled.', style: TextStyle(fontSize: Fs.sm, color: C.muted2)),
+            const SizedBox(height: Sp.lg),
             PillBtn('Pay ${inr(price + fees)} & extend',
                 loading: paying,
                 kind: BtnKind.dark,

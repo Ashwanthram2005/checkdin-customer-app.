@@ -52,18 +52,18 @@ class SkHotelCard extends StatelessWidget {
   const SkHotelCard({super.key});
   @override
   Widget build(BuildContext context) => Container(
-        margin: const EdgeInsets.only(bottom: 14),
-        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(22)),
+        margin: const EdgeInsets.only(bottom: Sp.lg),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.xl)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Bone(height: 170, radius: 22),
+          const Bone(height: 170, radius: R.xl),
           Padding(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(Sp.lg),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Bone(width: 190, height: 16),
               _gap(),
               const Bone(width: 140),
               _gap(14),
-              const Row(children: [Bone(width: 70, height: 22, radius: 999), SizedBox(width: 8), Bone(width: 90, height: 22, radius: 999), Spacer(), Bone(width: 64, height: 20)]),
+              const Row(children: [Bone(width: 70, height: 22, radius: R.pill), SizedBox(width: Sp.sm), Bone(width: 90, height: 22, radius: R.pill), Spacer(), Bone(width: 64, height: 20)]),
             ]),
           ),
         ]),
@@ -83,11 +83,11 @@ class SkRows extends StatelessWidget {
             count,
             (i) => Container(
               height: height,
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(20)),
+              margin: const EdgeInsets.only(bottom: Sp.md),
+              padding: const EdgeInsets.all(Sp.lg),
+              decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.xl)),
               child: Row(children: [
-                if (icon) ...[const Bone(width: 42, height: 42, radius: 14), const SizedBox(width: 12)],
+                if (icon) ...[const Bone(width: 42, height: 42, radius: R.lg), const SizedBox(width: Sp.md)],
                 Expanded(
                   child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Bone(width: i.isEven ? 170 : 130, height: 14),
@@ -123,17 +123,17 @@ class SkCards extends StatelessWidget {
             count,
             (i) => Container(
               constraints: BoxConstraints(minHeight: height),
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(22)),
+              margin: const EdgeInsets.only(bottom: Sp.md),
+              padding: const EdgeInsets.all(Sp.lg),
+              decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.xl)),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Row(children: [Expanded(child: Bone(height: 16)), SizedBox(width: 40), Bone(width: 80, height: 22, radius: 999)]),
+                const Row(children: [Expanded(child: Bone(height: 16)), SizedBox(width: Sp.x4), Bone(width: 80, height: 22, radius: R.pill)]),
                 _gap(14),
                 const Bone(width: 180),
                 _gap(),
                 const Bone(width: 130),
                 _gap(16),
-                const Bone(height: 36, radius: 999),
+                const Bone(height: 36, radius: R.pill),
               ]),
             ),
           ),
@@ -147,19 +147,19 @@ class SkHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Skeleton(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: Sp.xl),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             _gap(22),
             const Bone(width: 120, height: 12),
             _gap(12),
             const SizedBox(
               height: 150,
-              child: Row(children: [Expanded(child: Bone(height: 150, radius: 24)), SizedBox(width: 12), Expanded(child: Bone(height: 150, radius: 24))]),
+              child: Row(children: [Expanded(child: Bone(height: 150, radius: R.xl)), SizedBox(width: Sp.md), Expanded(child: Bone(height: 150, radius: R.xl))]),
             ),
             _gap(24),
             const Bone(width: 140, height: 12),
             _gap(12),
-            for (var i = 0; i < 3; i++) ...[const Bone(height: 64, radius: 18), _gap(10)],
+            for (var i = 0; i < 3; i++) ...[const Bone(height: 64, radius: R.lg), _gap(10)],
           ]),
         ),
       );
@@ -173,28 +173,28 @@ class SkHotelBody extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _gap(16),
           Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(22)),
+            padding: const EdgeInsets.all(Sp.lg),
+            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.xl)),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Row(children: [Expanded(child: Bone(height: 46, radius: 14)), SizedBox(width: 8), Expanded(child: Bone(height: 46, radius: 14))]),
+              const Row(children: [Expanded(child: Bone(height: 46, radius: R.lg)), SizedBox(width: Sp.sm), Expanded(child: Bone(height: 46, radius: R.lg))]),
               _gap(),
-              const Bone(height: 46, radius: 14),
+              const Bone(height: 46, radius: R.lg),
               _gap(18),
               const Bone(width: 150, height: 16),
               _gap(12),
-              const Row(children: [Bone(width: 104, height: 92, radius: 16), SizedBox(width: 8), Bone(width: 104, height: 92, radius: 16), SizedBox(width: 8), Expanded(child: Bone(height: 92, radius: 16))]),
+              const Row(children: [Bone(width: 104, height: 92, radius: R.lg), SizedBox(width: Sp.sm), Bone(width: 104, height: 92, radius: R.lg), SizedBox(width: Sp.sm), Expanded(child: Bone(height: 92, radius: R.lg))]),
             ]),
           ),
           _gap(22),
           const Bone(width: 90, height: 12),
           _gap(10),
           Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(22)),
+            padding: const EdgeInsets.all(Sp.lg),
+            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.xl)),
             child: const Row(children: [
-              Bone(width: 128, height: 104, radius: 16),
-              SizedBox(width: 14),
-              Expanded(child: Column(children: [Bone(), SizedBox(height: 12), Bone(), SizedBox(height: 12), Bone(), SizedBox(height: 12), Bone()])),
+              Bone(width: 128, height: 104, radius: R.lg),
+              SizedBox(width: Sp.lg),
+              Expanded(child: Column(children: [Bone(), SizedBox(height: Sp.md), Bone(), SizedBox(height: Sp.md), Bone(), SizedBox(height: Sp.md), Bone()])),
             ]),
           ),
         ]),
@@ -210,10 +210,10 @@ class SkSuggestions extends StatelessWidget {
           children: List.generate(
             5,
             (i) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: Sp.md),
               child: Row(children: [
-                const Bone(width: 36, height: 36, radius: 12),
-                const SizedBox(width: 12),
+                const Bone(width: 36, height: 36, radius: R.md),
+                const SizedBox(width: Sp.md),
                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Bone(width: 120.0 + i * 15, height: 13), _gap(6), const Bone(width: 90, height: 10)])),
               ]),
             ),
@@ -369,7 +369,7 @@ class AsyncBtn extends StatefulWidget {
       this.height = 52,
       this.icon,
       this.trailingIcon = true,
-      this.fontSize = 15.5,
+      this.fontSize = Fs.lg,
       this.expand = false});
   @override
   State<AsyncBtn> createState() => _AsyncBtnState();
@@ -408,21 +408,21 @@ Future<T> withPaymentSpinner<T>(BuildContext context, Future<T> work) async {
   showDialog<void>(
     context: context,
     barrierDismissible: false,
-    barrierColor: const Color(0xCC111111),
+    barrierColor: P.inkA80,
     builder: (_) => PopScope(
       canPop: false,
       child: Center(
         child: Container(
           width: 260,
-          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-          decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(26)),
+          padding: const EdgeInsets.fromLTRB(Sp.xxl, Sp.x3, Sp.xxl, Sp.xxl),
+          decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.xl)),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             const Spinner(size: 40),
-            const SizedBox(height: 18),
-            const Text('Processing payment…', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, decoration: TextDecoration.none)),
-            const SizedBox(height: 6),
+            const SizedBox(height: Sp.lg),
+            const Text('Processing payment…', style: TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800, decoration: TextDecoration.none)),
+            const SizedBox(height: Sp.sm),
             Text('Please don\'t press back or close the app.',
-                textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: C.muted, height: 1.4, decoration: TextDecoration.none)),
+                textAlign: TextAlign.center, style: TextStyle(fontSize: Fs.base, color: C.muted, height: 1.4, decoration: TextDecoration.none)),
           ]),
         ),
       ),
@@ -444,6 +444,6 @@ class SkPage extends StatelessWidget {
   Widget build(BuildContext context) => ListView(
         physics: const NeverScrollableScrollPhysics(),
         padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 14, 20, 24),
-        children: [TitleBar(title: title), const SizedBox(height: 18), child],
+        children: [TitleBar(title: title), const SizedBox(height: Sp.lg), child],
       );
 }

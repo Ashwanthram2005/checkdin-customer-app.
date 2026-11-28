@@ -8,14 +8,14 @@ class _Part {
   final List<int> hours;
   final IconData icon;
   final Color tile, fg;
-  const _Part(this.title, this.range, this.hours, this.icon, this.tile, [this.fg = const Color(0xFF111111)]);
+  const _Part(this.title, this.range, this.hours, this.icon, this.tile, [this.fg = P.ink]);
 }
 
 List<_Part> get _parts => [
-  _Part('Morning', '6 AM – 11 AM', [6, 7, 8, 9, 10, 11], Icons.wb_twilight, Color(0xFFFFF1C7)),
-  _Part('Afternoon', '12 PM – 4 PM', [12, 13, 14, 15, 16], Icons.wb_sunny_outlined, Color(0xFFEEF8C8)),
-  _Part('Evening', '5 PM – 8 PM', [17, 18, 19, 20], Icons.brightness_6_outlined, Color(0xFFFDE3D2)),
-  _Part('Night', '9 PM – 5 AM', [21, 22, 23, 24, 25, 26, 27, 28, 29], Icons.nightlight_round, C.inkBg, C.white),
+  _Part('Morning', '6 AM – 11 AM', [6, 7, 8, 9, 10, 11], Icons.wb_twilight_rounded, P.amberSoft),
+  _Part('Afternoon', '12 PM – 4 PM', [12, 13, 14, 15, 16], Icons.wb_sunny_rounded, P.lime88),
+  _Part('Evening', '5 PM – 8 PM', [17, 18, 19, 20], Icons.brightness_6_rounded, P.orange91),
+  _Part('Night', '9 PM – 5 AM', [21, 22, 23, 24, 25, 26, 27, 28, 29], Icons.nightlight_rounded, C.inkBg, C.white),
 ];
 
 class TimeSelectScreen extends StatefulWidget {
@@ -51,28 +51,28 @@ class _TimeSelectScreenState extends State<TimeSelectScreen> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
                   BackBtn(bg: C.bg, shadow: false),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: Sp.md),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const Text('Check-in time', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                    const Text('Check-in time', style: TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
                     const SizedBox(height: 1),
-                    Text('Step 2 of 2 · ${dateLabel(app.date)}', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                    Text('Step 2 of 2 · ${dateLabel(app.date)}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                   ]),
                 ]),
-                const SizedBox(height: 14),
+                const SizedBox(height: Sp.lg),
                 Row(children: [
-                  Text('Stay for', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.muted)),
-                  const SizedBox(width: 10),
+                  Text('Stay for', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.muted)),
+                  const SizedBox(width: Sp.md),
                   Expanded(
                     child: SegmentPill(
                       options: const ['3 hrs', '6 hrs', '9 hrs', '12 hrs'],
                       selected: [3, 6, 9, 12].indexOf(app.slot),
                       height: 34,
-                      track: C.tint(Color(0xFFF0F0EA)),
+                      track: C.tint(P.grey93),
                       onChanged: (i) => app.set(() => app.slot = [3, 6, 9, 12][i]),
                     ),
                   ),
                 ]),
-                const SizedBox(height: 12),
+                const SizedBox(height: Sp.md),
                 MediaQuery.withClampedTextScaling(
                   maxScaleFactor: 1.1,
                   child: Row(
@@ -82,7 +82,7 @@ class _TimeSelectScreenState extends State<TimeSelectScreen> {
                     final on = i == _part;
                     return Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(right: i < 3 ? 6 : 0),
+                        padding: EdgeInsets.only(right: i < Sp.xs ? Sp.sm : 0),
                         child: GestureDetector(
                           onTap: () => setState(() => _part = i),
                           child: AnimatedContainer(
@@ -90,13 +90,13 @@ class _TimeSelectScreenState extends State<TimeSelectScreen> {
                             height: 56,
                             decoration: BoxDecoration(
                               color: on ? C.limeBg : C.card,
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(R.lg),
                               border: Border.all(color: on ? C.lime : C.border, width: 1.5),
                             ),
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                              Text(p.title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
-                              const SizedBox(height: 2),
-                              Text(open > 0 ? '$open open' : 'Closed', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: C.muted2)),
+                              Text(p.title, style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700)),
+                              const SizedBox(height: Sp.xxs),
+                              Text(open > 0 ? '$open open' : 'Closed', style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w600, color: C.muted2)),
                             ]),
                           ),
                         ),
@@ -108,11 +108,11 @@ class _TimeSelectScreenState extends State<TimeSelectScreen> {
               ]),
             ),
             Expanded(
-              child: ListView(padding: const EdgeInsets.fromLTRB(20, 18, 20, 24), children: [
+              child: ListView(padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, Sp.xxl), children: [
                 WhiteCard(
                   color: C.inkBg,
-                  radius: 20,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  radius: R.xl,
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.lg),
                   onTap: () => setState(() {
                     app.set(() => app.hour = soon);
                     final i = _parts.indexWhere((p) => p.hours.contains(soon));
@@ -120,32 +120,32 @@ class _TimeSelectScreenState extends State<TimeSelectScreen> {
                   }),
                   child: Row(children: [
                     IconTile(Icons.bolt_rounded, bg: C.limeBg, size: 40, radius: 20),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: Sp.md),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text('NEED IT NOW?', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: C.faint, letterSpacing: 0.6)),
-                        const SizedBox(height: 2),
-                        Text('Check in at ${withDay(soon)}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: C.white)),
+                        Text('NEED IT NOW?', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.faint, letterSpacing: 0.6)),
+                        const SizedBox(height: Sp.xxs),
+                        Text('Check in at ${withDay(soon)}', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: C.white)),
                       ]),
                     ),
-                    Text(app.hour == soon ? 'Selected ✓' : 'Pick', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.lime)),
+                    Text(app.hour == soon ? 'Selected ✓' : 'Pick', style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, color: C.lime)),
                   ]),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: Sp.lg),
                 WhiteCard(
-                  padding: const EdgeInsets.fromLTRB(14, 16, 14, 14),
+                  padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, Sp.lg),
                   child: Column(children: [
                     Row(children: [
                       IconTile(part.icon, bg: part.tile, fg: part.fg, size: 34, radius: 10),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: Sp.md),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(part.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                          Text(part.range, style: TextStyle(fontSize: 12, color: C.muted2)),
+                          Text(part.title, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                          Text(part.range, style: TextStyle(fontSize: Fs.sm, color: C.muted2)),
                         ]),
                       ),
                     ]),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: Sp.md),
                     GridView.count(
                       crossAxisCount: 3,
                       shrinkWrap: true,
@@ -162,18 +162,18 @@ class _TimeSelectScreenState extends State<TimeSelectScreen> {
                             duration: const Duration(milliseconds: 150),
                             decoration: BoxDecoration(
                               color: on ? C.limeBg : (past ? C.bg : C.white),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(R.lg),
                               border: Border.all(color: on ? C.lime : (past ? C.bg : C.border), width: 1.5),
                             ),
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                               Text(hourLabel(h),
-                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: past ? C.faint : C.ink)),
-                              const SizedBox(height: 2),
+                                  style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: past ? C.faint : C.ink)),
+                              const SizedBox(height: Sp.xxs),
                               Text(past ? 'Not available' : 'till ${hourLabel(h + app.slot, short: true)}',
                                   style: TextStyle(
-                                      fontSize: 11,
+                                      fontSize: Fs.xs,
                                       fontWeight: FontWeight.w600,
-                                      color: on ? C.limeInk : (past ? const Color(0xFFC9C9C1) : C.muted2))),
+                                      color: on ? C.limeInk : (past ? P.disabled : C.muted2))),
                             ]),
                           ),
                         );
@@ -187,10 +187,10 @@ class _TimeSelectScreenState extends State<TimeSelectScreen> {
               child: Row(children: [
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                    Text('${app.place ?? 'Chennai'} · ${dateLabel(app.date)}', style: TextStyle(fontSize: 12.5, color: C.muted)),
-                    const SizedBox(height: 2),
+                    Text('${app.place ?? 'Chennai'} · ${dateLabel(app.date)}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
+                    const SizedBox(height: Sp.xxs),
                     Text(hasPick ? '${hourLabel(app.checkInHour)} – ${withDay(app.checkOutHour)}' : 'Pick a time',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                        style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
                   ]),
                 ),
                 PillBtn('Search', icon: Icons.arrow_forward_rounded, onTap: hasPick ? () => Navigator.pushNamed(context, '/results') : null),

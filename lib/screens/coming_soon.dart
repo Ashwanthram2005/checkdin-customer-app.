@@ -50,67 +50,67 @@ class _ComingSoonScreenState extends State<ComingSoonScreen> {
             padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 24),
             children: [
               const Align(alignment: Alignment.centerLeft, child: BackBtn()),
-              const SizedBox(height: 26),
+              const SizedBox(height: Sp.xxl),
               Center(
                 child: Stack(clipBehavior: Clip.none, children: [
                   Container(
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle),
-                    child: const Icon(Icons.location_city_rounded, size: 54),
+                    child: const Icon(Icons.location_city_rounded, size: Ic.hero),
                   ),
                   Positioned(
                     right: -8,
                     top: -4,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(999)),
-                      child: Text('SOON', style: TextStyle(color: C.lime, fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1)),
+                      padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.xs),
+                      decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(R.pill)),
+                      child: Text('SOON', style: TextStyle(color: C.lime, fontSize: Fs.xs, fontWeight: FontWeight.w700, letterSpacing: 1)),
                     ),
                   ),
                 ]),
               ),
-              const SizedBox(height: 22),
-              Text('Checkdin isn\'t in $city yet', textAlign: TextAlign.center, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.8, height: 1.15)),
-              const SizedBox(height: 10),
+              const SizedBox(height: Sp.xxl),
+              Text('Checkdin isn\'t in $city yet', textAlign: TextAlign.center, style: const TextStyle(fontSize: Fs.h1, fontWeight: FontWeight.w800, letterSpacing: -0.8, height: 1.15)),
+              const SizedBox(height: Sp.md),
               Text('We\'re live in Chennai right now and opening in new cities soon. Want to know the day we launch in $city?',
-                  textAlign: TextAlign.center, style: TextStyle(fontSize: 14.5, color: C.muted, height: 1.5)),
-              const SizedBox(height: 22),
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: Fs.md, color: C.muted, height: 1.5)),
+              const SizedBox(height: Sp.xxl),
               WhiteCard(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(Sp.lg),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('WHERE WE ARE', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: C.muted)),
-                  const SizedBox(height: 10),
+                  Text('WHERE WE ARE', style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: C.muted)),
+                  const SizedBox(height: Sp.md),
                   Row(children: [
                     Container(width: 10, height: 10, decoration: BoxDecoration(color: C.green, shape: BoxShape.circle)),
-                    const SizedBox(width: 10),
-                    const Expanded(child: Text('Chennai', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800))),
+                    const SizedBox(width: Sp.md),
+                    const Expanded(child: Text('Chennai', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700))),
                     Tag('Live now', bg: C.limeSoft, fg: C.ink),
                   ]),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: Sp.md),
                   for (final c in [city, ...next])
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: Sp.md),
                       child: Row(children: [
                         Container(width: 10, height: 10, decoration: BoxDecoration(border: Border.all(color: C.faint, width: 2), shape: BoxShape.circle)),
-                        const SizedBox(width: 10),
-                        Expanded(child: Text(c, style: TextStyle(fontSize: 15, fontWeight: c == city ? FontWeight.w800 : FontWeight.w600))),
-                        Text(c == city ? 'Coming soon' : 'Planned', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                        const SizedBox(width: Sp.md),
+                        Expanded(child: Text(c, style: TextStyle(fontSize: Fs.md, fontWeight: c == city ? FontWeight.w700 : FontWeight.w600))),
+                        Text(c == city ? 'Coming soon' : 'Planned', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                       ]),
                     ),
                 ]),
               ),
               if (on) ...[
-                const SizedBox(height: 14),
+                const SizedBox(height: Sp.lg),
                 Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(16)),
+                  padding: const EdgeInsets.all(Sp.lg),
+                  decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(R.lg)),
                   child: Row(children: [
                     const Icon(Icons.check_circle_rounded),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: Sp.md),
                     Expanded(
                       child: Text('Done! We\'ll WhatsApp you${app.phone.isEmpty ? '' : ' on +91 ${app.phone}'} when Checkdin opens in $city.',
-                          style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, height: 1.4)),
+                          style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w600, height: 1.4)),
                     ),
                   ]),
                 ),
@@ -137,7 +137,7 @@ class _ComingSoonScreenState extends State<ComingSoonScreen> {
                       setState(() => _sending = false);
                     },
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: Sp.sm),
             PillBtn('Explore stays in Chennai', kind: BtnKind.outline, height: 48, expand: true, onTap: () {
               app.set(() => app.place = null);
               Navigator.pop(context);

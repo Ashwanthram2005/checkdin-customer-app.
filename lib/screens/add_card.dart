@@ -146,16 +146,16 @@ class _AddCardScreenState extends State<AddCardScreen> {
   }
 
   InputDecoration _dec(String hint, {String? error, Widget? suffix}) {
-    final b = OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: C.border, width: 1.5));
+    final b = OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: C.border, width: 1.5));
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: Color(0xFF8A8A82), fontWeight: FontWeight.w400),
+      hintStyle: const TextStyle(color: P.hint, fontWeight: FontWeight.w400),
       errorText: error,
       isDense: true,
       filled: true,
       fillColor: C.card,
       suffixIcon: suffix,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
+      contentPadding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.lg),
       border: b,
       enabledBorder: b,
       focusedBorder: b.copyWith(borderSide: BorderSide(color: C.ink, width: 1.5)),
@@ -165,8 +165,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
   }
 
   Widget _label(String t) => Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: Text(t, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted)),
+        padding: const EdgeInsets.only(bottom: Sp.sm),
+        child: Text(t, style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, color: C.muted)),
       );
 
   Widget _preview() {
@@ -183,8 +183,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
         width: double.infinity,
         decoration: BoxDecoration(
           color: C.inkBg,
-          borderRadius: BorderRadius.circular(22),
-          boxShadow: const [BoxShadow(color: Color(0x33111111), blurRadius: 24, offset: Offset(0, 10))],
+          borderRadius: BorderRadius.circular(R.xl),
+          boxShadow: const [BoxShadow(color: P.inkA20, blurRadius: 24, offset: Offset(0, 10))],
         ),
         clipBehavior: Clip.antiAlias,
         child: Stack(children: [
@@ -197,69 +197,69 @@ class _AddCardScreenState extends State<AddCardScreen> {
             right: 40,
             top: 40,
             child: Container(
-                width: 120, height: 120, decoration: BoxDecoration(color: const Color(0x2ED1F148), shape: BoxShape.circle)),
+                width: 120, height: 120, decoration: BoxDecoration(color: P.limeA18, shape: BoxShape.circle)),
           ),
           if (flipped)
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              const SizedBox(height: 28),
-              Container(height: 40, color: const Color(0xFF2B2B2B)),
-              const SizedBox(height: 18),
+              const SizedBox(height: Sp.x3),
+              Container(height: 40, color: P.grey17),
+              const SizedBox(height: Sp.lg),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: Sp.xl),
                 child: Row(children: [
-                  Expanded(child: Container(height: 34, color: C.tint(Color(0xFFEDEDE6)))),
+                  Expanded(child: Container(height: 34, color: C.tint(P.grey92))),
                   Container(
                     height: 34,
                     width: 64,
                     alignment: Alignment.center,
                     color: C.card,
                     child: Text(_cvv.text.isEmpty ? '•••' : _cvv.text,
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 2)),
+                        style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, letterSpacing: 2)),
                   ),
                 ]),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: Text('The 3 digits on the back of your card', style: TextStyle(color: C.faint, fontSize: 11.5)),
+                padding: EdgeInsets.fromLTRB(Sp.xl, Sp.md, Sp.xl, 0),
+                child: Text('The 3 digits on the back of your card', style: TextStyle(color: C.faint, fontSize: Fs.xs)),
               ),
             ])
           else
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(Sp.xl),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
                   Container(
                     width: 40,
                     height: 30,
-                    decoration: BoxDecoration(color: const Color(0xFFD9C27A), borderRadius: BorderRadius.circular(6)),
+                    decoration: BoxDecoration(color: P.amber66, borderRadius: BorderRadius.circular(R.sm)),
                   ),
                   const Spacer(),
                   Text(_brand.isEmpty ? 'CARD' : _brand.toUpperCase(),
-                      style: TextStyle(color: C.ink, fontSize: 15, fontWeight: FontWeight.w800, fontStyle: FontStyle.italic)),
+                      style: TextStyle(color: C.ink, fontSize: Fs.md, fontWeight: FontWeight.w700, fontStyle: FontStyle.italic)),
                 ]),
                 const Spacer(),
                 FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(shownNum,
-                      style: TextStyle(color: C.white, fontSize: 21, fontWeight: FontWeight.w700, letterSpacing: 2)),
+                      style: TextStyle(color: C.white, fontSize: Fs.h2, fontWeight: FontWeight.w700, letterSpacing: 2)),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: Sp.lg),
                 Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text('CARD HOLDER', style: TextStyle(color: C.faint, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1)),
-                      const SizedBox(height: 3),
+                      Text('CARD HOLDER', style: TextStyle(color: C.faint, fontSize: Fs.xs, fontWeight: FontWeight.w700, letterSpacing: 1)),
+                      const SizedBox(height: Sp.xs),
                       Text(_name.text.trim().isEmpty ? 'YOUR NAME' : _name.text.trim().toUpperCase(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: C.white, fontSize: 13.5, fontWeight: FontWeight.w700)),
+                          style: TextStyle(color: C.white, fontSize: Fs.base, fontWeight: FontWeight.w700)),
                     ]),
                   ),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('EXPIRES', style: TextStyle(color: C.faint, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1)),
-                    const SizedBox(height: 3),
+                    Text('EXPIRES', style: TextStyle(color: C.faint, fontSize: Fs.xs, fontWeight: FontWeight.w700, letterSpacing: 1)),
+                    const SizedBox(height: Sp.xs),
                     Text(_exp.text.isEmpty ? 'MM/YY' : _exp.text,
-                        style: TextStyle(color: C.white, fontSize: 13.5, fontWeight: FontWeight.w700)),
+                        style: TextStyle(color: C.white, fontSize: Fs.base, fontWeight: FontWeight.w700)),
                   ]),
                 ]),
               ]),
@@ -282,16 +282,16 @@ class _AddCardScreenState extends State<AddCardScreen> {
             padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 24),
             children: [
               const TitleBar(title: 'Add card'),
-              const SizedBox(height: 20),
+              const SizedBox(height: Sp.xl),
               _preview(),
-              const SizedBox(height: 22),
+              const SizedBox(height: Sp.xxl),
               _label('Card number'),
               Shake(key: _kNum, child: TextField(
                 controller: _num,
                 keyboardType: TextInputType.number,
                 inputFormatters: [CardNumberFormatter()],
                 autofillHints: const [AutofillHints.creditCardNumber],
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 1.5),
+                style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w700, letterSpacing: 1.5),
                 onChanged: (_) => setState(() {
                   if (_digits.length == 16) _touchedNum = true;
                 }),
@@ -300,7 +300,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     error: numErr,
                     suffix: _luhn ? Icon(Icons.check_circle_rounded, color: C.green) : Icon(Icons.credit_card_rounded, color: C.faint)),
               )),
-              const SizedBox(height: 14),
+              const SizedBox(height: Sp.lg),
               Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -310,7 +310,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       keyboardType: TextInputType.number,
                       inputFormatters: [ExpiryFormatter()],
                       autofillHints: const [AutofillHints.creditCardExpirationDate],
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                      style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w700),
                       onChanged: (_) => setState(() {
                         if (_exp.text.length == 5) _touchedExp = true;
                       }),
@@ -318,7 +318,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     )),
                   ]),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: Sp.md),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     _label('CVV'),
@@ -329,48 +329,48 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       obscureText: true,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(3)],
                       autofillHints: const [AutofillHints.creditCardSecurityCode],
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 3),
+                      style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w700, letterSpacing: 3),
                       onChanged: (_) => setState(() {
                         if (_cvv.text.length == 3) _touchedCvv = true;
                       }),
-                      decoration: _dec('•••', error: cvvErr, suffix: Icon(Icons.help_outline_rounded, color: C.faint, size: 20)),
+                      decoration: _dec('•••', error: cvvErr, suffix: Icon(Icons.help_outline_rounded, color: C.faint, size: Ic.md)),
                     )),
                   ]),
                 ),
               ]),
-              const SizedBox(height: 14),
+              const SizedBox(height: Sp.lg),
               _label('Name on card'),
               Shake(key: _kName, child: TextField(
                 controller: _name,
                 textCapitalization: TextCapitalization.characters,
                 autofillHints: const [AutofillHints.creditCardName],
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z .']"))],
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w700),
                 onChanged: (_) => setState(() {}),
                 decoration: _dec('As printed on the card', error: nameErr),
               )),
-              const SizedBox(height: 16),
+              const SizedBox(height: Sp.lg),
               WhiteCard(
-                radius: 18,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                radius: R.lg,
+                padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.md),
                 child: Row(children: [
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text('Save this card', style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-                      SizedBox(height: 2),
-                      Text('Pay faster next time. CVV is never saved.', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                      Text('Save this card', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                      SizedBox(height: Sp.xxs),
+                      Text('Pay faster next time. CVV is never saved.', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                     ]),
                   ),
                   BrandSwitch(value: _save, onChanged: (v) => setState(() => _save = v)),
                 ]),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: Sp.lg),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Icon(Icons.lock_outline_rounded, size: 15, color: C.muted2),
-                SizedBox(width: 6),
+                Icon(Icons.lock_outline_rounded, size: Ic.sm, color: C.muted2),
+                SizedBox(width: Sp.sm),
                 Flexible(
                   child: Text('Secured by our payment partner · PCI-DSS compliant',
-                      style: TextStyle(fontSize: 12, color: C.muted2)),
+                      style: TextStyle(fontSize: Fs.sm, color: C.muted2)),
                 ),
               ]),
             ],

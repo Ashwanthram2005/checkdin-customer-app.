@@ -19,31 +19,31 @@ class DateSelectScreen extends StatelessWidget {
             SheetHeader(
               child: Row(children: [
                 BackBtn(bg: C.bg, shadow: false),
-                const SizedBox(width: 12),
+                const SizedBox(width: Sp.md),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Check-in date', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                  Text('Check-in date', style: TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
                   SizedBox(height: 1),
-                  Text('Step 1 of 2', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                  Text('Step 1 of 2', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                 ]),
               ]),
             ),
             Expanded(
               child: ListView.separated(
-                padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+                padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, Sp.xxl),
                 itemCount: months.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 16),
+                separatorBuilder: (_, __) => const SizedBox(height: Sp.lg),
                 itemBuilder: (context, i) {
                   final m = months[i];
                   final lead = m.weekday % 7; // Sunday first
                   final days = DateTime(m.year, m.month + 1, 0).day;
                   return WhiteCard(
-                    padding: const EdgeInsets.fromLTRB(14, 16, 14, 12),
+                    padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, Sp.md),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: Text('${monthsLong[m.month - 1]} ${m.year}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                        padding: const EdgeInsets.symmetric(horizontal: Sp.sm),
+                        child: Text('${monthsLong[m.month - 1]} ${m.year}', style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: Sp.md),
                       GridView.count(
                         crossAxisCount: 7,
                         shrinkWrap: true,
@@ -51,7 +51,7 @@ class DateSelectScreen extends StatelessWidget {
                         childAspectRatio: 1,
                         children: [
                           for (final w in ['S', 'M', 'T', 'W', 'T', 'F', 'S'])
-                            Center(child: Text(w, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: Color(0xFF8A8A82)))),
+                            Center(child: Text(w, style: const TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, color: P.hint))),
                           for (var b = 0; b < lead; b++) const SizedBox(),
                           for (var d = 1; d <= days; d++)
                             Builder(builder: (_) {
@@ -77,9 +77,9 @@ class DateSelectScreen extends StatelessWidget {
                                     ),
                                     child: Text('$d',
                                         style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: Fs.md,
                                             fontWeight: on || isToday ? FontWeight.w800 : FontWeight.w600,
-                                            color: past ? const Color(0xFFC9C9C1) : C.ink)),
+                                            color: past ? P.disabled : C.ink)),
                                   ),
                                 ),
                               );
@@ -95,9 +95,9 @@ class DateSelectScreen extends StatelessWidget {
               child: Row(children: [
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                    Text('${app.place ?? 'Chennai'} · ${app.slot}-hour stay', style: TextStyle(fontSize: 12.5, color: C.muted)),
-                    const SizedBox(height: 2),
-                    Text('${dateLabel(sel)}${sel == today ? ' · Today' : ''}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                    Text('${app.place ?? 'Chennai'} · ${app.slot}-hour stay', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
+                    const SizedBox(height: Sp.xxs),
+                    Text('${dateLabel(sel)}${sel == today ? ' · Today' : ''}', style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
                   ]),
                 ),
                 PillBtn('Select time', icon: Icons.arrow_forward_rounded, onTap: () => Navigator.pushNamed(context, '/time')),

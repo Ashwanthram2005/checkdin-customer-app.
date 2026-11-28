@@ -63,10 +63,10 @@ class _LegalScreenState extends State<LegalScreen> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: on ? C.card : Colors.transparent,
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(R.pill),
               boxShadow: on ? kShadow : null,
             ),
-            child: Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: on ? C.ink : C.muted2)),
+            child: Text(label, style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: on ? C.ink : C.muted2)),
           ),
         ),
       );
@@ -80,10 +80,10 @@ class _LegalScreenState extends State<LegalScreen> {
         padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 30 + MediaQuery.of(context).padding.bottom),
         children: [
           const TitleBar(title: 'Legal'),
-          const SizedBox(height: 18),
+          const SizedBox(height: Sp.lg),
           Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(color: C.track, borderRadius: BorderRadius.circular(999)),
+            padding: const EdgeInsets.all(Sp.xs),
+            decoration: BoxDecoration(color: C.track, borderRadius: BorderRadius.circular(R.pill)),
             child: Row(children: [
               _tab('Terms of use', _terms, () => setState(() {
                     _terms = true;
@@ -95,32 +95,32 @@ class _LegalScreenState extends State<LegalScreen> {
                   })),
             ]),
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: Sp.xxl),
           Text(_terms ? 'Terms of use' : 'Privacy policy',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.7)),
-          const SizedBox(height: 4),
-          Text(_terms ? 'Last updated 25 Nov 2026 · Draft' : 'From checkdin.in', style: TextStyle(fontSize: 12.5, color: C.muted)),
-          const SizedBox(height: 16),
+              style: const TextStyle(fontSize: Fs.h2, fontWeight: FontWeight.w800, letterSpacing: -0.7)),
+          const SizedBox(height: Sp.xs),
+          Text(_terms ? 'Last updated 25 Nov 2026 · Draft' : 'From checkdin.in', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
+          const SizedBox(height: Sp.lg),
           Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(20)),
+            padding: const EdgeInsets.all(Sp.lg),
+            decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(R.xl)),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('IN SHORT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1, color: C.limeInk)),
-              const SizedBox(height: 10),
+              Text('IN SHORT', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, letterSpacing: 1, color: C.limeInk)),
+              const SizedBox(height: Sp.md),
               for (final s in summary)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(bottom: Sp.sm),
                   child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Padding(padding: EdgeInsets.only(top: 2), child: Icon(Icons.check_rounded, size: 16, color: C.green)),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(s, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, height: 1.45))),
+                    Padding(padding: EdgeInsets.only(top: Sp.xxs), child: Icon(Icons.check_rounded, size: Ic.sm, color: C.green)),
+                    const SizedBox(width: Sp.sm),
+                    Expanded(child: Text(s, style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w600, height: 1.45))),
                   ]),
                 ),
             ]),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: Sp.lg),
           if (!_terms) const PolicyBody(privacyPolicy, showIntro: false) else WhiteCard(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xxs),
             child: Column(children: [
               for (var i = 0; i < sections.length; i++)
                 Container(
@@ -131,14 +131,14 @@ class _LegalScreenState extends State<LegalScreen> {
                     InkWell(
                       onTap: () => setState(() => _open = _open == i ? -1 : i),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        padding: const EdgeInsets.symmetric(vertical: Sp.lg),
                         child: Row(children: [
                           SizedBox(
                             width: 28,
                             child: Text((i + 1).toString().padLeft(2, '0'),
-                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: C.faint)),
+                                style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, color: C.muted2)),
                           ),
-                          Expanded(child: Text(sections[i][0], style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700))),
+                          Expanded(child: Text(sections[i][0], style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700))),
                           AnimatedRotation(
                             turns: _open == i ? 0.5 : 0,
                             duration: const Duration(milliseconds: 180),
@@ -149,24 +149,24 @@ class _LegalScreenState extends State<LegalScreen> {
                     ),
                     if (_open == i)
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(28, 0, 0, 15),
-                        child: Text(sections[i][1], style: TextStyle(fontSize: 13.5, color: C.tx(Color(0xFF3F3F38)), height: 1.6)),
+                        padding: const EdgeInsets.fromLTRB(Sp.x3, 0, 0, Sp.lg),
+                        child: Text(sections[i][1], style: TextStyle(fontSize: Fs.base, color: C.tx(P.ink2), height: 1.6)),
                       ),
                   ]),
                 ),
             ]),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: Sp.lg),
           WhiteCard(
             onTap: () => Navigator.pushNamed(context, '/help'),
             child: Row(children: [
               IconTile(Icons.mail_outline_rounded, size: 38),
-              SizedBox(width: 12),
+              SizedBox(width: Sp.md),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Questions about this?', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                  SizedBox(height: 2),
-                  Text('Write to hello@checkdin.in', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                  Text('Questions about this?', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                  SizedBox(height: Sp.xxs),
+                  Text('Write to hello@checkdin.in', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                 ]),
               ),
               Icon(Icons.chevron_right_rounded),

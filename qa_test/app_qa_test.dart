@@ -1074,6 +1074,7 @@ void main() {
     ('normal', 393.0, 851.0, 1.0),
     ('small', 360.0, 640.0, 1.0),
     ('bigtext', 393.0, 851.0, 1.3),
+    ('tablet', 800.0, 1280.0, 1.0),
   ]) {
     testWidgets('screen tour ${size.$1}', (t) async {
       phone(t, w: size.$2, h: size.$3, text: size.$4);

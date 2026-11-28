@@ -27,11 +27,11 @@ class _Photo extends StatelessWidget {
       decoration: BoxDecoration(color: Color(p[2] as int), borderRadius: BorderRadius.circular(radius)),
       child: Center(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Icon(p[0] == 'Bathroom' ? Icons.bathtub_outlined : p[0] == 'Lobby' ? Icons.room_service_outlined : p[0] == 'Outside' ? Icons.apartment_rounded : Icons.bed_outlined,
-              size: big ? 64 : 28, color: const Color(0xFF8A8478)),
+          Icon(p[0] == 'Bathroom' ? Icons.bathtub_rounded : p[0] == 'Lobby' ? Icons.room_service_rounded : p[0] == 'Outside' ? Icons.apartment_rounded : Icons.bed_rounded,
+              size: big ? 64 : 28, color: P.grey51),
           if (big) ...[
-            const SizedBox(height: 10),
-            Text(p[1] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF6A645A))),
+            const SizedBox(height: Sp.md),
+            Text(p[1] as String, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w600, color: P.grey38)),
           ],
         ]),
       ),
@@ -58,26 +58,26 @@ class _GalleryScreenState extends State<GalleryScreen> {
         SheetHeader(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             TitleBar(title: app.hotel.name),
-            const SizedBox(height: 12),
+            const SizedBox(height: Sp.md),
             SizedBox(
               height: 38,
               child: ListView(scrollDirection: Axis.horizontal, children: [
                 for (final c in cats)
                   Padding(
-                    padding: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.only(right: Sp.sm),
                     child: GestureDetector(
                       onTap: () => setState(() => _cat = c),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        padding: const EdgeInsets.symmetric(horizontal: Sp.lg),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: _cat == c ? C.inkBg : C.card,
-                          borderRadius: BorderRadius.circular(999),
+                          borderRadius: BorderRadius.circular(R.pill),
                           border: Border.all(color: _cat == c ? C.ink : C.border, width: 1.5),
                         ),
                         child: Text(
                             c == 'All' ? 'All · ${galleryPhotos.length}' : '$c · ${galleryPhotos.where((p) => p[0] == c).length}',
-                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: _cat == c ? C.lime : C.ink)),
+                            style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, color: _cat == c ? C.lime : C.ink)),
                       ),
                     ),
                   ),
@@ -184,12 +184,12 @@ class _PhotoViewerState extends State<PhotoViewer> {
           right: 16,
           top: top + 10,
           child: Row(children: [
-            CircleBtn(icon: Icons.close_rounded, bg: const Color(0x33FFFFFF), iconColor: C.white, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(context)),
+            CircleBtn(icon: Icons.close_rounded, bg: P.whiteA20, iconColor: C.white, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(context)),
             const Spacer(),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(color: const Color(0x33FFFFFF), borderRadius: BorderRadius.circular(999)),
-              child: Text('${_page + 1} / ${_ids.length}', style: TextStyle(color: C.white, fontWeight: FontWeight.w700, fontSize: 13)),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.sm),
+              decoration: BoxDecoration(color: P.whiteA20, borderRadius: BorderRadius.circular(R.pill)),
+              child: Text('${_page + 1} / ${_ids.length}', style: TextStyle(color: C.white, fontWeight: FontWeight.w700, fontSize: Fs.base)),
             ),
           ]),
         ),
@@ -199,14 +199,14 @@ class _PhotoViewerState extends State<PhotoViewer> {
           bottom: 28 + MediaQuery.of(context).padding.bottom,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(999)),
-              child: Text(p[0] as String, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.xs),
+              decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(R.pill)),
+              child: Text(p[0] as String, style: const TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700)),
             ),
-            const SizedBox(height: 8),
-            Text(p[1] as String, style: TextStyle(color: C.white, fontSize: 16, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 4),
-            const Text('Pinch to zoom · swipe for more · swipe down to close', style: TextStyle(color: Color(0xFF9A9A92), fontSize: 12.5)),
+            const SizedBox(height: Sp.sm),
+            Text(p[1] as String, style: TextStyle(color: C.white, fontSize: Fs.lg, fontWeight: FontWeight.w700)),
+            const SizedBox(height: Sp.xs),
+            const Text('Pinch to zoom · swipe for more · swipe down to close', style: TextStyle(color: P.iconMuted, fontSize: Fs.sm)),
           ]),
         ),
       ]),
@@ -228,23 +228,23 @@ class GalleryStrip extends StatelessWidget {
           flex: 2,
           child: GestureDetector(onTap: () => open(0), child: Hero(tag: photoTag(0), child: const _Photo(0))),
         ),
-        const SizedBox(width: 3),
+        const SizedBox(width: Sp.xs),
         Expanded(
           child: Column(children: [
             Expanded(child: GestureDetector(onTap: () => open(4), child: Hero(tag: photoTag(4), child: const _Photo(4)))),
-            const SizedBox(height: 3),
+            const SizedBox(height: Sp.xs),
             Expanded(
               child: GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/gallery'),
                 child: Stack(fit: StackFit.expand, children: [
                   const _Photo(6),
                   Container(
-                    color: const Color(0x99111111),
+                    color: P.inkA60,
                     alignment: Alignment.center,
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(Icons.photo_library_outlined, color: C.white, size: 22),
-                      const SizedBox(height: 4),
-                      Text('+${galleryPhotos.length - 2} photos', style: TextStyle(color: C.white, fontWeight: FontWeight.w800, fontSize: 13)),
+                      Icon(Icons.photo_library_rounded, color: C.white, size: Ic.md),
+                      const SizedBox(height: Sp.xs),
+                      Text('+${galleryPhotos.length - 2} photos', style: TextStyle(color: C.white, fontWeight: FontWeight.w700, fontSize: Fs.base)),
                     ]),
                   ),
                 ]),

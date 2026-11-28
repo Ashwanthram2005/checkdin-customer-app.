@@ -42,19 +42,19 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               const Spacer(),
               Image.asset('assets/logo.png', height: 32),
             ]),
-            const SizedBox(height: 18),
-            Text('Last thing, promise.', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: C.muted)),
-            const SizedBox(height: 8),
+            const SizedBox(height: Sp.lg),
+            Text('Last thing, promise.', style: TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w600, color: C.muted)),
+            const SizedBox(height: Sp.sm),
             const Highlight(before: 'Nice to\nmeet ', marked: 'you.', size: 50, spacing: -2, height: 1.05),
           ]),
         ),
         Expanded(
           child: Container(
             width: double.infinity,
-            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
             child: Column(children: [
               Expanded(
-                child: ListView(padding: const EdgeInsets.fromLTRB(24, 26, 24, 12), children: [
+                child: ListView(padding: const EdgeInsets.fromLTRB(Sp.xxl, Sp.xxl, Sp.xxl, Sp.md), children: [
                   Shake(
                       key: _kName,
                       child: BrandField(
@@ -63,7 +63,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                           controller: _name,
                           errorText: _tried && nameBad ? 'Enter your name (at least 2 letters)' : null,
                           onChanged: (_) => setState(() {}))),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: Sp.lg),
                   Shake(
                       key: _kEmail,
                       child: BrandField(
@@ -73,16 +73,16 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                           keyboard: TextInputType.emailAddress,
                           errorText: _tried && _emailBad ? 'That email doesn\'t look right' : null,
                           onChanged: (_) => setState(() {}))),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: Sp.lg),
                   GestureDetector(
                     onTap: () => setState(() => _wa = !_wa),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 160),
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(Sp.lg),
                       decoration: BoxDecoration(
                         color: _wa ? C.bg : C.card,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: _wa ? C.ink : const Color(0xFFDADAD2), width: 1.5),
+                        borderRadius: BorderRadius.circular(R.lg),
+                        border: Border.all(color: _wa ? C.ink : P.border, width: 1.5),
                       ),
                       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Container(
@@ -90,17 +90,17 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                           height: 22,
                           decoration: BoxDecoration(
                             color: _wa ? C.inkBg : C.card,
-                            borderRadius: BorderRadius.circular(6),
-                            border: _wa ? null : Border.all(color: const Color(0xFF8A8A82), width: 2),
+                            borderRadius: BorderRadius.circular(R.sm),
+                            border: _wa ? null : Border.all(color: P.hint, width: 2),
                           ),
-                          child: _wa ? Icon(Icons.check_rounded, size: 16, color: C.lime) : null,
+                          child: _wa ? Icon(Icons.check_rounded, size: Ic.sm, color: C.lime) : null,
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: Sp.md),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text('Booking updates & deals on WhatsApp', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-                            SizedBox(height: 3),
-                            Text('OTPs, confirmations, check-in details & offers.', style: TextStyle(fontSize: 13, color: C.muted)),
+                            Text('Booking updates & deals on WhatsApp', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                            SizedBox(height: Sp.xs),
+                            Text('OTPs, confirmations, check-in details & offers.', style: TextStyle(fontSize: Fs.base, color: C.muted)),
                           ]),
                         ),
                       ]),
@@ -112,7 +112,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                 padding: EdgeInsets.fromLTRB(24, 0, 24, 18 + MediaQuery.of(context).padding.bottom),
                 child: Column(children: [
                   const LegalLine(lead: 'By continuing, I agree to the ', terms: 'T&Cs', underline: true),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: Sp.md),
                   PillBtn('Start exploring stays',
                       kind: BtnKind.dark,
                       height: 56,

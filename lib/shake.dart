@@ -61,7 +61,7 @@ void shakeAll(Iterable<GlobalKey<ShakeState>?> keys) {
 class FieldError extends StatelessWidget {
   final String? message;
   final EdgeInsets padding;
-  const FieldError(this.message, {super.key, this.padding = const EdgeInsets.fromLTRB(4, 8, 4, 0)});
+  const FieldError(this.message, {super.key, this.padding = const EdgeInsets.fromLTRB(Sp.xs, Sp.sm, Sp.xs, 0)});
   @override
   Widget build(BuildContext context) => AnimatedSize(
         duration: const Duration(milliseconds: 180),
@@ -78,9 +78,9 @@ class FieldError extends StatelessWidget {
                   key: ValueKey(message),
                   padding: padding,
                   child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Icon(Icons.error_outline_rounded, size: 15, color: C.red),
-                    const SizedBox(width: 6),
-                    Expanded(child: Text(message!, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.red, height: 1.35))),
+                    Icon(Icons.error_outline_rounded, size: Ic.sm, color: C.red),
+                    const SizedBox(width: Sp.sm),
+                    Expanded(child: Text(message!, style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.red, height: 1.35))),
                   ]),
                 ),
         ),

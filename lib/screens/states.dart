@@ -31,24 +31,24 @@ class EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 36, 24, 24),
+      padding: const EdgeInsets.fromLTRB(Sp.xxl, Sp.x4, Sp.xxl, Sp.xxl),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Container(
           width: 96,
           height: 96,
           decoration: BoxDecoration(color: tile, shape: BoxShape.circle),
-          child: Icon(icon, size: 42, color: C.ink),
+          child: Icon(icon, size: Ic.xxl, color: C.ink),
         ),
-        const SizedBox(height: 20),
-        Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
-        const SizedBox(height: 8),
-        Text(body, textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: C.muted, height: 1.5)),
+        const SizedBox(height: Sp.xl),
+        Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
+        const SizedBox(height: Sp.sm),
+        Text(body, textAlign: TextAlign.center, style: TextStyle(fontSize: Fs.md, color: C.muted, height: 1.5)),
         if (primary != null) ...[
-          const SizedBox(height: 20),
+          const SizedBox(height: Sp.xl),
           PillBtn(primary!, kind: BtnKind.dark, height: 50, onTap: onPrimary),
         ],
         if (secondary != null) ...[
-          const SizedBox(height: 6),
+          const SizedBox(height: Sp.sm),
           TextButton(
             onPressed: onSecondary,
             child: Text(secondary!, style: TextStyle(color: C.ink, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
@@ -133,7 +133,7 @@ Future<bool> useMyLocation(BuildContext context) async {
   if (!app.useLocation) {
     final on = await _locationSheet(
       context,
-      icon: Icons.location_disabled_outlined,
+      icon: Icons.location_disabled_rounded,
       title: 'Location is off in Checkdin',
       body: 'You turned off location for Checkdin. Turn it back on to see stays near you, or search by area or landmark.',
       primary: 'Turn on location',
@@ -146,7 +146,7 @@ Future<bool> useMyLocation(BuildContext context) async {
     if (context.mounted) {
       await _locationSheet(
         context,
-        icon: Icons.location_off_outlined,
+        icon: Icons.location_off_rounded,
         title: 'Turn on location',
         body: 'Your phone\'s location is off. Turn it on to see stays near you, or search by area instead.',
         primary: 'Open location settings',
@@ -160,7 +160,7 @@ Future<bool> useMyLocation(BuildContext context) async {
     if (!context.mounted) return false;
     final go = await _locationSheet(
       context,
-      icon: Icons.near_me_outlined,
+      icon: Icons.near_me_rounded,
       title: 'Find stays near you',
       body: 'Checkdin uses your location only while you search, to show the closest hotels. We never track you in the background.',
       primary: 'Allow location',
@@ -172,7 +172,7 @@ Future<bool> useMyLocation(BuildContext context) async {
     if (context.mounted) {
       await _locationSheet(
         context,
-        icon: Icons.location_disabled_outlined,
+        icon: Icons.location_disabled_rounded,
         title: 'Location permission is off',
         body: p == LocationPermission.deniedForever
             ? 'You\'ve turned off location for Checkdin. Turn it on in Settings › Permissions › Location, or search by area.'
@@ -193,9 +193,9 @@ Future<bool?> _locationSheet(BuildContext context,
     backgroundColor: Colors.transparent,
     builder: (ctx) => Container(
       padding: EdgeInsets.fromLTRB(20, 12, 20, 16 + MediaQuery.of(ctx).padding.bottom),
-      decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2))),
+        Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(R.xs))),
         EmptyState(
           icon: icon,
           title: title,

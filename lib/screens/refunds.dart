@@ -51,9 +51,9 @@ class _RefundsScreenState extends State<RefundsScreen> {
   final _answered = <String>{};
 
   ({String label, Color fg, Color bg, IconData icon}) _chip(RefundStatus s) => switch (s) {
-        RefundStatus.underReview => (label: 'Under review', fg: C.tx(const Color(0xFF8A5A00)), bg: C.tint(const Color(0xFFFFF1C7)), icon: Icons.hourglass_top_rounded),
-        RefundStatus.initiated => (label: 'Initiated', fg: C.tx(const Color(0xFF1F5FAF)), bg: C.tint(const Color(0xFFE3EEFC)), icon: Icons.send_rounded),
-        RefundStatus.processing => (label: 'With your bank', fg: C.tx(const Color(0xFF6A3FB5)), bg: C.tint(const Color(0xFFEEE6FB)), icon: Icons.account_balance_outlined),
+        RefundStatus.underReview => (label: 'Under review', fg: C.tx(P.orange27), bg: C.tint(P.amberSoft), icon: Icons.hourglass_top_rounded),
+        RefundStatus.initiated => (label: 'Initiated', fg: C.tx(P.blue40), bg: C.tint(P.blue94), icon: Icons.send_rounded),
+        RefundStatus.processing => (label: 'With your bank', fg: C.tx(P.purple48), bg: C.tint(P.purple94), icon: Icons.account_balance_rounded),
         RefundStatus.completed => (label: 'Completed', fg: C.green, bg: C.limeSoft, icon: Icons.check_circle_rounded),
         RefundStatus.failed => (label: 'Failed', fg: C.red, bg: C.redSoft, icon: Icons.error_outline_rounded),
       };
@@ -96,16 +96,16 @@ class _RefundsScreenState extends State<RefundsScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-        decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(R.xl))),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2)))),
-          const SizedBox(height: 16),
-          const Text('What is an RRN?', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 8),
+          Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(R.xs)))),
+          const SizedBox(height: Sp.lg),
+          const Text('What is an RRN?', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+          const SizedBox(height: Sp.sm),
           Text(
               'The Retrieval Reference Number is a 12–18 digit number your bank gives every transaction. If the refund isn\'t in your statement, share this number with your bank\'s customer care and they can trace it.',
-              style: TextStyle(fontSize: 14, color: C.muted, height: 1.5)),
-          const SizedBox(height: 16),
+              style: TextStyle(fontSize: Fs.md, color: C.muted, height: 1.5)),
+          const SizedBox(height: Sp.lg),
           PillBtn('Got it', kind: BtnKind.dark, expand: true, onTap: () => Navigator.pop(ctx)),
         ]),
       ),
@@ -116,7 +116,7 @@ class _RefundsScreenState extends State<RefundsScreen> {
     final steps = _steps(r);
     final done = _done(r);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
+      padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, Sp.sm),
       child: Column(
         children: List.generate(steps.length, (i) {
           final s = steps[i];
@@ -132,7 +132,7 @@ class _RefundsScreenState extends State<RefundsScreen> {
                   Container(
                     width: 18,
                     height: 18,
-                    margin: const EdgeInsets.only(top: 2),
+                    margin: const EdgeInsets.only(top: Sp.xxs),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: isNow ? C.limeBg : C.card,
@@ -142,38 +142,38 @@ class _RefundsScreenState extends State<RefundsScreen> {
                   if (!last) Expanded(child: Container(width: 3, color: i + 1 < done ? C.green : C.track)),
                 ]),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: Sp.md),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: last ? 4 : 18),
+                  padding: EdgeInsets.only(bottom: last ? Sp.xs : Sp.lg),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(s.$1, style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800, color: isDone || isNow ? C.ink : C.muted)),
-                    const SizedBox(height: 2),
-                    Text(s.$2, style: TextStyle(fontSize: 12.5, color: C.muted)),
-                    const SizedBox(height: 4),
+                    Text(s.$1, style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: isDone || isNow ? C.ink : C.muted)),
+                    const SizedBox(height: Sp.xxs),
+                    Text(s.$2, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
+                    const SizedBox(height: Sp.xs),
                     Text(s.$3,
                         style: TextStyle(
-                            fontSize: 12.5,
+                            fontSize: Fs.sm,
                             height: 1.4,
                             fontWeight: isNow ? FontWeight.w700 : FontWeight.w400,
                             color: isNow ? C.ink : C.muted2)),
                     if (last && r.rrn != null && r.status == RefundStatus.completed) ...[
-                      const SizedBox(height: 6),
+                      const SizedBox(height: Sp.sm),
                       GestureDetector(
                         onTap: () {
                           Clipboard.setData(ClipboardData(text: r.rrn!));
                           toast(context, 'RRN copied');
                         },
                         child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          Text(r.rrn!, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, letterSpacing: 0.3)),
-                          const SizedBox(width: 6),
-                          Icon(Icons.copy_rounded, size: 15, color: C.muted),
+                          Text(r.rrn!, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, letterSpacing: 0.3)),
+                          const SizedBox(width: Sp.sm),
+                          Icon(Icons.copy_rounded, size: Ic.sm, color: C.muted),
                         ]),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: Sp.sm),
                       TapLink('What is RRN?',
                           onTap: _whatIsRrn,
-                          style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: C.ink, decoration: TextDecoration.underline)),
+                          style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.ink, decoration: TextDecoration.underline)),
                     ],
                   ]),
                 ),
@@ -190,32 +190,32 @@ class _RefundsScreenState extends State<RefundsScreen> {
     final open = _open.contains(r.bookingId);
     Widget dash() => Container(height: 1, color: C.line);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: Sp.md),
       child: WhiteCard(
         padding: EdgeInsets.zero,
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+            padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, Sp.lg),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Expanded(child: Text(r.hotel, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
-                const SizedBox(width: 8),
+                Expanded(child: Text(r.hotel, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800))),
+                const SizedBox(width: Sp.sm),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(8, 4, 10, 4),
-                  decoration: BoxDecoration(color: c.bg, borderRadius: BorderRadius.circular(999)),
+                  padding: const EdgeInsets.fromLTRB(Sp.sm, Sp.xs, Sp.md, Sp.xs),
+                  decoration: BoxDecoration(color: c.bg, borderRadius: BorderRadius.circular(R.pill)),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(c.icon, size: 14, color: c.fg),
-                    const SizedBox(width: 4),
-                    Text(c.label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: c.fg)),
+                    Icon(c.icon, size: Ic.sm, color: c.fg),
+                    const SizedBox(width: Sp.xs),
+                    Text(c.label, style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: c.fg)),
                   ]),
                 ),
               ]),
-              const SizedBox(height: 10),
+              const SizedBox(height: Sp.md),
               Text.rich(TextSpan(children: [
                 TextSpan(text: 'To: ', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
                 TextSpan(text: r.to, style: TextStyle(color: C.muted)),
-              ]), style: const TextStyle(fontSize: 13.5)),
-              const SizedBox(height: 4),
+              ]), style: const TextStyle(fontSize: Fs.base)),
+              const SizedBox(height: Sp.xs),
               Row(children: [
                 Expanded(
                   child: Text.rich(TextSpan(children: [
@@ -223,24 +223,24 @@ class _RefundsScreenState extends State<RefundsScreen> {
                         text: r.status == RefundStatus.completed ? 'Completed on: ' : 'Requested on: ',
                         style: TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
                     TextSpan(text: _d(r.status == RefundStatus.completed ? r.doneOn : r.requested), style: TextStyle(color: C.muted)),
-                  ]), style: const TextStyle(fontSize: 13.5)),
+                  ]), style: const TextStyle(fontSize: Fs.base)),
                 ),
-                Text(inr(r.amount), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                Text(inr(r.amount), style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
               ]),
               if (r.ongoing) ...[
-                const SizedBox(height: 10),
+                const SizedBox(height: Sp.md),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                  decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(12)),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.sm),
+                  decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(R.md)),
                   child: Row(children: [
-                    Icon(Icons.schedule_rounded, size: 16, color: C.muted),
-                    const SizedBox(width: 8),
+                    Icon(Icons.schedule_rounded, size: Ic.sm, color: C.muted),
+                    const SizedBox(width: Sp.sm),
                     Expanded(
                       child: Text(
                           r.status == RefundStatus.underReview
                               ? 'We\'re reviewing it. Expect it by ${_d(r.requested.add(const Duration(days: 7)))}.'
                               : 'Expected in your account by ${_d(r.requested.add(const Duration(days: 7)))}.',
-                          style: TextStyle(fontSize: 12.5, color: C.muted, fontWeight: FontWeight.w600)),
+                          style: TextStyle(fontSize: Fs.sm, color: C.muted, fontWeight: FontWeight.w600)),
                     ),
                   ]),
                 ),
@@ -252,10 +252,10 @@ class _RefundsScreenState extends State<RefundsScreen> {
             InkWell(
               onTap: () => Navigator.pushNamed(context, '/bookings'),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.lg),
                 child: Row(children: [
-                  Text('Booking ID: ', style: TextStyle(fontSize: 13.5, color: C.muted)),
-                  Text('#${r.bookingId}', style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800)),
+                  Text('Booking ID: ', style: TextStyle(fontSize: Fs.base, color: C.muted)),
+                  Text('#${r.bookingId}', style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700)),
                   const Spacer(),
                   Icon(Icons.chevron_right_rounded, color: C.muted),
                 ]),
@@ -265,29 +265,29 @@ class _RefundsScreenState extends State<RefundsScreen> {
             _timeline(r),
             dash(),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 6, 8, 6),
+              padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.sm, Sp.sm, Sp.sm),
               child: r.ongoing
                   ? Row(children: [
-                      Expanded(child: Text('Questions about this refund?', style: TextStyle(fontSize: 13.5, color: C.muted))),
+                      Expanded(child: Text('Questions about this refund?', style: TextStyle(fontSize: Fs.base, color: C.muted))),
                       TextButton(
                           onPressed: () => Navigator.pushNamed(context, '/chat'),
                           child: Text('Chat with us', style: TextStyle(fontWeight: FontWeight.w800, color: C.ink))),
                     ])
                   : _answered.contains(r.bookingId)
                       ? Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Text('Thanks for letting us know.', style: TextStyle(fontSize: 13.5, color: C.muted)),
+                          padding: const EdgeInsets.symmetric(vertical: Sp.md),
+                          child: Text('Thanks for letting us know.', style: TextStyle(fontSize: Fs.base, color: C.muted)),
                         )
                       : Row(children: [
-                          Expanded(child: Text('Did you receive your refund?', style: TextStyle(fontSize: 13.5, color: C.muted))),
+                          Expanded(child: Text('Did you receive your refund?', style: TextStyle(fontSize: Fs.base, color: C.muted))),
                           TextButton.icon(
                             onPressed: () => setState(() => _answered.add(r.bookingId)),
-                            icon: Icon(Icons.thumb_up_alt_outlined, size: 16, color: C.green),
+                            icon: Icon(Icons.thumb_up_alt_rounded, size: Ic.sm, color: C.green),
                             label: Text('Yes', style: TextStyle(fontWeight: FontWeight.w800, color: C.green)),
                           ),
                           TextButton.icon(
                             onPressed: () => Navigator.pushNamed(context, '/chat'),
-                            icon: Icon(Icons.thumb_down_alt_outlined, size: 16, color: C.red),
+                            icon: Icon(Icons.thumb_down_alt_rounded, size: Ic.sm, color: C.red),
                             label: Text('No', style: TextStyle(fontWeight: FontWeight.w800, color: C.red)),
                           ),
                         ]),
@@ -296,13 +296,13 @@ class _RefundsScreenState extends State<RefundsScreen> {
           ],
           InkWell(
             onTap: () => setState(() => open ? _open.remove(r.bookingId) : _open.add(r.bookingId)),
-            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(22)),
+            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(R.xl)),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: Sp.lg),
               child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(open ? 'Hide details' : 'See details', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: C.ink)),
-                const SizedBox(width: 4),
-                Icon(open ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded, size: 20, color: C.ink),
+                Text(open ? 'Hide details' : 'See details', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: C.ink)),
+                const SizedBox(width: Sp.xs),
+                Icon(open ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded, size: Ic.md, color: C.ink),
               ]),
             ),
           ),
@@ -323,9 +323,9 @@ class _RefundsScreenState extends State<RefundsScreen> {
         cacheKey: 'refunds',
         skeleton: const SkPage(title: 'My refunds', child: SkCards(count: 3, height: 160)),
         builder: (context, _) => SafeArea(
-        child: ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 30), children: [
+        child: ListView(padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.sm, Sp.xl, Sp.x3), children: [
           const TitleBar(title: 'My refunds'),
-          const SizedBox(height: 14),
+          const SizedBox(height: Sp.lg),
           WhiteCard(
             child: Row(children: [
               Expanded(
@@ -335,10 +335,10 @@ class _RefundsScreenState extends State<RefundsScreen> {
                     TextSpan(text: 'original payment method', style: TextStyle(fontWeight: FontWeight.w800, color: C.ink)),
                     const TextSpan(text: ' in 5–7 working days. Checkdin credits are added instantly.'),
                   ]),
-                  style: TextStyle(fontSize: 13.5, color: C.muted, height: 1.45),
+                  style: TextStyle(fontSize: Fs.base, color: C.muted, height: 1.45),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: Sp.md),
               IconTile(Icons.currency_rupee_rounded, bg: C.limeSoft, size: 48, radius: 24),
             ]),
           ),

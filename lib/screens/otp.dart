@@ -20,20 +20,20 @@ class DoorHanger extends StatelessWidget {
       child: Container(
         width: 150,
         height: 210,
-        padding: const EdgeInsets.only(top: 18),
+        padding: const EdgeInsets.only(top: Sp.lg),
         decoration: BoxDecoration(
           color: C.inkBg,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [BoxShadow(color: Color(0x47111111), blurRadius: 50, offset: Offset(0, 24))],
+          borderRadius: BorderRadius.circular(R.xl),
+          boxShadow: const [BoxShadow(color: P.inkA28, blurRadius: 50, offset: Offset(0, 24))],
         ),
         child: Column(children: [
           Container(width: 52, height: 52, decoration: BoxDecoration(color: C.bg, shape: BoxShape.circle)),
           Container(width: 10, height: 16, color: C.bg),
-          const SizedBox(height: 14),
-          Text('Shh…', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: C.lime, letterSpacing: -1)),
-          const SizedBox(height: 6),
+          const SizedBox(height: Sp.lg),
+          Text('Shh…', style: TextStyle(fontSize: Fs.h1, fontWeight: FontWeight.w800, color: C.lime, letterSpacing: -1)),
+          const SizedBox(height: Sp.sm),
           Text('Resting till\n5:00 PM',
-              textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: C.faint, height: 1.4)),
+              textAlign: TextAlign.center, style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w600, color: C.muted2, height: 1.4)),
         ]),
       ),
     );
@@ -156,25 +156,25 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
         ),
         AuthSheet(children: [
-          const Text('Verify your number', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 6),
+          const Text('Verify your number', style: TextStyle(fontSize: Fs.h2, fontWeight: FontWeight.w700)),
+          const SizedBox(height: Sp.sm),
           Wrap(crossAxisAlignment: WrapCrossAlignment.center, spacing: 10, children: [
-            Text.rich(TextSpan(style: TextStyle(fontSize: 15, color: C.muted), children: [
+            Text.rich(TextSpan(style: TextStyle(fontSize: Fs.md, color: C.muted), children: [
               const TextSpan(text: "We've sent an OTP on WhatsApp to "),
               TextSpan(text: '+91 $phone', style: TextStyle(color: C.ink, fontWeight: FontWeight.w700)),
             ])),
             TapLink('Edit number',
                 onTap: () => Navigator.pop(context),
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+                style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
           ]),
-          const SizedBox(height: 16),
+          const SizedBox(height: Sp.lg),
           Shake(
             key: _shake,
             child: Row(
             children: List.generate(4, (i) {
               return Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(right: i < 3 ? 14 : 0),
+                  padding: EdgeInsets.only(right: i < Sp.xs ? Sp.lg : 0),
                   child: SizedBox(
                     height: 60,
                     child: TextField(
@@ -186,16 +186,16 @@ class _OtpScreenState extends State<OtpScreen> {
                       // Keyboard OTP suggestions and paste put the whole code in one box; it's spread out below.
                       autofillHints: i == 0 ? const [AutofillHints.oneTimeCode] : null,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(4)],
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                      style: const TextStyle(fontSize: Fs.h2, fontWeight: FontWeight.w700),
                       decoration: InputDecoration(
                         counterText: '',
-                        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                        contentPadding: const EdgeInsets.symmetric(vertical: Sp.lg),
                         filled: _bad,
                         fillColor: C.redSoft,
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: _bad ? C.red : const Color(0xFFDADAD2), width: 1.5)),
+                            borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: _bad ? C.red : P.border, width: 1.5)),
                         focusedBorder:
-                            OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: _bad ? C.red : C.ink, width: 1.5)),
+                            OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: _bad ? C.red : C.ink, width: 1.5)),
                       ),
                       onChanged: (v) {
                         if (v.length > 1) {
@@ -229,21 +229,21 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
           ),
           FieldError(_err),
-          const SizedBox(height: 18),
+          const SizedBox(height: Sp.lg),
           PillBtn('Verify & continue',
               kind: BtnKind.dark,
               height: 56,
               expand: true,
               loading: _verifying,
               onTap: _verify),
-          const SizedBox(height: 6),
-          Text('Demo OTP: 1234', style: TextStyle(fontSize: 12, color: C.muted2)),
-          const SizedBox(height: 10),
+          const SizedBox(height: Sp.sm),
+          Text('Demo OTP: 1234', style: TextStyle(fontSize: Fs.sm, color: C.muted2)),
+          const SizedBox(height: Sp.md),
           Row(children: [
-            Expanded(child: Text("Didn't get the code?", style: TextStyle(fontSize: 15, color: C.muted))),
+            Expanded(child: Text("Didn't get the code?", style: TextStyle(fontSize: Fs.md, color: C.muted))),
             if (_secs > 0)
               Text('Resend in 0:${_secs.toString().padLeft(2, '0')}',
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF7C7C74)))
+                  style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w600, color: P.hint))
             else
               TextButton.icon(
                 onPressed: () {
@@ -254,7 +254,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   });
                   toast(context, 'New OTP sent on WhatsApp');
                 },
-                icon: Icon(Icons.refresh_rounded, size: 18, color: C.ink),
+                icon: Icon(Icons.refresh_rounded, size: Ic.md, color: C.ink),
                 label: Text('Resend OTP',
                     style: TextStyle(color: C.ink, fontWeight: FontWeight.w800, decoration: TextDecoration.underline)),
               ),

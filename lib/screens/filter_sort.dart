@@ -40,7 +40,7 @@ Future<void> showFilterSheet(BuildContext context) {
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    barrierColor: const Color(0x8C111111),
+    barrierColor: P.inkA55,
     builder: (_) => const FilterSheet(),
   );
 }
@@ -64,15 +64,15 @@ class _FilterSheetState extends State<FilterSheet> {
         onTap: () => setState(tap),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.md),
           decoration: BoxDecoration(
             color: on ? C.limeBg : C.card,
-            borderRadius: BorderRadius.circular(999),
+            borderRadius: BorderRadius.circular(R.pill),
             border: Border.all(color: on ? C.lime : C.border, width: 1.5),
           ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            if (on) ...[const Icon(Icons.check_rounded, size: 15), const SizedBox(width: 5)],
-            Text(label, style: TextStyle(fontSize: 13, fontWeight: on ? FontWeight.w800 : FontWeight.w600)),
+            if (on) ...[const Icon(Icons.check_rounded, size: Ic.sm), const SizedBox(width: Sp.xs)],
+            Text(label, style: TextStyle(fontSize: Fs.base, fontWeight: on ? FontWeight.w700 : FontWeight.w600)),
           ]),
         ),
       );
@@ -105,20 +105,20 @@ class _FilterSheetState extends State<FilterSheet> {
       constraints: BoxConstraints(maxHeight: maxH),
       decoration: BoxDecoration(
         color: C.bg,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl)),
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        const SizedBox(height: 10),
-        Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2))),
+        const SizedBox(height: Sp.md),
+        Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(R.xs))),
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 14, 12, 4),
+          padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.md, Sp.xs),
           child: Row(children: [
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('Filters & sort', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-                const SizedBox(height: 2),
+                const Text('Filters & sort', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+                const SizedBox(height: Sp.xxs),
                 Text(n == 0 ? 'No filters applied' : '$n ${n == 1 ? 'filter' : 'filters'} applied',
-                    style: TextStyle(fontSize: 13, color: C.muted)),
+                    style: TextStyle(fontSize: Fs.base, color: C.muted)),
               ]),
             ),
             CircleBtn(icon: Icons.close_rounded, size: 40, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(context)),
@@ -127,11 +127,11 @@ class _FilterSheetState extends State<FilterSheet> {
         Flexible(
           child: ListView(
             shrinkWrap: true,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            padding: const EdgeInsets.fromLTRB(Sp.xl, 0, Sp.xl, Sp.xl),
             children: [
               const SectionLabel('Sort by'),
               WhiteCard(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xs),
                 child: Column(children: [
                   for (var i = 0; i < _sorts.length; i++)
                     InkWell(
@@ -145,7 +145,7 @@ class _FilterSheetState extends State<FilterSheet> {
                           Expanded(
                             child: Text(_sorts[i],
                                 style: TextStyle(
-                                    fontSize: 14.5,
+                                    fontSize: Fs.md,
                                     fontWeight: Filters.sort == _sorts[i] ? FontWeight.w800 : FontWeight.w500)),
                           ),
                           AnimatedContainer(
@@ -180,7 +180,7 @@ class _FilterSheetState extends State<FilterSheet> {
         BottomBar(
           child: Row(children: [
             PillBtn('Clear all', kind: BtnKind.outline, onTap: n == 0 ? null : () => setState(Filters.clear)),
-            const SizedBox(width: 12),
+            const SizedBox(width: Sp.md),
             Expanded(
               child: PillBtn('Show ${Filters.stays} stays', kind: BtnKind.dark, expand: true, onTap: () => Navigator.pop(context)),
             ),

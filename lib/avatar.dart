@@ -39,13 +39,13 @@ Future<void> changePhoto(BuildContext context) async {
     backgroundColor: Colors.transparent,
     builder: (ctx) => Container(
       padding: EdgeInsets.fromLTRB(18, 18, 18, 18 + MediaQuery.of(ctx).padding.bottom),
-      decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
+      decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(R.xl))),
       child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Profile photo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: C.ink)),
-        const SizedBox(height: 10),
+        Text('Profile photo', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800, color: C.ink)),
+        const SizedBox(height: Sp.md),
         for (final o in [
-          [Icons.photo_camera_outlined, 'Take a photo', 'camera'],
-          [Icons.photo_library_outlined, 'Choose from gallery', 'gallery'],
+          [Icons.photo_camera_rounded, 'Take a photo', 'camera'],
+          [Icons.photo_library_rounded, 'Choose from gallery', 'gallery'],
           if (app.photoPath != null) [Icons.delete_outline_rounded, 'Remove photo', 'remove'],
         ])
           ListTile(

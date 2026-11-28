@@ -9,13 +9,13 @@ class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
   Widget _stepper(String label, String sub, int value, int min, int max, ValueChanged<int> onChange, {bool last = false}) => Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: Sp.md),
         decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
         child: Row(children: [
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(label, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-              Text(sub, style: TextStyle(fontSize: 12, color: C.muted)),
+              Text(label, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+              Text(sub, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
             ]),
           ),
           CircleBtn(
@@ -26,7 +26,7 @@ class SearchScreen extends StatelessWidget {
               tooltip: 'Less',
               iconColor: value > min ? C.ink : C.faint,
               onTap: value > min ? () => onChange(value - 1) : null),
-          SizedBox(width: 36, child: Text('$value', textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
+          SizedBox(width: 36, child: Text('$value', textAlign: TextAlign.center, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800))),
           CircleBtn(
               icon: Icons.add_rounded,
               size: 34,
@@ -57,7 +57,7 @@ class SearchScreen extends StatelessWidget {
                 children: [
                   Row(children: [
                     const BackBtn(),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: Sp.md),
                     Expanded(
                       child: SegmentPill(
                         options: const ['Hourly stay', 'Full-day stay'],
@@ -71,66 +71,66 @@ class SearchScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: Sp.md),
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(context, '/account'),
                       child: const Avatar(size: 44),
                     ),
                   ]),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: Sp.xl),
                   const Highlight(before: 'Where do you\nwant to ', marked: 'check in?', size: 28, height: 1.2),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: Sp.lg),
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(R.lg),
                       onTap: () async {
                         final r = await Navigator.pushNamed(context, '/picker');
                         if (r is String) app.set(() => app.place = r);
                       },
                       child: Container(
                         height: 56,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: Sp.lg),
                         decoration: BoxDecoration(
                           color: C.card,
-                          borderRadius: BorderRadius.circular(18),
+                          borderRadius: BorderRadius.circular(R.lg),
                           border: Border.all(color: place != null ? C.ink : C.white, width: 1.5),
-                          boxShadow: const [BoxShadow(color: Color(0x0F111111), blurRadius: 20, offset: Offset(0, 6))],
+                          boxShadow: const [BoxShadow(color: P.inkA6, blurRadius: 20, offset: Offset(0, 6))],
                         ),
                         child: Row(children: [
                           Icon(Icons.search_rounded, color: C.ink),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: Sp.md),
                           Expanded(
                             child: Text(place ?? 'Search area, landmark or hotel',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    fontSize: 15.5,
+                                    fontSize: Fs.lg,
                                     fontWeight: place != null ? FontWeight.w700 : FontWeight.w400,
-                                    color: place != null ? C.ink : const Color(0xFF7C7C74))),
+                                    color: place != null ? C.ink : P.hint)),
                           ),
                         ]),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: Sp.md),
                   WhiteCard(
-                    radius: 18,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    radius: R.lg,
+                    padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.md),
                     border: Border.all(color: place == 'Current location' ? C.ink : C.white, width: 1.5),
                     onTap: () async {
                       if (await useMyLocation(context)) app.set(() => app.place = 'Current location');
                     },
                     child: Row(children: [
                       IconTile(Icons.near_me_rounded, bg: C.limeSoft, size: 38, radius: 19),
-                      SizedBox(width: 12),
+                      SizedBox(width: Sp.md),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('Use my current location', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-                          SizedBox(height: 2),
-                          Text('Find stays near you', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                          Text('Use my current location', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                          SizedBox(height: Sp.xxs),
+                          Text('Find stays near you', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                         ]),
                       ),
-                      Icon(Icons.chevron_right_rounded, color: Color(0xFF9A9A92)),
+                      Icon(Icons.chevron_right_rounded, color: P.iconMuted),
                     ]),
                   ),
                   const SectionLabel('How many hours?'),
@@ -139,7 +139,7 @@ class SearchScreen extends StatelessWidget {
                       final on = app.slot == h;
                       return Expanded(
                         child: Padding(
-                          padding: EdgeInsets.only(right: h == 12 ? 0 : 8),
+                          padding: EdgeInsets.only(right: h == Sp.md ? 0 : Sp.sm),
                           child: GestureDetector(
                             onTap: () => app.set(() => app.slot = h),
                             child: AnimatedContainer(
@@ -147,12 +147,12 @@ class SearchScreen extends StatelessWidget {
                               height: 56,
                               decoration: BoxDecoration(
                                 color: on ? C.limeBg : C.card,
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(R.lg),
                                 border: Border.all(color: on ? C.lime : C.border, width: 1.5),
                               ),
                               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                Text('$h', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, height: 1.1)),
-                                Text('hours', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: C.muted)),
+                                Text('$h', style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800, height: 1.1)),
+                                Text('hours', style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w600, color: C.muted)),
                               ]),
                             ),
                           ),
@@ -162,7 +162,7 @@ class SearchScreen extends StatelessWidget {
                   ),
                   const SectionLabel('Rooms & guests'),
                   WhiteCard(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xxs),
                     child: Column(children: [
                       _stepper('Rooms', 'Up to 3 guests per room', app.rooms, 1, 4, (v) => app.set(() {
                             app.rooms = v;
@@ -183,10 +183,10 @@ class SearchScreen extends StatelessWidget {
                         onTap: () => app.set(() => app.place = a),
                         child: Container(
                           height: 40,
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          padding: const EdgeInsets.symmetric(horizontal: Sp.lg),
                           alignment: Alignment.center,
-                          decoration: BoxDecoration(color: on ? C.limeBg : C.card, borderRadius: BorderRadius.circular(999)),
-                          child: Text(a, style: TextStyle(fontSize: 13.5, fontWeight: on ? FontWeight.w800 : FontWeight.w600)),
+                          decoration: BoxDecoration(color: on ? C.limeBg : C.card, borderRadius: BorderRadius.circular(R.pill)),
+                          child: Text(a, style: TextStyle(fontSize: Fs.base, fontWeight: on ? FontWeight.w700 : FontWeight.w600)),
                         ),
                       );
                     }).toList(),
@@ -197,7 +197,7 @@ class SearchScreen extends StatelessWidget {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: recent.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 10),
+                      separatorBuilder: (_, __) => const SizedBox(width: Sp.md),
                       itemBuilder: (_, i) {
                         final r = recent[i];
                         return GestureDetector(
@@ -208,17 +208,17 @@ class SearchScreen extends StatelessWidget {
                           }),
                           child: Container(
                             width: 160,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(18)),
+                            padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.md),
+                            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.lg)),
                             child: Row(children: [
                               Expanded(
                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
-                                  Text(r[0] as String, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-                                  const SizedBox(height: 3),
-                                  Text(r[1] as String, style: TextStyle(fontSize: 12.5, color: C.muted)),
+                                  Text(r[0] as String, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                                  const SizedBox(height: Sp.xs),
+                                  Text(r[1] as String, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                                 ]),
                               ),
-                              const Icon(Icons.chevron_right_rounded, size: 20),
+                              const Icon(Icons.chevron_right_rounded, size: Ic.md),
                             ]),
                           ),
                         );
@@ -234,10 +234,10 @@ class SearchScreen extends StatelessWidget {
                   : Row(children: [
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                          Text(place, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                          const SizedBox(height: 2),
+                          Text(place, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                          const SizedBox(height: Sp.xxs),
                           Text('${app.slot}-hour stay · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.guestsLabel}',
-                              style: TextStyle(fontSize: 12.5, color: C.muted)),
+                              style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                         ]),
                       ),
                       PillBtn('Continue', icon: Icons.arrow_forward_rounded, onTap: () => Navigator.pushNamed(context, '/date')),

@@ -7,7 +7,7 @@ import '../state.dart';
 import '../theme.dart';
 
 Widget _tiles() => kQaMode
-    ? Container(color: const Color(0xFFE6EBE0))
+    ? Container(color: P.grey90)
     : TileLayer(
         urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         userAgentPackageName: 'com.checkdin.checkdin',
@@ -41,14 +41,14 @@ class _Pin extends StatelessWidget {
     return Center(
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.sm),
         decoration: BoxDecoration(
           color: on ? C.inkBg : C.card,
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(R.pill),
           border: Border.all(color: C.ink, width: 1.5),
-          boxShadow: const [BoxShadow(color: Color(0x33111111), blurRadius: 8, offset: Offset(0, 3))],
+          boxShadow: const [BoxShadow(color: P.inkA20, blurRadius: 8, offset: Offset(0, 3))],
         ),
-        child: Text(price!, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: on ? C.lime : C.ink)),
+        child: Text(price!, style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: on ? C.lime : C.ink)),
       ),
     );
   }
@@ -81,7 +81,7 @@ class HotelMiniMap extends StatelessWidget {
         const Positioned(
           right: 6,
           bottom: 4,
-          child: Text('© OpenStreetMap', style: TextStyle(fontSize: 9.5, color: Color(0xFF5C5C55))),
+          child: Text('© OpenStreetMap', style: TextStyle(fontSize: Fs.xs, color: P.muted)),
         ),
       ]),
     );
@@ -148,15 +148,15 @@ class _StaysMapScreenState extends State<StaysMapScreen> {
           top: top + 10,
           child: Row(children: [
             const BackBtn(),
-            const SizedBox(width: 10),
+            const SizedBox(width: Sp.md),
             Expanded(
               child: Container(
                 height: 44,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: Sp.lg),
                 alignment: Alignment.centerLeft,
-                decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(999), boxShadow: kShadow),
+                decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.pill), boxShadow: kShadow),
                 child: Text('${list.length} stays in ${app.place ?? 'Chennai'}',
-                    overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                    overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
               ),
             ),
           ]),
@@ -167,36 +167,36 @@ class _StaysMapScreenState extends State<StaysMapScreen> {
           bottom: 20 + MediaQuery.of(context).padding.bottom,
           child: Material(
             color: C.card,
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(R.xl),
             elevation: 6,
-            shadowColor: const Color(0x33111111),
+            shadowColor: P.inkA20,
             child: InkWell(
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(R.xl),
               onTap: () {
                 app.set(() => app.hotel = _sel);
                 Navigator.pushNamed(context, '/hotel');
               },
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(Sp.md),
                 child: Row(children: [
                   const SizedBox(width: 78, height: 78, child: PhotoPlaceholder(height: 78, radius: 16, label: '')),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: Sp.md),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       RatingBadge(_sel.rating, reviews: _sel.reviews),
-                      const SizedBox(height: 4),
-                      Text(_sel.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                      Text('${_sel.area} · ${kmLabel(_sel)}', style: TextStyle(fontSize: 12.5, color: C.muted)),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: Sp.xs),
+                      Text(_sel.name, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
+                      Text('${_sel.area} · ${kmLabel(_sel)}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
+                      const SizedBox(height: Sp.xs),
                       Text.rich(TextSpan(children: [
-                        TextSpan(text: _price(_sel), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                        TextSpan(text: widget.nightly || app.fullDay ? ' / night' : ' / ${app.slot} hrs', style: TextStyle(fontSize: 12, color: C.muted)),
+                        TextSpan(text: _price(_sel), style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
+                        TextSpan(text: widget.nightly || app.fullDay ? ' / night' : ' / ${app.slot} hrs', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                       ])),
                     ]),
                   ),
                   Column(children: [
                     CircleBtn(icon: Icons.directions_rounded, size: 40, bg: C.limeBg, shadow: false, tooltip: 'Directions', onTap: () => openDirections(context, _sel)),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: Sp.sm),
                     const Icon(Icons.chevron_right_rounded),
                   ]),
                 ]),

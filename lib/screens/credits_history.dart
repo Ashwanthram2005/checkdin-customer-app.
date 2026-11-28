@@ -16,10 +16,10 @@ class _Txn {
 // Newest first. Running balance ends at ₹120.
 const _txns = [
   _Txn('Credits expired', 'Unused part of welcome bonus', '25 Nov', 'November 2026', -32, Icons.hourglass_bottom_rounded, expired: true),
-  _Txn('Used on a booking', 'The Grand Residency · 3 hrs', '24 Nov', 'November 2026', -150, Icons.shopping_bag_outlined),
+  _Txn('Used on a booking', 'The Grand Residency · 3 hrs', '24 Nov', 'November 2026', -150, Icons.shopping_bag_rounded),
   _Txn('Referral bonus', 'Priya joined with your code ASHW100', '22 Nov', 'November 2026', 100, Icons.card_giftcard_rounded),
-  _Txn('8% back with BACK8', 'Skyline Suites · 12 hrs', '10 Nov', 'November 2026', 152, Icons.local_offer_outlined),
-  _Txn('Welcome bonus', 'Thanks for joining Checkdin', '28 Oct', 'October 2026', 50, Icons.celebration_outlined),
+  _Txn('8% back with BACK8', 'Skyline Suites · 12 hrs', '10 Nov', 'November 2026', 152, Icons.local_offer_rounded),
+  _Txn('Welcome bonus', 'Thanks for joining Checkdin', '28 Oct', 'October 2026', 50, Icons.celebration_rounded),
 ];
 
 class CreditsHistoryScreen extends StatefulWidget {
@@ -60,50 +60,50 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
         padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 32 + MediaQuery.of(context).padding.bottom),
         children: [
           const TitleBar(title: 'Checkdin credits'),
-          const SizedBox(height: 18),
+          const SizedBox(height: Sp.lg),
           WhiteCard(
             color: C.inkBg,
-            radius: 24,
-            padding: const EdgeInsets.all(20),
+            radius: R.xl,
+            padding: const EdgeInsets.all(Sp.xl),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('AVAILABLE BALANCE', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: C.faint)),
-              const SizedBox(height: 6),
-              Text('₹120', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, letterSpacing: -1.5, color: C.lime, height: 1)),
-              const SizedBox(height: 6),
-              Text('Used automatically at checkout', style: TextStyle(fontSize: 12.5, color: C.faint)),
-              const SizedBox(height: 16),
+              Text('AVAILABLE BALANCE', style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, letterSpacing: 1.2, color: C.faint)),
+              const SizedBox(height: Sp.sm),
+              Text('₹120', style: TextStyle(fontSize: Fs.display, fontWeight: FontWeight.w800, letterSpacing: -1.5, color: C.lime, height: 1)),
+              const SizedBox(height: Sp.sm),
+              Text('Used automatically at checkout', style: TextStyle(fontSize: Fs.sm, color: C.faint)),
+              const SizedBox(height: Sp.lg),
               Row(children: [
                 Expanded(child: _stat('Earned', inr(earned))),
-                Container(width: 1, height: 34, color: const Color(0xFF333333)),
-                const SizedBox(width: 16),
+                Container(width: 1, height: 34, color: P.grey20),
+                const SizedBox(width: Sp.lg),
                 Expanded(child: _stat('Used & expired', inr(used))),
               ]),
             ]),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: Sp.md),
           Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: C.tint(Color(0xFFFFF4D6)), borderRadius: BorderRadius.circular(14)),
+            padding: const EdgeInsets.all(Sp.md),
+            decoration: BoxDecoration(color: C.tint(P.amber92), borderRadius: BorderRadius.circular(R.lg)),
             child: const Row(children: [
-              Icon(Icons.schedule_rounded, size: 18, color: Color(0xFF8A6A00)),
-              SizedBox(width: 8),
+              Icon(Icons.schedule_rounded, size: Ic.md, color: P.amber27),
+              SizedBox(width: Sp.sm),
               Expanded(
                 child: Text('₹100 expires on 31 Dec 2026. Use it on your next stay.',
-                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFF6B5200))),
+                    style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w600, color: P.amber21)),
               ),
             ]),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: Sp.lg),
           SegmentPill(options: const ['All', 'Earned', 'Used'], selected: _filter, onChanged: (i) => setState(() => _filter = i)),
           if (shown.isEmpty)
             Padding(
-              padding: EdgeInsets.only(top: 40),
-              child: Center(child: Text('Nothing here yet', style: TextStyle(fontSize: 14, color: C.muted))),
+              padding: EdgeInsets.only(top: Sp.x4),
+              child: Center(child: Text('Nothing here yet', style: TextStyle(fontSize: Fs.md, color: C.muted))),
             ),
           for (final m in months) ...[
             SectionLabel(m),
             WhiteCard(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xxs),
               child: Column(children: [
                 for (final i in shown.where((i) => _txns[i].month == m).toList().asMap().entries)
                   Builder(builder: (_) {
@@ -114,21 +114,21 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 13),
                       decoration: BoxDecoration(border: i.key == inMonth - 1 ? null : Border(bottom: BorderSide(color: C.line))),
                       child: Row(children: [
-                        IconTile(t.icon, bg: plus ? C.limeSoft : (t.expired ? const Color(0xFFFFF4D6) : C.bg), size: 40),
-                        const SizedBox(width: 12),
+                        IconTile(t.icon, bg: plus ? C.limeSoft : (t.expired ? P.amber92 : C.bg), size: 40),
+                        const SizedBox(width: Sp.md),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text(t.title, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-                            const SizedBox(height: 2),
-                            Text('${t.sub} · ${t.date}', style: TextStyle(fontSize: 12, color: C.muted)),
+                            Text(t.title, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                            const SizedBox(height: Sp.xxs),
+                            Text('${t.sub} · ${t.date}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                           ]),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: Sp.sm),
                         Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                           Text('${plus ? '+' : '−'}${inr(t.amount.abs())}',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: plus ? C.green : (t.expired ? const Color(0xFF8A6A00) : C.ink))),
-                          const SizedBox(height: 2),
-                          Text('Bal ${inr(after[i.value])}', style: TextStyle(fontSize: 11.5, color: C.muted2)),
+                              style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: plus ? C.green : (t.expired ? P.amber27 : C.ink))),
+                          const SizedBox(height: Sp.xxs),
+                          Text('Bal ${inr(after[i.value])}', style: TextStyle(fontSize: Fs.xs, color: C.muted2)),
                         ]),
                       ]),
                     );
@@ -136,10 +136,10 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
               ]),
             ),
           ],
-          const SizedBox(height: 18),
+          const SizedBox(height: Sp.lg),
           const SectionLabel('How credits work'),
           WhiteCard(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(Sp.lg),
             child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               _HowRow('Earn from offers like BACK8, referrals and goodwill refunds.'),
               _HowRow('Credits are used automatically at checkout, before you pay.'),
@@ -154,9 +154,9 @@ class _CreditsHistoryScreenState extends State<CreditsHistoryScreen> {
   }
 
   Widget _stat(String k, String v) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(k, style: TextStyle(fontSize: 12, color: C.faint)),
-        const SizedBox(height: 2),
-        Text(v, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: C.white)),
+        Text(k, style: TextStyle(fontSize: Fs.sm, color: C.faint)),
+        const SizedBox(height: Sp.xxs),
+        Text(v, style: TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800, color: C.white)),
       ]);
 }
 
@@ -166,11 +166,11 @@ class _HowRow extends StatelessWidget {
   const _HowRow(this.text, {this.last = false});
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.only(bottom: last ? 0 : 10),
+        padding: EdgeInsets.only(bottom: last ? 0 : Sp.md),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(padding: EdgeInsets.only(top: 1), child: Icon(Icons.check_circle_rounded, size: 18, color: C.green)),
-          const SizedBox(width: 10),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 13.5, height: 1.45))),
+          Padding(padding: EdgeInsets.only(top: 1), child: Icon(Icons.check_circle_rounded, size: Ic.md, color: C.green)),
+          const SizedBox(width: Sp.md),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: Fs.base, height: 1.45))),
         ]),
       );
 }

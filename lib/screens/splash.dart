@@ -178,7 +178,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     offset: Offset(0, 8 * (1 - tag)),
                     child: Text('Hotel rooms by the hour',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.plusJakartaSans(fontSize: 14.5, fontWeight: FontWeight.w500, color: C.muted)),
+                        style: GoogleFonts.plusJakartaSans(fontSize: Fs.md, fontWeight: FontWeight.w500, color: C.muted)),
                   ),
                 ),
               ),
@@ -208,8 +208,8 @@ class _IconPainter extends CustomPainter {
   _IconPainter(this.t);
 
   static double seg(double t, double s, double d, [Curve c = Curves.linear]) => _SplashScreenState.seg(t, s, d, c);
-  static const _ink = Color(0xFF111111);
-  static const _lime = Color(0xFFD1F148);
+  static const _ink = P.ink;
+  static const _lime = P.lime;
   static double _rad(double deg) => deg * math.pi / 180;
 
   @override

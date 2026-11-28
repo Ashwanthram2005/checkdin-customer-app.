@@ -17,13 +17,13 @@ class ReportIssueScreen extends StatefulWidget {
 
 class _ReportIssueScreenState extends State<ReportIssueScreen> {
   static const _types = [
-    [Icons.no_meeting_room_outlined, 'Hotel refused check-in', 'Turned away at the desk'],
-    [Icons.cleaning_services_outlined, 'Room not clean', 'Bed, bathroom or floor'],
+    [Icons.no_meeting_room_rounded, 'Hotel refused check-in', 'Turned away at the desk'],
+    [Icons.cleaning_services_rounded, 'Room not clean', 'Bed, bathroom or floor'],
     [Icons.ac_unit_rounded, 'Something isn\'t working', 'AC, TV, Wi-Fi, hot water'],
-    [Icons.image_not_supported_outlined, 'Room not as shown', 'Different from the photos'],
-    [Icons.payments_outlined, 'Charged extra', 'Asked to pay more at the hotel'],
+    [Icons.image_not_supported_rounded, 'Room not as shown', 'Different from the photos'],
+    [Icons.payments_rounded, 'Charged extra', 'Asked to pay more at the hotel'],
     [Icons.schedule_rounded, 'Check-in delay', 'Kept waiting past my slot'],
-    [Icons.shield_outlined, 'Safety concern', 'I felt unsafe or uncomfortable'],
+    [Icons.shield_rounded, 'Safety concern', 'I felt unsafe or uncomfortable'],
     [Icons.more_horiz_rounded, 'Something else', 'Tell us what happened'],
   ];
 
@@ -91,16 +91,16 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
             padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 24),
             children: [
               const TitleBar(title: 'Report an issue'),
-              const SizedBox(height: 16),
+              const SizedBox(height: Sp.lg),
               WhiteCard(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(Sp.md),
                 child: Row(children: [
                   const SizedBox(width: 54, height: 54, child: PhotoPlaceholder(height: 54, radius: 12, label: '')),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: Sp.md),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(h.name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                      Text('${app.whenShort} · Booking ${app.bookingId}', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                      Text(h.name, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                      Text('${app.whenShort} · Booking ${app.bookingId}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                     ]),
                   ),
                 ]),
@@ -119,18 +119,18 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                       onTap: () => setState(() => _type = t[1] as String),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 150),
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(Sp.md),
                         decoration: BoxDecoration(
                           color: _type == t[1] ? C.limeSoft : C.card,
-                          borderRadius: BorderRadius.circular(18),
+                          borderRadius: BorderRadius.circular(R.lg),
                           border: Border.all(color: _type == t[1] ? C.ink : C.white, width: 1.5),
                         ),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Icon(t[0] as IconData, size: 22),
+                          Icon(t[0] as IconData, size: Ic.md),
                           const Spacer(),
-                          Text(t[1] as String, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, height: 1.2)),
-                          const SizedBox(height: 2),
-                          Text(t[2] as String, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5, color: C.muted)),
+                          Text(t[1] as String, style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, height: 1.2)),
+                          const SizedBox(height: Sp.xxs),
+                          Text(t[2] as String, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: Fs.xs, color: C.muted)),
                         ]),
                       ),
                     ),
@@ -138,19 +138,19 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
               )),
               FieldError(_tried && _type == null ? 'Pick what went wrong' : null),
               if (urgent) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: Sp.md),
                 Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(16)),
+                  padding: const EdgeInsets.all(Sp.lg),
+                  decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(R.lg)),
                   child: Row(children: [
                     Icon(Icons.priority_high_rounded, color: C.red),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: Sp.md),
                     Expanded(
                       child: Text('This is urgent. Call us now and we\'ll sort it out while you\'re at the hotel.',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: C.tx(Color(0xFFA3241A)), height: 1.4)),
+                          style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w600, color: C.tx(P.redDark), height: 1.4)),
                     ),
-                    const SizedBox(width: 8),
-                    PillBtn('Call', kind: BtnKind.dark, height: 38, fontSize: 13, onTap: () => toast(context, 'Calling Checkdin support…')),
+                    const SizedBox(width: Sp.sm),
+                    PillBtn('Call', kind: BtnKind.dark, height: 38, fontSize: Fs.base, onTap: () => toast(context, 'Calling Checkdin support…')),
                   ]),
                 ),
               ],
@@ -161,22 +161,22 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                 minLines: 4,
                 maxLength: 500,
                 onChanged: (_) => setState(() {}),
-                style: const TextStyle(fontSize: 14.5, height: 1.5),
+                style: const TextStyle(fontSize: Fs.md, height: 1.5),
                 decoration: InputDecoration(
                   hintText: 'What happened, and when? The more detail, the faster we can help.',
-                  hintStyle: const TextStyle(color: Color(0xFF8A8A82)),
+                  hintStyle: const TextStyle(color: P.hint),
                   filled: true,
                   fillColor: C.card,
                   helperText: _text.text.trim().length < 15 ? 'At least 15 characters' : null,
-                  contentPadding: const EdgeInsets.all(14),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.border, width: 1.5)),
-                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.border, width: 1.5)),
-                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.ink, width: 1.5)),
+                  contentPadding: const EdgeInsets.all(Sp.lg),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: C.border, width: 1.5)),
+                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: C.border, width: 1.5)),
+                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: C.ink, width: 1.5)),
                 ),
               )),
               FieldError(_tried && _text.text.trim().length < 15 ? 'Add a little more detail (at least 15 characters)' : null),
               SectionLabel('Add photos (optional)',
-                  trailing: Text('${_photos.length}/4', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: C.muted))),
+                  trailing: Text('${_photos.length}/4', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.muted))),
               SizedBox(
                 height: 84,
                 child: ListView(scrollDirection: Axis.horizontal, children: [
@@ -185,21 +185,21 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                       onTap: _addPhoto,
                       child: Container(
                         width: 84,
-                        margin: const EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(16), border: Border.all(color: C.lime, width: 1.5)),
+                        margin: const EdgeInsets.only(right: Sp.sm),
+                        decoration: BoxDecoration(color: C.limeSoft, borderRadius: BorderRadius.circular(R.lg), border: Border.all(color: C.lime, width: 1.5)),
                         child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          Icon(Icons.add_a_photo_outlined),
-                          SizedBox(height: 4),
-                          Text('Add', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                          Icon(Icons.add_a_photo_rounded),
+                          SizedBox(height: Sp.xs),
+                          Text('Add', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700)),
                         ]),
                       ),
                     ),
                   for (var i = 0; i < _photos.length; i++)
                     Container(
                       width: 84,
-                      margin: const EdgeInsets.only(right: 8),
+                      margin: const EdgeInsets.only(right: Sp.sm),
                       child: Stack(fit: StackFit.expand, children: [
-                        ClipRRect(borderRadius: BorderRadius.circular(16), child: Image.file(File(_photos[i].path), fit: BoxFit.cover)),
+                        ClipRRect(borderRadius: BorderRadius.circular(R.lg), child: Image.file(File(_photos[i].path), fit: BoxFit.cover)),
                         Positioned(
                           top: 4,
                           right: 4,
@@ -209,7 +209,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                               width: 24,
                               height: 24,
                               decoration: BoxDecoration(color: C.inkBg, shape: BoxShape.circle),
-                              child: Icon(Icons.close_rounded, size: 15, color: C.white),
+                              child: Icon(Icons.close_rounded, size: Ic.sm, color: C.white),
                             ),
                           ),
                         ),
@@ -217,8 +217,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                     ),
                 ]),
               ),
-              const SizedBox(height: 8),
-              Text('Photos help us resolve room and cleanliness issues faster.', style: TextStyle(fontSize: 12, color: C.muted2)),
+              const SizedBox(height: Sp.sm),
+              Text('Photos help us resolve room and cleanliness issues faster.', style: TextStyle(fontSize: Fs.sm, color: C.muted2)),
             ],
           ),
         ),
@@ -254,21 +254,21 @@ class _TicketDone extends StatelessWidget {
                   width: 96,
                   height: 96,
                   decoration: BoxDecoration(color: C.limeBg, shape: BoxShape.circle),
-                  child: const Icon(Icons.support_agent_rounded, size: 44),
+                  child: const Icon(Icons.support_agent_rounded, size: Ic.xxl),
                 ),
               ),
-              const SizedBox(height: 20),
-              const Text('We\'re on it', textAlign: TextAlign.center, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.8)),
-              const SizedBox(height: 8),
+              const SizedBox(height: Sp.xl),
+              const Text('We\'re on it', textAlign: TextAlign.center, style: TextStyle(fontSize: Fs.h1, fontWeight: FontWeight.w800, letterSpacing: -0.8)),
+              const SizedBox(height: Sp.sm),
               Text(
                   urgent
                       ? 'Our team will call you within 10 minutes. Stay where you are if it\'s safe to do so.'
                       : 'We\'ve sent your report to our support team. You\'ll hear from us on WhatsApp within 2 hours.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14.5, color: C.muted, height: 1.5)),
-              const SizedBox(height: 22),
+                  style: TextStyle(fontSize: Fs.md, color: C.muted, height: 1.5)),
+              const SizedBox(height: Sp.xxl),
               WhiteCard(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xs),
                 child: Column(children: [
                   for (final r in [
                     ['Ticket', id],
@@ -277,21 +277,21 @@ class _TicketDone extends StatelessWidget {
                     ['Status', 'Open'],
                   ])
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: Sp.md),
                       decoration: BoxDecoration(border: r[0] == 'Status' ? null : Border(bottom: BorderSide(color: C.line))),
                       child: Row(children: [
-                        Text(r[0], style: TextStyle(fontSize: 13.5, color: C.muted)),
+                        Text(r[0], style: TextStyle(fontSize: Fs.base, color: C.muted)),
                         const Spacer(),
                         r[0] == 'Status'
                             ? Tag('● Open', bg: C.limeSoft, fg: C.ink)
-                            : Text(r[1], style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                            : Text(r[1], style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700)),
                       ]),
                     ),
                 ]),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: Sp.md),
               Text('If the hotel can\'t fix it, you may get a refund, credits or another room, as per our Cancellation & Refund Policy.',
-                  textAlign: TextAlign.center, style: TextStyle(fontSize: 12.5, color: C.muted2, height: 1.45)),
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: Fs.sm, color: C.muted2, height: 1.45)),
             ],
           ),
         ),

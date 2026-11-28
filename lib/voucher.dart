@@ -43,69 +43,69 @@ Future<pw.Document> _doc(String id) async {
   final room = app.gross - app.fees;
 
   pw.Widget row(String k, String v, {bool bold = false}) => pw.Padding(
-        padding: const pw.EdgeInsets.symmetric(vertical: 4),
+        padding: const pw.EdgeInsets.symmetric(vertical: Sp.xs),
         child: pw.Row(children: [
-          pw.Expanded(child: pw.Text(k, style: const pw.TextStyle(color: muted, fontSize: 10.5))),
+          pw.Expanded(child: pw.Text(k, style: const pw.TextStyle(color: muted, fontSize: Fs.xs))),
           pw.Text(v, style: pw.TextStyle(fontSize: bold ? 12 : 10.5, fontWeight: bold ? pw.FontWeight.bold : pw.FontWeight.normal)),
         ]),
       );
   pw.Widget label(String t) =>
-      pw.Padding(padding: const pw.EdgeInsets.only(top: 16, bottom: 6), child: pw.Text(t.toUpperCase(), style: const pw.TextStyle(fontSize: 9, color: muted, letterSpacing: 1.2)));
+      pw.Padding(padding: const pw.EdgeInsets.only(top: Sp.lg, bottom: Sp.sm), child: pw.Text(t.toUpperCase(), style: const pw.TextStyle(fontSize: Fs.xs, color: muted, letterSpacing: 1.2)));
 
   final doc = pw.Document(theme: theme, title: 'Checkdin booking $id', author: 'Checkdin');
   doc.addPage(pw.Page(
     pageFormat: PdfPageFormat.a4,
-    margin: const pw.EdgeInsets.all(36),
+    margin: const pw.EdgeInsets.all(Sp.x4),
     build: (_) => pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
       pw.Row(children: [
         pw.Container(width: 26, height: 26, decoration: const pw.BoxDecoration(color: lime, shape: pw.BoxShape.circle)),
-        pw.SizedBox(width: 8),
-        pw.Text('Checkdin', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
+        pw.SizedBox(width: Sp.sm),
+        pw.Text('Checkdin', style: pw.TextStyle(fontSize: Fs.xl, fontWeight: pw.FontWeight.bold)),
         pw.Spacer(),
         pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.end, children: [
-          pw.Text('Booking voucher & payment receipt', style: pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold)),
-          pw.Text('Booking ID $id', style: const pw.TextStyle(fontSize: 10, color: muted)),
+          pw.Text('Booking voucher & payment receipt', style: pw.TextStyle(fontSize: Fs.xs, fontWeight: pw.FontWeight.bold)),
+          pw.Text('Booking ID $id', style: const pw.TextStyle(fontSize: Fs.xs, color: muted)),
         ]),
       ]),
-      pw.SizedBox(height: 18),
+      pw.SizedBox(height: Sp.lg),
       pw.Container(
-        padding: const pw.EdgeInsets.all(16),
-        decoration: pw.BoxDecoration(color: ink, borderRadius: pw.BorderRadius.circular(12)),
+        padding: const pw.EdgeInsets.all(Sp.lg),
+        decoration: pw.BoxDecoration(color: ink, borderRadius: pw.BorderRadius.circular(R.md)),
         child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.end, children: [
           pw.Expanded(
             child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-              pw.Text('CONFIRMED', style: const pw.TextStyle(color: lime, fontSize: 9, letterSpacing: 1.4)),
-              pw.SizedBox(height: 4),
-              pw.Text(h.name, style: pw.TextStyle(color: PdfColors.white, fontSize: 16, fontWeight: pw.FontWeight.bold)),
-              pw.Text(h.address, style: const pw.TextStyle(color: PdfColors.grey400, fontSize: 9.5)),
+              pw.Text('CONFIRMED', style: const pw.TextStyle(color: lime, fontSize: Fs.xs, letterSpacing: 1.4)),
+              pw.SizedBox(height: Sp.xs),
+              pw.Text(h.name, style: pw.TextStyle(color: PdfColors.white, fontSize: Fs.lg, fontWeight: pw.FontWeight.bold)),
+              pw.Text(h.address, style: const pw.TextStyle(color: PdfColors.grey400, fontSize: Fs.xs)),
             ]),
           ),
-          pw.Text(_rs(app.total), style: pw.TextStyle(color: lime, fontSize: 22, fontWeight: pw.FontWeight.bold)),
+          pw.Text(_rs(app.total), style: pw.TextStyle(color: lime, fontSize: Fs.h2, fontWeight: pw.FontWeight.bold)),
         ]),
       ),
       label('Your stay'),
       pw.Row(children: [
         pw.Expanded(
           child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-            pw.Text('CHECK-IN', style: const pw.TextStyle(fontSize: 8.5, color: muted)),
-            pw.Text(app.inTimeLabel, style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold)),
-            pw.Text(app.inDateLabel, style: const pw.TextStyle(fontSize: 10, color: muted)),
+            pw.Text('CHECK-IN', style: const pw.TextStyle(fontSize: Fs.xs, color: muted)),
+            pw.Text(app.inTimeLabel, style: pw.TextStyle(fontSize: Fs.md, fontWeight: pw.FontWeight.bold)),
+            pw.Text(app.inDateLabel, style: const pw.TextStyle(fontSize: Fs.xs, color: muted)),
           ]),
         ),
         pw.Container(
-          padding: const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: pw.BoxDecoration(color: lime, borderRadius: pw.BorderRadius.circular(10)),
-          child: pw.Text(app.stayLabel, style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold)),
+          padding: const pw.EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.xs),
+          decoration: pw.BoxDecoration(color: lime, borderRadius: pw.BorderRadius.circular(R.md)),
+          child: pw.Text(app.stayLabel, style: pw.TextStyle(fontSize: Fs.xs, fontWeight: pw.FontWeight.bold)),
         ),
         pw.Expanded(
           child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.end, children: [
-            pw.Text('CHECK-OUT', style: const pw.TextStyle(fontSize: 8.5, color: muted)),
-            pw.Text(app.outTimeLabel, style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold)),
-            pw.Text(app.outDateLabel, style: const pw.TextStyle(fontSize: 10, color: muted)),
+            pw.Text('CHECK-OUT', style: const pw.TextStyle(fontSize: Fs.xs, color: muted)),
+            pw.Text(app.outTimeLabel, style: pw.TextStyle(fontSize: Fs.md, fontWeight: pw.FontWeight.bold)),
+            pw.Text(app.outDateLabel, style: const pw.TextStyle(fontSize: Fs.xs, color: muted)),
           ]),
         ),
       ]),
-      pw.SizedBox(height: 8),
+      pw.SizedBox(height: Sp.sm),
       row('Room', 'Deluxe Room · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'}'),
       row('Guests', app.guestsLabel),
       label('Guest'),
@@ -122,14 +122,14 @@ Future<pw.Document> _doc(String id) async {
       row('Paid via', app.paidWith),
       row('Payment partner', 'Razorpay'),
       label('At check-in'),
-      pw.Bullet(text: 'Every guest must show an original government photo ID (Aadhaar, passport, driving licence or voter ID).', style: const pw.TextStyle(fontSize: 10)),
-      pw.Bullet(text: 'Show this voucher or your Booking ID at the front desk.', style: const pw.TextStyle(fontSize: 10)),
-      pw.Bullet(text: 'Cancel 5+ hrs before check-in for a 50% refund, 5–3 hrs for 25%; no refund after that or for no-shows.', style: const pw.TextStyle(fontSize: 10)),
+      pw.Bullet(text: 'Every guest must show an original government photo ID (Aadhaar, passport, driving licence or voter ID).', style: const pw.TextStyle(fontSize: Fs.xs)),
+      pw.Bullet(text: 'Show this voucher or your Booking ID at the front desk.', style: const pw.TextStyle(fontSize: Fs.xs)),
+      pw.Bullet(text: 'Cancel 5+ hrs before check-in for a 50% refund, 5–3 hrs for 25%; no refund after that or for no-shows.', style: const pw.TextStyle(fontSize: Fs.xs)),
       pw.Spacer(),
       pw.Divider(color: line),
-      pw.Text('Checkdin, Chennai, Tamil Nadu · hello@checkdin.in · checkdin.in', style: const pw.TextStyle(fontSize: 9, color: muted)),
+      pw.Text('Checkdin, Chennai, Tamil Nadu · hello@checkdin.in · checkdin.in', style: const pw.TextStyle(fontSize: Fs.xs, color: muted)),
       pw.Text('This is a computer-generated receipt and does not need a signature. The hotel issues its own GST invoice where applicable.',
-          style: const pw.TextStyle(fontSize: 8.5, color: muted)),
+          style: const pw.TextStyle(fontSize: Fs.xs, color: muted)),
     ]),
   ));
   return doc;

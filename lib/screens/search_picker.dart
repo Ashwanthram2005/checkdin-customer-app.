@@ -36,32 +36,32 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
   void _pick(String name) => Navigator.pop(context, name);
 
   Widget _row(_Item it, bool last) {
-    final icon = it.type == 'Landmark' ? Icons.flag_outlined : it.type == 'Hotel' ? Icons.bed_outlined : Icons.place_outlined;
-    final bg = it.type == 'Landmark' ? C.limeSoft : it.type == 'Hotel' ? const Color(0xFFFFF1C7) : C.bg;
+    final icon = it.type == 'Landmark' ? Icons.flag_rounded : it.type == 'Hotel' ? Icons.bed_rounded : Icons.place_rounded;
+    final bg = it.type == 'Landmark' ? C.limeSoft : it.type == 'Hotel' ? P.amberSoft : C.bg;
     return InkWell(
       onTap: () => _pick(it.name),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: Sp.md),
         decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
         child: Row(children: [
           IconTile(icon, bg: bg, size: 38),
-          const SizedBox(width: 12),
+          const SizedBox(width: Sp.md),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(it.name, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-              const SizedBox(height: 2),
-              Text(it.sub, style: TextStyle(fontSize: 12.5, color: C.muted)),
+              Text(it.name, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+              const SizedBox(height: Sp.xxs),
+              Text(it.sub, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
             ]),
           ),
-          const Icon(Icons.chevron_right_rounded, color: Color(0xFF9A9A92)),
+          const Icon(Icons.chevron_right_rounded, color: P.iconMuted),
         ]),
       ),
     );
   }
 
   Widget _list(List<_Item> items) => WhiteCard(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-        radius: 20,
+        padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xxs),
+        radius: R.xl,
         child: Column(children: [for (var i = 0; i < items.length; i++) _row(items[i], i == items.length - 1)]),
       );
 
@@ -77,23 +77,23 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
           child: Column(children: [
             Row(children: [
               BackBtn(bg: C.bg, shadow: false),
-              SizedBox(width: 10),
-              Text('Where to?', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+              SizedBox(width: Sp.md),
+              Text('Where to?', style: TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
             ]),
-            const SizedBox(height: 12),
+            const SizedBox(height: Sp.md),
             Container(
               height: 52,
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(16)),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.lg),
+              decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(R.lg)),
               child: Row(children: [
                 const Icon(Icons.search_rounded),
-                const SizedBox(width: 10),
+                const SizedBox(width: Sp.md),
                 Expanded(
                   child: TextField(
                     controller: _q,
                     autofocus: true,
                     onChanged: (_) => setState(() {}),
-                    style: const TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: Fs.md),
                     decoration: const InputDecoration(border: InputBorder.none, hintText: 'Search area, landmark or hotel'),
                   ),
                 ),
@@ -104,12 +104,12 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
           ]),
         ),
         Expanded(
-          child: ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 28), children: [
+          child: ListView(padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, Sp.x3), children: [
             if (q.isEmpty) ...[
               WhiteCard(
                 color: C.limeBg,
-                radius: 20,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                radius: R.xl,
+                padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.lg),
                 onTap: () async {
                   if (_locating) return;
                   setState(() => _locating = true);
@@ -120,12 +120,12 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                 },
                 child: Row(children: [
                   IconTile(Icons.near_me_rounded, bg: C.card, size: 40, radius: 20),
-                  SizedBox(width: 12),
+                  SizedBox(width: Sp.md),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text('Use my current location', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                      SizedBox(height: 2),
-                      Text('Stays near you, right now', style: TextStyle(fontSize: 12.5, color: C.limeInk)),
+                      Text('Use my current location', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                      SizedBox(height: Sp.xxs),
+                      Text('Stays near you, right now', style: TextStyle(fontSize: Fs.sm, color: C.limeInk)),
                     ]),
                   ),
                   _locating ? const Spinner() : const Icon(Icons.chevron_right_rounded),
@@ -141,13 +141,13 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                 childAspectRatio: 2.9,
                 children: areas
                     .map((a) => WhiteCard(
-                          radius: 18,
-                          padding: const EdgeInsets.all(12),
+                          radius: R.lg,
+                          padding: const EdgeInsets.all(Sp.md),
                           onTap: () => _pick(a),
                           child: Row(children: [
-                            const IconTile(Icons.place_outlined, size: 34, radius: 10),
-                            const SizedBox(width: 10),
-                            Expanded(child: Text(a, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
+                            const IconTile(Icons.place_rounded, size: 34, radius: 10),
+                            const SizedBox(width: Sp.md),
+                            Expanded(child: Text(a, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700))),
                           ]),
                         ))
                     .toList(),
@@ -162,17 +162,17 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                 builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
               if (soonCityFor(q) != null)
                 WhiteCard(
-                  radius: 20,
-                  padding: const EdgeInsets.all(14),
+                  radius: R.xl,
+                  padding: const EdgeInsets.all(Sp.lg),
                   onTap: () => Navigator.pushNamed(context, '/coming-soon', arguments: soonCityFor(q)),
                   child: Row(children: [
                     IconTile(Icons.location_city_rounded, bg: C.limeBg, size: 42),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: Sp.md),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(soonCityFor(q)!, style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
-                        const SizedBox(height: 2),
-                        Text('Coming soon · get notified', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                        Text(soonCityFor(q)!, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
+                        const SizedBox(height: Sp.xxs),
+                        Text('Coming soon · get notified', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                       ]),
                     ),
                     Tag('SOON', bg: C.inkBg, fg: C.lime),
@@ -185,12 +185,12 @@ class _SearchPickerScreenState extends State<SearchPickerScreen> {
                 ],
               if (hits.isEmpty && soonCityFor(q) == null)
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: Sp.x4, horizontal: Sp.md),
                   child: Column(children: [
-                    Text('No matches for “${_q.text}”', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                    const SizedBox(height: 6),
+                    Text('No matches for “${_q.text}”', style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
+                    const SizedBox(height: Sp.sm),
                     Text("Try an area like T. Nagar or OMR. We're adding new hotels every week.",
-                        textAlign: TextAlign.center, style: TextStyle(fontSize: 13.5, color: C.muted, height: 1.5)),
+                        textAlign: TextAlign.center, style: TextStyle(fontSize: Fs.base, color: C.muted, height: 1.5)),
                   ]),
                 ),
                 ]),

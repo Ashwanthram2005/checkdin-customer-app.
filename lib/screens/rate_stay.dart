@@ -64,19 +64,19 @@ class _RateStayScreenState extends State<RateStayScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         padding: EdgeInsets.fromLTRB(18, 18, 18, 18 + MediaQuery.of(ctx).padding.bottom),
-        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Add photos', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 14),
+          const Text('Add photos', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+          const SizedBox(height: Sp.lg),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: IconTile(Icons.photo_camera_outlined, bg: C.limeBg),
+            leading: IconTile(Icons.photo_camera_rounded, bg: C.limeBg),
             title: const Text('Take a photo', style: TextStyle(fontWeight: FontWeight.w700)),
             onTap: () => Navigator.pop(ctx, ImageSource.camera),
           ),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: const IconTile(Icons.photo_library_outlined),
+            leading: const IconTile(Icons.photo_library_rounded),
             title: const Text('Choose from gallery', style: TextStyle(fontWeight: FontWeight.w700)),
             onTap: () => Navigator.pop(ctx, ImageSource.gallery),
           ),
@@ -124,15 +124,15 @@ class _RateStayScreenState extends State<RateStayScreen> {
       onTap: () => setState(() => on ? _tags.remove(t) : _tags.add(t)),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.md),
         decoration: BoxDecoration(
           color: on ? (_happy ? C.lime : C.redSoft) : C.card,
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(R.pill),
           border: Border.all(color: on ? (_happy ? C.lime : C.red) : C.border, width: 1.5),
         ),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          if (on) ...[Icon(_happy ? Icons.thumb_up_alt_rounded : Icons.thumb_down_alt_rounded, size: 14), const SizedBox(width: 6)],
-          Text(t, style: TextStyle(fontSize: 13, fontWeight: on ? FontWeight.w800 : FontWeight.w600)),
+          if (on) ...[Icon(_happy ? Icons.thumb_up_alt_rounded : Icons.thumb_down_alt_rounded, size: Ic.sm), const SizedBox(width: Sp.sm)],
+          Text(t, style: TextStyle(fontSize: Fs.base, fontWeight: on ? FontWeight.w700 : FontWeight.w600)),
         ]),
       ),
     );
@@ -150,60 +150,60 @@ class _RateStayScreenState extends State<RateStayScreen> {
             padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 24),
             children: [
               const TitleBar(title: 'Rate your stay'),
-              const SizedBox(height: 18),
+              const SizedBox(height: Sp.lg),
               WhiteCard(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(Sp.md),
                 child: Row(children: [
                   const SizedBox(width: 64, height: 64, child: PhotoPlaceholder(height: 64, radius: 14, label: '')),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: Sp.md),
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(_hotel, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                      Text(_hotel, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
                       if (_when.isNotEmpty) ...[
-                        const SizedBox(height: 3),
-                        Text(_when, style: TextStyle(fontSize: 12.5, color: C.muted)),
+                        const SizedBox(height: Sp.xs),
+                        Text(_when, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                       ],
                     ]),
                   ),
                 ]),
               ),
-              const SizedBox(height: 22),
+              const SizedBox(height: Sp.xxl),
               Center(
                 child: Column(children: [
-                  const Text('How was your stay?', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
-                  const SizedBox(height: 12),
+                  const Text('How was your stay?', style: TextStyle(fontSize: Fs.h2, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
+                  const SizedBox(height: Sp.md),
                   _stars(_overall, 46, (v) => setState(() {
                         if (_happy != (v >= 4)) _tags.clear();
                         _overall = v;
                       })),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: Sp.sm),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 150),
                     child: Container(
                       key: ValueKey(_overall),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.xs),
                       decoration: BoxDecoration(
                           color: _overall == 0 ? Colors.transparent : (_overall >= 4 ? C.lime : C.limeSoft),
-                          borderRadius: BorderRadius.circular(999)),
+                          borderRadius: BorderRadius.circular(R.pill)),
                       child: Text(_overall == 0 ? 'Tap a star to rate' : _words[_overall],
                           style: TextStyle(
-                              fontSize: 13.5, fontWeight: FontWeight.w800, color: _overall == 0 ? C.muted : C.ink)),
+                              fontSize: Fs.base, fontWeight: FontWeight.w700, color: _overall == 0 ? C.muted : C.ink)),
                     ),
                   ),
                 ]),
               ),
               const SectionLabel('Rate the details'),
               WhiteCard(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xs),
                 child: Column(children: [
                   for (final e in _cat.entries.toList().asMap().entries)
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: Sp.md),
                       decoration: BoxDecoration(
                         border: e.key == _cat.length - 1 ? null : Border(bottom: BorderSide(color: C.line)),
                       ),
                       child: Row(children: [
-                        Expanded(child: Text(e.value.key, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600))),
+                        Expanded(child: Text(e.value.key, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w600))),
                         _stars(e.value.value, 24, (v) => setState(() => _cat[e.value.key] = v)),
                       ]),
                     ),
@@ -218,23 +218,23 @@ class _RateStayScreenState extends State<RateStayScreen> {
                 minLines: 4,
                 maxLength: 500,
                 onChanged: (_) => setState(() {}),
-                style: const TextStyle(fontSize: 14.5, height: 1.5),
+                style: const TextStyle(fontSize: Fs.md, height: 1.5),
                 decoration: InputDecoration(
                   hintText: 'Tell other guests about the room, check-in and staff…',
-                  hintStyle: const TextStyle(color: Color(0xFF8A8A82)),
+                  hintStyle: const TextStyle(color: P.hint),
                   filled: true,
                   fillColor: C.card,
                   errorText: textOk ? null : 'Write at least 20 characters (${20 - textLen} more)',
-                  contentPadding: const EdgeInsets.all(14),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.border, width: 1.5)),
+                  contentPadding: const EdgeInsets.all(Sp.lg),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: C.border, width: 1.5)),
                   enabledBorder:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.border, width: 1.5)),
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: C.border, width: 1.5)),
                   focusedBorder:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: C.ink, width: 1.5)),
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide(color: C.ink, width: 1.5)),
                 ),
               ),
               SectionLabel('Add photos from your stay',
-                  trailing: Text('${_photos.length}/6', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: C.muted))),
+                  trailing: Text('${_photos.length}/6', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.muted))),
               GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
@@ -248,20 +248,20 @@ class _RateStayScreenState extends State<RateStayScreen> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: C.limeSoft,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(R.lg),
                           border: Border.all(color: C.lime, width: 1.5),
                         ),
                         child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          Icon(Icons.add_a_photo_outlined, size: 26),
-                          SizedBox(height: 6),
-                          Text('Add photos', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800)),
+                          Icon(Icons.add_a_photo_rounded, size: Ic.lg),
+                          SizedBox(height: Sp.sm),
+                          Text('Add photos', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700)),
                         ]),
                       ),
                     ),
                   for (var i = 0; i < _photos.length; i++)
                     Stack(fit: StackFit.expand, children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(R.lg),
                         child: Image.file(File(_photos[i].path), fit: BoxFit.cover),
                       ),
                       Positioned(
@@ -273,26 +273,26 @@ class _RateStayScreenState extends State<RateStayScreen> {
                             width: 26,
                             height: 26,
                             decoration: BoxDecoration(color: C.inkBg, shape: BoxShape.circle),
-                            child: Icon(Icons.close_rounded, size: 16, color: C.white),
+                            child: Icon(Icons.close_rounded, size: Ic.sm, color: C.white),
                           ),
                         ),
                       ),
                     ]),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: Sp.sm),
               Text('Show the room, bathroom or view. Please avoid faces and ID cards.',
-                  style: TextStyle(fontSize: 12, color: C.muted2)),
-              const SizedBox(height: 16),
+                  style: TextStyle(fontSize: Fs.sm, color: C.muted2)),
+              const SizedBox(height: Sp.lg),
               WhiteCard(
-                radius: 18,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                radius: R.lg,
+                padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.md),
                 child: Row(children: [
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text('Post anonymously', style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-                      SizedBox(height: 2),
-                      Text('Your name won\'t be shown with this review.', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                      Text('Post anonymously', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                      SizedBox(height: Sp.xxs),
+                      Text('Your name won\'t be shown with this review.', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                     ]),
                   ),
                   BrandSwitch(value: _anon, onChanged: (v) => setState(() => _anon = v)),

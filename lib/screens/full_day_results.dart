@@ -69,22 +69,22 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
   }
 
   Widget _chip(String label, IconData icon, bool active, VoidCallback onTap) => Padding(
-        padding: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.only(right: Sp.sm),
         child: GestureDetector(
           onTap: onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: const EdgeInsets.symmetric(horizontal: Sp.lg),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: active ? C.inkBg : C.card,
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(R.pill),
               border: Border.all(color: active ? C.ink : C.border, width: 1.5),
             ),
             child: Row(children: [
-              Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: active ? C.lime : C.ink)),
-              const SizedBox(width: 5),
-              Icon(icon, size: 17, color: active ? C.lime : C.ink),
+              Text(label, style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, color: active ? C.lime : C.ink)),
+              const SizedBox(width: Sp.xs),
+              Icon(icon, size: Ic.sm, color: active ? C.lime : C.ink),
             ]),
           ),
         ),
@@ -105,7 +105,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
                   foregroundColor: C.lime,
                   elevation: 4,
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StaysMapScreen(list: list, nightly: true))),
-                  icon: const Icon(Icons.map_outlined),
+                  icon: const Icon(Icons.map_rounded),
                   label: const Text('Map', style: TextStyle(fontWeight: FontWeight.w800)),
                 ),
           body: Column(children: [
@@ -113,39 +113,39 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
               child: Column(children: [
                 Row(children: [
                   BackBtn(bg: C.bg, shadow: false),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: Sp.md),
                   Expanded(
                     child: Material(
                       color: C.bg,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(R.lg),
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(R.lg),
                         onTap: () => Navigator.maybePop(context),
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(14, 9, 8, 9),
+                          padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.sm, Sp.sm, Sp.sm),
                           child: Row(children: [
                             Expanded(
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 Text(app.place ?? 'Chennai',
-                                    overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                                    overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
                                 const SizedBox(height: 1),
                                 GestureDetector(
                                   onTap: () => pickStayDates(context),
                                   child: Text(
                                       '${dateLabel(app.inDate)} – ${dateLabel(app.outDate)} · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.adults}',
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: 12.5, color: C.muted)),
+                                      style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                                 ),
                               ]),
                             ),
-                            const CircleBtn(icon: Icons.edit_outlined, size: 34, shadow: false, tooltip: 'Edit search'),
+                            const CircleBtn(icon: Icons.edit_rounded, size: 34, shadow: false, tooltip: 'Edit search'),
                           ]),
                         ),
                       ),
                     ),
                   ),
                 ]),
-                const SizedBox(height: 12),
+                const SizedBox(height: Sp.md),
                 SizedBox(
                   height: 38,
                   child: ListView(scrollDirection: Axis.horizontal, children: [
@@ -170,7 +170,7 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
                 load: () => api.searchHotels(place: app.place, fullDay: true),
                 cacheKey: 'fullday|${app.place}|${app.inDate.day}|${app.outDate.day}|${app.rooms}',
                 skeleton: const SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(), padding: EdgeInsets.fromLTRB(20, 16, 20, 28), child: SkHotelList()),
+                    physics: NeverScrollableScrollPhysics(), padding: EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, Sp.x3), child: SkHotelList()),
                 builder: (context, _) => RefreshIndicator(
                   color: C.ink,
                   onRefresh: () async {
@@ -181,29 +181,29 @@ class _FullDayResultsScreenState extends State<FullDayResultsScreen> {
                     }
                   },
                   child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 18, 20, 30),
+                padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, Sp.x3),
                 children: [
-                  Text.rich(TextSpan(style: TextStyle(fontSize: 14, color: C.muted), children: [
+                  Text.rich(TextSpan(style: TextStyle(fontSize: Fs.md, color: C.muted), children: [
                     const TextSpan(text: 'Showing '),
                     TextSpan(text: '${list.length} ${list.length == 1 ? 'stay' : 'stays'}', style: TextStyle(fontWeight: FontWeight.w800, color: C.ink)),
                     TextSpan(text: ' for ${app.stayLabel} in ${_area ?? 'Chennai'}'),
                   ])),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: Sp.lg),
                   if (list.isEmpty)
                     Padding(
-                      padding: const EdgeInsets.only(top: 40),
+                      padding: const EdgeInsets.only(top: Sp.x4),
                       child: Column(children: [
                         IconTile(Icons.search_off_rounded, bg: C.limeBg, size: 64, radius: 22),
-                        const SizedBox(height: 14),
-                        const Text('No stays match', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: Sp.lg),
+                        const Text('No stays match', style: TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
+                        const SizedBox(height: Sp.md),
                         PillBtn('Clear filters', kind: BtnKind.dark, height: 44, onTap: () => setState(() {
                               _area = null;
                               _minRating = null;
                             })),
                       ]),
                     ),
-                  for (final h in list) Padding(padding: const EdgeInsets.only(bottom: 16), child: _NightCard(h)),
+                  for (final h in list) Padding(padding: const EdgeInsets.only(bottom: Sp.lg), child: _NightCard(h)),
                 ],
               ),
                 ),
@@ -225,17 +225,17 @@ class _OptionSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 18, 20, 18 + MediaQuery.of(context).padding.bottom),
-      decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
       child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-        const SizedBox(height: 8),
+        Text(title, style: const TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+        const SizedBox(height: Sp.sm),
         for (final o in options)
           InkWell(
             onTap: () => Navigator.pop(context, [o]),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 13),
               child: Row(children: [
-                Expanded(child: Text(o, style: TextStyle(fontSize: 15, fontWeight: o == selected ? FontWeight.w800 : FontWeight.w500))),
+                Expanded(child: Text(o, style: TextStyle(fontSize: Fs.md, fontWeight: o == selected ? FontWeight.w700 : FontWeight.w500))),
                 if (o == selected) Icon(Icons.check_circle_rounded, color: C.ink),
               ]),
             ),
@@ -275,30 +275,30 @@ class _NightCardState extends State<_NightCard> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         padding: EdgeInsets.fromLTRB(20, 18, 20, 18 + MediaQuery.of(ctx).padding.bottom),
-        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
-            Expanded(child: Text(h.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800))),
+            Expanded(child: Text(h.name, style: const TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800))),
             RatingBadge(h.rating, reviews: h.reviews),
           ]),
-          const SizedBox(height: 4),
-          Text(h.address, style: TextStyle(fontSize: 13, color: C.muted)),
-          const SizedBox(height: 14),
+          const SizedBox(height: Sp.xs),
+          Text(h.address, style: TextStyle(fontSize: Fs.base, color: C.muted)),
+          const SizedBox(height: Sp.lg),
           for (final r in [
             [Icons.login_rounded, 'Check-in from 12:00 PM · check-out by 11:00 AM'],
-            [Icons.badge_outlined, 'Original photo ID needed for every guest'],
-            [Icons.event_available_outlined, '50% refund if you cancel 5+ hrs before check-in'],
+            [Icons.badge_rounded, 'Original photo ID needed for every guest'],
+            [Icons.event_available_rounded, '50% refund if you cancel 5+ hrs before check-in'],
             [Icons.wifi_rounded, 'AC · Free Wi-Fi · Room service'],
           ])
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: Sp.md),
               child: Row(children: [
-                Icon(r[0] as IconData, size: 18, color: C.muted),
-                const SizedBox(width: 10),
-                Expanded(child: Text(r[1] as String, style: const TextStyle(fontSize: 13.5))),
+                Icon(r[0] as IconData, size: Ic.md, color: C.muted),
+                const SizedBox(width: Sp.md),
+                Expanded(child: Text(r[1] as String, style: const TextStyle(fontSize: Fs.base))),
               ]),
             ),
-          const SizedBox(height: 6),
+          const SizedBox(height: Sp.sm),
           PillBtn('View hotel', kind: BtnKind.dark, expand: true, onTap: () {
             Navigator.pop(ctx);
             _open();
@@ -325,7 +325,7 @@ class _NightCardState extends State<_NightCard> {
               icon: icon,
               size: 32,
               shadow: false,
-              bg: const Color(0xCCFFFFFF),
+              bg: P.whiteA80,
               tooltip: left ? 'Previous photo' : 'Next photo',
               onTap: () => _page.animateToPage((_i + (left ? -1 : 1)).clamp(0, _shots.length - 1).toInt(),
                   duration: const Duration(milliseconds: 250), curve: Curves.easeOut),
@@ -334,7 +334,7 @@ class _NightCardState extends State<_NightCard> {
         );
     return Material(
       color: C.card,
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(R.xl),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: _open,
@@ -356,7 +356,7 @@ class _NightCardState extends State<_NightCard> {
                 top: 12,
                 child: CircleBtn(
                   icon: saved ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                  iconColor: saved ? const Color(0xFFE5484D) : C.ink,
+                  iconColor: saved ? P.redBright : C.ink,
                   size: 38,
                   shadow: false,
                   tooltip: 'Save',
@@ -375,39 +375,39 @@ class _NightCardState extends State<_NightCard> {
                       duration: const Duration(milliseconds: 150),
                       width: k == _i ? 16 : 6,
                       height: 6,
-                      margin: const EdgeInsets.symmetric(horizontal: 2),
-                      decoration: BoxDecoration(color: k == _i ? C.card : const Color(0x99FFFFFF), borderRadius: BorderRadius.circular(3)),
+                      margin: const EdgeInsets.symmetric(horizontal: Sp.xxs),
+                      decoration: BoxDecoration(color: k == _i ? C.card : P.whiteA60, borderRadius: BorderRadius.circular(R.xs)),
                     ),
                 ]),
               ),
             ]),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+            padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, 0),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(h.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
-                  const SizedBox(height: 3),
-                  Text('${h.area} · ${kmLabel(h)}', style: TextStyle(fontSize: 13, color: C.muted)),
+                  Text(h.name, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
+                  const SizedBox(height: Sp.xs),
+                  Text('${h.area} · ${kmLabel(h)}', style: TextStyle(fontSize: Fs.base, color: C.muted)),
                 ]),
               ),
               GestureDetector(
                 onTap: _quickView,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(10)),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.sm),
+                  decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(R.md)),
                   child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(Icons.info_outline_rounded, size: 15),
-                    SizedBox(width: 4),
-                    Text('Quick view', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+                    Icon(Icons.info_outline_rounded, size: Ic.sm),
+                    SizedBox(width: Sp.xs),
+                    Text('Quick view', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700)),
                   ]),
                 ),
               ),
             ]),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+            padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.md, Sp.lg, 0),
             child: Wrap(spacing: 14, runSpacing: 6, children: [
               for (final t in h.tags.take(2))
                 Row(mainAxisSize: MainAxisSize.min, children: [
@@ -415,30 +415,30 @@ class _NightCardState extends State<_NightCard> {
                       t.startsWith('Couple')
                           ? Icons.people_outline_rounded
                           : t.startsWith('Local')
-                              ? Icons.badge_outlined
+                              ? Icons.badge_rounded
                               : Icons.check_circle_outline_rounded,
-                      size: 16,
+                      size: Ic.sm,
                       color: C.muted),
-                  const SizedBox(width: 5),
-                  Text(t, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: C.tx(Color(0xFF3F3F38)))),
+                  const SizedBox(width: Sp.xs),
+                  Text(t, style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w600, color: C.tx(P.ink2))),
                 ]),
             ]),
           ),
-          Padding(padding: EdgeInsets.fromLTRB(16, 14, 16, 0), child: Divider(color: C.line, height: 1)),
+          Padding(padding: EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, 0), child: Divider(color: C.line, height: 1)),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+            padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.md, Sp.lg, Sp.lg),
             child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
               Expanded(
                 child: app.nights > 1
-                    ? Text('${inr(total)} for ${app.stayLabel}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.green))
-                    : Text('50% refund till 5 hrs before', style: TextStyle(fontSize: 12, color: C.green, fontWeight: FontWeight.w600)),
+                    ? Text('${inr(total)} for ${app.stayLabel}', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.green))
+                    : Text('50% refund till 5 hrs before', style: TextStyle(fontSize: Fs.sm, color: C.green, fontWeight: FontWeight.w600)),
               ),
               Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                 Text.rich(TextSpan(children: [
-                  TextSpan(text: inr(perNight), style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w800)),
-                  TextSpan(text: ' /night · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'}', style: TextStyle(fontSize: 12, color: C.muted)),
+                  TextSpan(text: inr(perNight), style: const TextStyle(fontSize: Fs.h2, fontWeight: FontWeight.w800)),
+                  TextSpan(text: ' /night · ${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                 ])),
-                Text('+${inr(taxes)} taxes', style: TextStyle(fontSize: 12, color: C.muted2)),
+                Text('+${inr(taxes)} taxes', style: TextStyle(fontSize: Fs.sm, color: C.muted2)),
               ]),
             ]),
           ),

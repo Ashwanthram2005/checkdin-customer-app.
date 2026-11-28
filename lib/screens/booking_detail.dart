@@ -24,23 +24,23 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
           padding: const EdgeInsets.symmetric(vertical: 13),
           decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
           child: Row(children: [
-            Text(l, style: TextStyle(fontSize: 14, color: C.muted)),
-            const SizedBox(width: 12),
-            Expanded(child: Text(v, textAlign: TextAlign.right, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
+            Text(l, style: TextStyle(fontSize: Fs.md, color: C.muted)),
+            const SizedBox(width: Sp.md),
+            Expanded(child: Text(v, textAlign: TextAlign.right, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700))),
           ]),
         );
     Widget contact(IconData icon, String t, String s, VoidCallback onTap) => Expanded(
           child: WhiteCard(
-            radius: 18,
-            padding: const EdgeInsets.all(14),
+            radius: R.lg,
+            padding: const EdgeInsets.all(Sp.lg),
             onTap: onTap,
             child: Row(children: [
               IconTile(icon, bg: C.limeSoft, size: 38, radius: 19),
-              const SizedBox(width: 10),
+              const SizedBox(width: Sp.md),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(t, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                  Text(s, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: C.muted)),
+                  Text(t, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                  Text(s, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                 ]),
               ),
             ]),
@@ -60,7 +60,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
           ),
         ),
         Expanded(
-          child: ListView(padding: const EdgeInsets.fromLTRB(0, 6, 0, 28), children: [
+          child: ListView(padding: const EdgeInsets.fromLTRB(0, Sp.sm, 0, Sp.x3), children: [
             SizedBox(
               height: 200,
               child: PageView.builder(
@@ -68,65 +68,65 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 controller: PageController(viewportFraction: 0.9),
                 onPageChanged: (i) => setState(() => _photo = i),
                 itemBuilder: (_, i) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.xs),
                   child: PhotoPlaceholder(height: 200, radius: 22, label: ['Room photo', 'Bathroom photo', 'Lobby photo'][i]),
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: Sp.md),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 3,
                 (i) => AnimatedContainer(
                   duration: const Duration(milliseconds: 150),
-                  margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                  margin: const EdgeInsets.symmetric(horizontal: Sp.xxs),
                   width: i == _photo ? 18 : 6,
                   height: 6,
-                  decoration: BoxDecoration(color: i == _photo ? C.inkBg : C.tint(Color(0xFFCFCFC7)), borderRadius: BorderRadius.circular(999)),
+                  decoration: BoxDecoration(color: i == _photo ? C.inkBg : C.tint(P.dotIdle), borderRadius: BorderRadius.circular(R.pill)),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.xl),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const SizedBox(height: 14),
-                Row(children: [RatingBadge(h.rating), const SizedBox(width: 8), const Tag('Completed')]),
-                const SizedBox(height: 10),
-                Text(h.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: -0.7)),
-                const SizedBox(height: 6),
-                Text(h.address, style: TextStyle(fontSize: 13.5, color: C.muted, height: 1.5)),
-                const SizedBox(height: 14),
+                const SizedBox(height: Sp.lg),
+                Row(children: [RatingBadge(h.rating), const SizedBox(width: Sp.sm), const Tag('Completed')]),
+                const SizedBox(height: Sp.md),
+                Text(h.name, style: const TextStyle(fontSize: Fs.h2, fontWeight: FontWeight.w800, letterSpacing: -0.7)),
+                const SizedBox(height: Sp.sm),
+                Text(h.address, style: TextStyle(fontSize: Fs.base, color: C.muted, height: 1.5)),
+                const SizedBox(height: Sp.lg),
                 PillBtn('Get directions',
-                    kind: BtnKind.outline, height: 48, expand: true, icon: Icons.near_me_outlined, trailingIcon: false, onTap: () => openDirections(context, app.hotel)),
-                const SizedBox(height: 20),
+                    kind: BtnKind.outline, height: 48, expand: true, icon: Icons.near_me_rounded, trailingIcon: false, onTap: () => openDirections(context, app.hotel)),
+                const SizedBox(height: Sp.xl),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-                  decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(24)),
+                  padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, Sp.lg),
+                  decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(R.xl)),
                   child: Column(children: [
                     Row(children: [
-                      Expanded(child: Text('BOOKING ID · ${app.bookingId}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1))),
+                      Expanded(child: Text('BOOKING ID · ${app.bookingId}', style: const TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, letterSpacing: 1))),
                       Material(
-                        color: const Color(0xA6FFFFFF),
-                        borderRadius: BorderRadius.circular(999),
+                        color: P.whiteA65,
+                        borderRadius: BorderRadius.circular(R.pill),
                         child: InkWell(
-                          borderRadius: BorderRadius.circular(999),
+                          borderRadius: BorderRadius.circular(R.pill),
                           onTap: () => shareVoucher(context),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                            padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.sm),
                             child: Row(children: [
                               ValueListenableBuilder<bool>(
                                 valueListenable: voucherBusy,
-                                builder: (_, busy, __) => busy ? const Spinner(size: 15) : const Icon(Icons.download_rounded, size: 15),
+                                builder: (_, busy, __) => busy ? const Spinner(size: 15) : const Icon(Icons.download_rounded, size: Ic.sm),
                               ),
-                              SizedBox(width: 5),
-                              Text('Voucher', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700)),
+                              SizedBox(width: Sp.xs),
+                              Text('Voucher', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700)),
                             ]),
                           ),
                         ),
                       ),
                     ]),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: Sp.lg),
                     StayTimeline(
                       inTime: hourLabel(app.checkInHour),
                       outTime: hourLabel(app.checkOutHour),
@@ -137,62 +137,62 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                     ),
                   ]),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: Sp.md),
                 Row(children: [
-                  contact(Icons.call_outlined, 'Call hotel', 'Front desk', () => callHotel(context)),
-                  const SizedBox(width: 12),
+                  contact(Icons.call_rounded, 'Call hotel', 'Front desk', () => callHotel(context)),
+                  const SizedBox(width: Sp.md),
                   contact(Icons.mail_outline_rounded, 'Email us', 'hello@checkdin.in', () => toast(context, 'Opening email…')),
                 ]),
                 const SectionLabel('Your room'),
                 WhiteCard(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xs),
                   child: Column(children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: Sp.lg),
                       decoration: BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
                       child: Row(children: [
-                        const IconTile(Icons.bed_outlined, size: 42),
-                        const SizedBox(width: 12),
+                        const IconTile(Icons.bed_rounded, size: 42),
+                        const SizedBox(width: Sp.md),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            const Text('Deluxe Room', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                            Text('Hourly stay · ${app.slot} hours · Room 204', style: TextStyle(fontSize: 13, color: C.muted)),
+                            const Text('Deluxe Room', style: TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
+                            Text('Hourly stay · ${app.slot} hours · Room 204', style: TextStyle(fontSize: Fs.base, color: C.muted)),
                           ]),
                         ),
                       ]),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: Sp.lg),
                       decoration: BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
                       child: Row(children: [
-                        Icon(Icons.group_outlined, size: 18, color: C.muted),
-                        const SizedBox(width: 12),
-                        Text(app.guestsLabel, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                        Icon(Icons.group_rounded, size: Ic.md, color: C.muted),
+                        const SizedBox(width: Sp.md),
+                        Text(app.guestsLabel, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w600)),
                       ]),
                     ),
                     InkWell(
                       onTap: () => Navigator.pushNamed(context, '/cancel-policy'),
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(vertical: Sp.lg),
                         child: Row(children: [
-                          Expanded(child: Text('View cancellation policy', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
+                          Expanded(child: Text('View cancellation policy', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700))),
                           Icon(Icons.chevron_right_rounded),
                         ]),
                       ),
                     ),
                   ]),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: Sp.md),
                 WhiteCard(
                   onTap: () => Navigator.pushNamed(context, '/report'),
                   child: Row(children: [
                     IconTile(Icons.report_gmailerrorred_rounded, bg: C.redSoft, size: 40),
-                    SizedBox(width: 12),
+                    SizedBox(width: Sp.md),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text('Report an issue', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-                        SizedBox(height: 2),
-                        Text('Room, check-in, extra charges or safety', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                        Text('Report an issue', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                        SizedBox(height: Sp.xxs),
+                        Text('Room, check-in, extra charges or safety', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                       ]),
                     ),
                     Icon(Icons.chevron_right_rounded),
@@ -200,7 +200,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 ),
                 const SectionLabel('Guest details'),
                 WhiteCard(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xs),
                   child: Column(children: [
                     if (app.forSomeoneElse) ...[
                       infoRow('Guest', app.stayGuestName),
@@ -215,13 +215,13 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 ),
                 const SectionLabel('Bill summary'),
                 WhiteCard(
-                  padding: const EdgeInsets.fromLTRB(18, 16, 18, 10),
+                  padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, Sp.md),
                   child: Column(children: [
                     billRow('Room price', inr(app.gross - app.fees)),
-                    const SizedBox(height: 12),
-                    if (app.discount > 0) ...[billRow('Coupon ${app.couponCode}', '−${inr(app.discount)}', vColor: C.green), const SizedBox(height: 12)],
+                    const SizedBox(height: Sp.md),
+                    if (app.discount > 0) ...[billRow('Coupon ${app.couponCode}', '−${inr(app.discount)}', vColor: C.green), const SizedBox(height: Sp.md)],
                     billRow('Taxes & fees', inr(app.fees)),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: Sp.lg),
                     totalBox(inr(app.total), label: 'Total paid'),
                   ]),
                 ),
@@ -232,7 +232,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
         BottomBar(
           child: Row(children: [
             Expanded(child: PillBtn('Rate stay', kind: BtnKind.outline, onTap: () => Navigator.pushNamed(context, '/bookings'))),
-            const SizedBox(width: 10),
+            const SizedBox(width: Sp.md),
             Expanded(child: PillBtn('Book again', onTap: () => popTo(context, '/search'))),
           ]),
         ),

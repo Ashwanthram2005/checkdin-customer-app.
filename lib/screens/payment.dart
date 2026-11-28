@@ -94,7 +94,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      barrierColor: const Color(0x99111111),
+      barrierColor: P.inkA60,
       builder: (_) => PopScope(
         canPop: false,
         child: Center(
@@ -102,15 +102,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
             color: Colors.transparent,
             child: Container(
             width: 260,
-            padding: const EdgeInsets.fromLTRB(20, 26, 20, 22),
-            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(24)),
+            padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.xxl, Sp.xl, Sp.xxl),
+            decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.xl)),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               SizedBox(width: 40, height: 40, child: CircularProgressIndicator(strokeWidth: 3.5, color: C.ink, backgroundColor: C.limeSoft)),
-              const SizedBox(height: 16),
-              const Text('Confirming payment…', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-              const SizedBox(height: 4),
+              const SizedBox(height: Sp.lg),
+              const Text('Confirming payment…', style: TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
+              const SizedBox(height: Sp.xs),
               Text('Don\'t press back or close the app', textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12.5, color: C.muted, fontWeight: FontWeight.w500)),
+                  style: TextStyle(fontSize: Fs.sm, color: C.muted, fontWeight: FontWeight.w500)),
             ]),
           ),
           ),
@@ -187,11 +187,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         filled: true,
         fillColor: C.card,
         suffixIcon: suffix,
-        hintStyle: const TextStyle(color: Color(0xFF8A8A82), fontWeight: FontWeight.w400),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: C.border, width: 1.5)),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: C.border, width: 1.5)),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: C.ink, width: 1.5)),
+        hintStyle: const TextStyle(color: P.hint, fontWeight: FontWeight.w400),
+        contentPadding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.lg),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(R.md), borderSide: BorderSide(color: C.border, width: 1.5)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(R.md), borderSide: BorderSide(color: C.border, width: 1.5)),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(R.md), borderSide: BorderSide(color: C.ink, width: 1.5)),
       );
 
   Widget _radio(bool on) => Container(
@@ -210,19 +210,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
         inputFormatters: [CardNumberFormatter()],
         autofillHints: const [AutofillHints.creditCardNumber],
         onChanged: (_) => setState(() {}),
-        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, letterSpacing: 1.2),
+        style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, letterSpacing: 1.2),
         decoration: _dec('Card number',
             suffix: Padding(
-              padding: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.only(right: Sp.md),
               child: luhnOk(_cDigits)
-                  ? Icon(Icons.check_circle_rounded, color: C.green, size: 20)
-                  : Text(brand, style: const TextStyle(fontWeight: FontWeight.w800, fontStyle: FontStyle.italic, fontSize: 12)),
+                  ? Icon(Icons.check_circle_rounded, color: C.green, size: Ic.md)
+                  : Text(brand, style: const TextStyle(fontWeight: FontWeight.w700, fontStyle: FontStyle.italic, fontSize: Fs.sm)),
             )),
       ),
       if (_cDigits.length == 16 && !luhnOk(_cDigits))
         Padding(
-            padding: EdgeInsets.only(top: 4, left: 4), child: Text('Check the card number', style: TextStyle(fontSize: 12, color: C.red))),
-      const SizedBox(height: 8),
+            padding: EdgeInsets.only(top: Sp.xs, left: Sp.xs), child: Text('Check the card number', style: TextStyle(fontSize: Fs.sm, color: C.red))),
+      const SizedBox(height: Sp.sm),
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Expanded(
           child: TextField(
@@ -231,11 +231,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
             inputFormatters: [ExpiryFormatter()],
             autofillHints: const [AutofillHints.creditCardExpirationDate],
             onChanged: (_) => setState(() {}),
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+            style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700),
             decoration: _dec('Expiry MM/YY'),
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: Sp.sm),
         Expanded(
           child: TextField(
             controller: _cCvv,
@@ -244,26 +244,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
             inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(3)],
             autofillHints: const [AutofillHints.creditCardSecurityCode],
             onChanged: (_) => setState(() {}),
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, letterSpacing: 3),
+            style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, letterSpacing: 3),
             decoration: _dec('CVV'),
           ),
         ),
       ]),
       if (_cExp.text.length == 5 && expiryError(_cExp.text) != null)
         Padding(
-            padding: const EdgeInsets.only(top: 4, left: 4),
-            child: Text(expiryError(_cExp.text)!, style: TextStyle(fontSize: 12, color: C.red))),
-      const SizedBox(height: 8),
+            padding: const EdgeInsets.only(top: Sp.xs, left: Sp.xs),
+            child: Text(expiryError(_cExp.text)!, style: TextStyle(fontSize: Fs.sm, color: C.red))),
+      const SizedBox(height: Sp.sm),
       TextField(
         controller: _cName,
         textCapitalization: TextCapitalization.characters,
         autofillHints: const [AutofillHints.creditCardName],
         inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z .']"))],
         onChanged: (_) => setState(() {}),
-        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700),
         decoration: _dec('Name on card'),
       ),
-      const SizedBox(height: 4),
+      const SizedBox(height: Sp.xs),
       Row(children: [
         Checkbox(
           value: _cSave,
@@ -272,24 +272,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
           visualDensity: VisualDensity.compact,
           onChanged: (v) => setState(() => _cSave = v ?? false),
         ),
-        Expanded(child: Text('Save this card for faster checkout. CVV is never saved.', style: TextStyle(fontSize: 12.5, color: C.muted))),
+        Expanded(child: Text('Save this card for faster checkout. CVV is never saved.', style: TextStyle(fontSize: Fs.sm, color: C.muted))),
       ]),
     ]);
   }
 
   Widget _cardPanel() => Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: const EdgeInsets.fromLTRB(Sp.md, Sp.xs, Sp.md, Sp.md),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           if (app.cards.isNotEmpty) ...[
             for (var i = 0; i < app.cards.length; i++)
               GestureDetector(
                 onTap: () => setState(() => _cardSel = i),
                 child: Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(bottom: Sp.sm),
+                  padding: const EdgeInsets.all(Sp.md),
                   decoration: BoxDecoration(
                     color: _cardSel == i ? C.limeSoft : C.card,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(R.lg),
                     border: Border.all(color: _cardSel == i ? C.ink : C.border, width: 1.5),
                   ),
                   child: Column(children: [
@@ -298,23 +298,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         width: 44,
                         height: 30,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(6)),
+                        decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(R.sm)),
                         child: Text(app.cards[i].brand == 'Mastercard' ? 'MC' : app.cards[i].brand.toUpperCase(),
-                            style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: C.lime, fontStyle: FontStyle.italic)),
+                            style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, color: C.lime, fontStyle: FontStyle.italic)),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: Sp.md),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(app.cards[i].label, style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-                          Text('Expires ${app.cards[i].expiry}', style: TextStyle(fontSize: 12, color: C.muted)),
+                          Text(app.cards[i].label, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                          Text('Expires ${app.cards[i].expiry}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                         ]),
                       ),
                       _radio(_cardSel == i),
                     ]),
                     if (_cardSel == i) ...[
-                      const SizedBox(height: 10),
+                      const SizedBox(height: Sp.md),
                       Row(children: [
-                        Expanded(child: Text('Enter CVV to confirm', style: TextStyle(fontSize: 12.5, color: C.muted))),
+                        Expanded(child: Text('Enter CVV to confirm', style: TextStyle(fontSize: Fs.sm, color: C.muted))),
                         SizedBox(
                           width: 96,
                           child: TextField(
@@ -324,7 +324,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             textAlign: TextAlign.center,
                             inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(3)],
                             onChanged: (_) => setState(() {}),
-                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 3),
+                            style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, letterSpacing: 3),
                             decoration: _dec('CVV'),
                           ),
                         ),
@@ -336,17 +336,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
             GestureDetector(
               onTap: () => setState(() => _cardSel = -1),
               child: Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.all(12),
+                margin: const EdgeInsets.only(bottom: Sp.sm),
+                padding: const EdgeInsets.all(Sp.md),
                 decoration: BoxDecoration(
                   color: _cardSel < 0 ? C.limeSoft : C.card,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(R.lg),
                   border: Border.all(color: _cardSel < 0 ? C.ink : C.border, width: 1.5),
                 ),
                 child: Row(children: [
-                  const Icon(Icons.add_card_rounded, size: 22),
-                  const SizedBox(width: 12),
-                  const Expanded(child: Text('Use a new card', style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700))),
+                  const Icon(Icons.add_card_rounded, size: Ic.md),
+                  const SizedBox(width: Sp.md),
+                  const Expanded(child: Text('Use a new card', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700))),
                   _radio(_cardSel < 0),
                 ]),
               ),
@@ -367,10 +367,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget _bankPanel() => Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: const EdgeInsets.fromLTRB(Sp.md, Sp.xs, Sp.md, Sp.md),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Popular banks', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.muted)),
-          const SizedBox(height: 8),
+          Text('Popular banks', style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.muted)),
+          const SizedBox(height: Sp.sm),
           GridView.count(
             crossAxisCount: 3,
             shrinkWrap: true,
@@ -387,35 +387,35 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: _bank == b[0] ? C.limeBg : C.card,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(R.md),
                       border: Border.all(color: _bank == b[0] ? C.lime : C.border, width: 1.5),
                     ),
-                    child: Text(b[1], style: TextStyle(fontSize: 13.5, fontWeight: _bank == b[0] ? FontWeight.w800 : FontWeight.w600)),
+                    child: Text(b[1], style: TextStyle(fontSize: Fs.base, fontWeight: _bank == b[0] ? FontWeight.w700 : FontWeight.w600)),
                   ),
                 ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Sp.sm),
           InkWell(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(R.md),
             onTap: _pickBank,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
-              decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(12), border: Border.all(color: C.border, width: 1.5)),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: 13),
+              decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.md), border: Border.all(color: C.border, width: 1.5)),
               child: Row(children: [
-                const Icon(Icons.search_rounded, size: 20),
-                const SizedBox(width: 10),
+                const Icon(Icons.search_rounded, size: Ic.md),
+                const SizedBox(width: Sp.md),
                 Expanded(
                   child: Text(
                       _bank != null && !popularBanks.any((b) => b[0] == _bank) ? bankName(_bank!) : 'All ${allBanks.length} banks',
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                      style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
                 ),
                 const Icon(Icons.chevron_right_rounded),
               ]),
             ),
           ),
-          const SizedBox(height: 6),
-          Text('You\'ll log in on your bank\'s secure page to approve the payment.', style: TextStyle(fontSize: 12, color: C.muted2)),
+          const SizedBox(height: Sp.sm),
+          Text('You\'ll log in on your bank\'s secure page to approve the payment.', style: TextStyle(fontSize: Fs.sm, color: C.muted2)),
         ]),
       );
 
@@ -433,30 +433,30 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final on = _sel == id;
     return Material(
       color: on ? C.bg : Colors.transparent,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(R.lg),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(R.lg),
         onTap: () => setState(() => _sel = id),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.md),
           child: Row(children: [
             IconTile(icon, bg: on ? C.limeBg : C.bg, size: 40),
-            const SizedBox(width: 12),
+            const SizedBox(width: Sp.md),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
-                  Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                  Text(title, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
                   if (badge != null) ...[
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Sp.sm),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                      decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(6)),
-                      child: Text(badge, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: C.lime, letterSpacing: 0.5)),
+                      padding: const EdgeInsets.symmetric(horizontal: Sp.sm, vertical: Sp.xxs),
+                      decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(R.sm)),
+                      child: Text(badge, style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, color: C.lime, letterSpacing: 0.5)),
                     ),
                   ],
                 ]),
-                const SizedBox(height: 2),
-                Text(sub, style: TextStyle(fontSize: 12.5, color: C.muted)),
+                const SizedBox(height: Sp.xxs),
+                Text(sub, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
               ]),
             ),
             AnimatedContainer(
@@ -466,7 +466,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               decoration: BoxDecoration(
                 color: C.card,
                 shape: BoxShape.circle,
-                border: Border.all(color: on ? C.ink : const Color(0xFF9A9A92), width: on ? 7 : 2),
+                border: Border.all(color: on ? C.ink : P.iconMuted, width: on ? 7 : 2),
               ),
             ),
           ]),
@@ -485,79 +485,79 @@ class _PaymentScreenState extends State<PaymentScreen> {
           child: ListView(padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 20), children: [
             Row(children: [
               const BackBtn(),
-              const SizedBox(width: 12),
-              const Expanded(child: Text('Payment', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700))),
+              const SizedBox(width: Sp.md),
+              const Expanded(child: Text('Payment', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w700))),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-                decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(999)),
+                padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.sm),
+                decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.circular(R.pill)),
                 child: Row(children: [
-                  const Icon(Icons.timer_outlined, size: 14),
-                  const SizedBox(width: 6),
-                  Text('Room held · $mm:$ss', style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600)),
+                  const Icon(Icons.timer_rounded, size: Ic.sm),
+                  const SizedBox(width: Sp.sm),
+                  Text('Room held · $mm:$ss', style: const TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w600)),
                 ]),
               ),
             ]),
-            const SizedBox(height: 16),
+            const SizedBox(height: Sp.lg),
             Container(
-              decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(22)),
+              decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(R.xl)),
               child: Column(children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
+                  padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, Sp.lg),
                   child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text('YOU PAY', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, letterSpacing: 1.4, color: C.faint)),
-                        const SizedBox(height: 6),
-                        Text(inr(app.total), style: TextStyle(fontSize: 44, fontWeight: FontWeight.w800, color: C.lime, letterSpacing: -1.5, height: 1)),
+                        Text('YOU PAY', style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w600, letterSpacing: 1.4, color: C.faint)),
+                        const SizedBox(height: Sp.sm),
+                        Text(inr(app.total), style: TextStyle(fontSize: Fs.display, fontWeight: FontWeight.w800, color: C.lime, letterSpacing: -1.5, height: 1)),
                       ]),
                     ),
                     Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                       Text('${app.rooms} ${app.rooms > 1 ? 'rooms' : 'room'} · ${app.stayLabel}',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: C.white)),
-                      const SizedBox(height: 3),
+                          style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: C.white)),
+                      const SizedBox(height: Sp.xs),
                       Text(app.whenShort,
-                          style: TextStyle(fontSize: 13, color: C.faint)),
+                          style: TextStyle(fontSize: Fs.base, color: C.faint)),
                     ]),
                   ]),
                 ),
                 Row(children: [
-                  Container(width: 10, height: 20, decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.horizontal(right: Radius.circular(10)))),
+                  Container(width: 10, height: 20, decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.horizontal(right: Radius.circular(R.md)))),
                   Expanded(
                     child: LayoutBuilder(
                       builder: (_, c) => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate((c.maxWidth / 10).floor(), (_) => Container(width: 5, height: 2, color: const Color(0xFF3A3A3A))),
+                        children: List.generate((c.maxWidth / 10).floor(), (_) => Container(width: 5, height: 2, color: P.grey23)),
                       ),
                     ),
                   ),
-                  Container(width: 10, height: 20, decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.horizontal(left: Radius.circular(10)))),
+                  Container(width: 10, height: 20, decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.horizontal(left: Radius.circular(R.md)))),
                 ]),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
+                  padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.md, Sp.xl, Sp.lg),
                   child: Row(children: [
-                    Expanded(child: Text('Inclusive of all taxes', style: TextStyle(fontSize: 13, color: C.faint))),
+                    Expanded(child: Text('Inclusive of all taxes', style: TextStyle(fontSize: Fs.base, color: C.faint))),
                     GestureDetector(
                       onTap: () => showModalBottomSheet(
                         context: context,
                         backgroundColor: C.card,
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(26))),
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
                         builder: (_) => Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
+                          padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.xl, Sp.xl, Sp.x3),
                           child: Column(mainAxisSize: MainAxisSize.min, children: [
-                            const Align(alignment: Alignment.centerLeft, child: Text('Price details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800))),
-                            const SizedBox(height: 16),
+                            const Align(alignment: Alignment.centerLeft, child: Text('Price details', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800))),
+                            const SizedBox(height: Sp.lg),
                             billRow('Room price', inr(app.gross - app.fees)),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: Sp.md),
                             billRow('Taxes & fees', inr(app.fees)),
-                            if (app.discount > 0) ...[const SizedBox(height: 12), billRow('Coupon ${app.couponCode}', '−${inr(app.discount)}', vColor: C.green)],
-                            const SizedBox(height: 14),
+                            if (app.discount > 0) ...[const SizedBox(height: Sp.md), billRow('Coupon ${app.couponCode}', '−${inr(app.discount)}', vColor: C.green)],
+                            const SizedBox(height: Sp.lg),
                             totalBox(inr(app.total)),
                           ]),
                         ),
                       ),
                       child: Row(children: [
-                        Text('Price details', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: C.white)),
-                        Icon(Icons.chevron_right_rounded, size: 16, color: C.white),
+                        Text('Price details', style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w600, color: C.white)),
+                        Icon(Icons.chevron_right_rounded, size: Ic.sm, color: C.white),
                       ]),
                     ),
                   ]),
@@ -566,14 +566,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             const SectionLabel('Pay with UPI'),
             WhiteCard(
-              radius: 20,
-              padding: const EdgeInsets.all(5),
+              radius: R.xl,
+              padding: const EdgeInsets.all(Sp.xs),
               child: Column(children: [
                 _row('anyupi', Icons.phone_android_rounded, 'Any UPI app', 'GPay, PhonePe, Paytm & more', badge: 'FASTEST'),
                 _row('upiid', Icons.alternate_email_rounded, 'Enter UPI ID', 'Pay using your UPI address'),
                 if (_sel == 'upiid')
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(64, 4, 12, 12),
+                    padding: const EdgeInsets.fromLTRB(64, Sp.xs, Sp.md, Sp.md),
                     child: Column(children: [
                       Shake(
                         key: _kVpa,
@@ -590,17 +590,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 hintText: 'yourname@okbank',
                                 isDense: true,
                                 suffixIcon: _vpaOk ? Icon(Icons.check_circle_rounded, color: C.green) : null,
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: 13),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(R.md)),
                                 enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: _vpaErr != null ? C.red : C.border, width: 1.5)),
+                                    borderRadius: BorderRadius.circular(R.md), borderSide: BorderSide(color: _vpaErr != null ? C.red : C.border, width: 1.5)),
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: _vpaErr != null ? C.red : C.ink, width: 1.5)),
+                                    borderRadius: BorderRadius.circular(R.md), borderSide: BorderSide(color: _vpaErr != null ? C.red : C.ink, width: 1.5)),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          PillBtn('Verify', kind: BtnKind.dark, height: 46, fontSize: 14, loading: _vpaBusy, onTap: _verifyVpa),
+                          const SizedBox(width: Sp.sm),
+                          PillBtn('Verify', kind: BtnKind.dark, height: 46, fontSize: Fs.md, loading: _vpaBusy, onTap: _verifyVpa),
                         ]),
                       ),
                       FieldError(_vpaErr),
@@ -610,13 +610,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             const SectionLabel('More ways to pay'),
             Shake(key: _kMore, child: WhiteCard(
-              radius: 20,
-              padding: const EdgeInsets.all(5),
+              radius: R.xl,
+              padding: const EdgeInsets.all(Sp.xs),
               child: Column(children: [
                 _row('card', Icons.credit_card_rounded, 'Credit / Debit card',
                     app.cards.isEmpty ? 'Visa, Mastercard, RuPay' : '${app.cards.length} saved · or add a new card'),
                 if (_sel == 'card') _cardPanel(),
-                _row('netbank', Icons.account_balance_outlined, 'Net banking',
+                _row('netbank', Icons.account_balance_rounded, 'Net banking',
                     _bank == null ? '${allBanks.length} Indian banks' : bankName(_bank!)),
                 if (_sel == 'netbank') _bankPanel(),
               ]),
@@ -626,15 +626,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
         BottomBar(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(Icons.lock_outline_rounded, size: 13, color: C.muted),
-              SizedBox(width: 6),
-              Text('Secure, encrypted payments', style: TextStyle(fontSize: 12, color: C.muted)),
+              Icon(Icons.lock_outline_rounded, size: Ic.sm, color: C.muted),
+              SizedBox(width: Sp.sm),
+              Text('Secure, encrypted payments', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
             ]),
             if (!_canPay) ...[
-              const SizedBox(height: 6),
-              Shake(key: _kNote, child: Text(_payNote, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.red))),
+              const SizedBox(height: Sp.sm),
+              Shake(key: _kNote, child: Text(_payNote, style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.red))),
             ],
-            const SizedBox(height: 10),
+            const SizedBox(height: Sp.md),
             PillBtn('Pay ${inr(app.total)}',
                 kind: BtnKind.dark,
                 height: 56,
@@ -664,19 +664,19 @@ class _BankSheetState extends State<_BankSheet> {
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.85,
-        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(color: C.card, borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
         child: Column(children: [
-          const SizedBox(height: 10),
-          Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2))),
+          const SizedBox(height: Sp.md),
+          Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(R.xs))),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 14, 12, 8),
+            padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.md, Sp.sm),
             child: Row(children: [
-              const Expanded(child: Text('Choose your bank', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800))),
+              const Expanded(child: Text('Choose your bank', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800))),
               CircleBtn(icon: Icons.close_rounded, size: 38, bg: C.bg, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(context)),
             ]),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+            padding: const EdgeInsets.fromLTRB(Sp.xl, 0, Sp.xl, Sp.sm),
             child: TextField(
               autofocus: false,
               onChanged: (v) => setState(() => _q = v),
@@ -686,8 +686,8 @@ class _BankSheetState extends State<_BankSheet> {
                 isDense: true,
                 filled: true,
                 fillColor: C.bg,
-                contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                contentPadding: const EdgeInsets.symmetric(vertical: Sp.lg),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(R.lg), borderSide: BorderSide.none),
               ),
             ),
           ),
@@ -695,7 +695,7 @@ class _BankSheetState extends State<_BankSheet> {
             child: list.isEmpty
                 ? Center(child: Text('No bank matches', style: TextStyle(color: C.muted)))
                 : ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+                    padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.xs, Sp.xl, Sp.xxl),
                     itemCount: list.length,
                     separatorBuilder: (_, __) => Divider(color: C.line, height: 1),
                     itemBuilder: (_, i) {
@@ -703,13 +703,13 @@ class _BankSheetState extends State<_BankSheet> {
                       return InkWell(
                         onTap: () => Navigator.pop(context, list[i][0]),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: const EdgeInsets.symmetric(vertical: Sp.lg),
                           child: Row(children: [
-                            const IconTile(Icons.account_balance_outlined, size: 36),
-                            const SizedBox(width: 12),
+                            const IconTile(Icons.account_balance_rounded, size: 36),
+                            const SizedBox(width: Sp.md),
                             Expanded(
                                 child: Text(list[i][1],
-                                    style: TextStyle(fontSize: 14.5, fontWeight: on ? FontWeight.w800 : FontWeight.w600))),
+                                    style: TextStyle(fontSize: Fs.md, fontWeight: on ? FontWeight.w700 : FontWeight.w600))),
                             if (on) Icon(Icons.check_circle_rounded, color: C.ink),
                           ]),
                         ),

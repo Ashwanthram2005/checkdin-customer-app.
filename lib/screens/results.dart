@@ -78,7 +78,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   foregroundColor: C.lime,
                   elevation: 4,
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StaysMapScreen(list: list))),
-                  icon: const Icon(Icons.map_outlined),
+                  icon: const Icon(Icons.map_rounded),
                   label: const Text('Map', style: TextStyle(fontWeight: FontWeight.w800)),
                 ),
           body: Column(children: [
@@ -86,45 +86,45 @@ class _ResultsScreenState extends State<ResultsScreen> {
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 14, bottom: 14),
               decoration: BoxDecoration(
                 color: C.card,
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
-                boxShadow: [BoxShadow(color: Color(0x0F111111), blurRadius: 24, offset: Offset(0, 8))],
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(R.xl)),
+                boxShadow: [BoxShadow(color: P.inkA6, blurRadius: 24, offset: Offset(0, 8))],
               ),
               child: Column(children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.xl),
                   child: Row(children: [
                     BackBtn(bg: C.bg, shadow: false),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: Sp.md),
                     Expanded(
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(R.lg),
                         onTap: () => popTo(context, '/search'),
                         child: Container(
                           height: 52,
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
-                          decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(horizontal: Sp.lg),
+                          decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(R.lg)),
                           child: Row(children: [
                             Expanded(
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
                                 Text('$place, Chennai'.replaceAll('Chennai, Chennai', 'Chennai'),
-                                    overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                                    overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
                                 Text('${dateLabel(app.date)} · ${hourLabel(app.checkInHour, short: true)} · ${app.slot} hrs',
-                                    style: TextStyle(fontSize: 12, color: C.muted)),
+                                    style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                               ]),
                             ),
-                            const CircleBtn(icon: Icons.edit_outlined, size: 32, shadow: false, tooltip: 'Edit search'),
+                            const CircleBtn(icon: Icons.edit_rounded, size: 32, shadow: false, tooltip: 'Edit search'),
                           ]),
                         ),
                       ),
                     ),
                   ]),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: Sp.md),
                 SizedBox(
                   height: 38,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: Sp.xl),
                     children: [
                       GestureDetector(
                         onTap: () async {
@@ -132,35 +132,35 @@ class _ResultsScreenState extends State<ResultsScreen> {
                           if (mounted) setState(() {});
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          padding: const EdgeInsets.symmetric(horizontal: Sp.lg),
                           decoration: BoxDecoration(
                             color: Filters.count > 0 ? C.inkBg : C.card,
-                            borderRadius: BorderRadius.circular(999),
+                            borderRadius: BorderRadius.circular(R.pill),
                             border: Border.all(color: C.ink, width: 1.5),
                           ),
                           child: Row(children: [
-                            Icon(Icons.tune_rounded, size: 16, color: Filters.count > 0 ? C.lime : C.ink),
-                            const SizedBox(width: 6),
+                            Icon(Icons.tune_rounded, size: Ic.sm, color: Filters.count > 0 ? C.lime : C.ink),
+                            const SizedBox(width: Sp.sm),
                             Text(Filters.count > 0 ? 'Filters · ${Filters.count}' : 'Filters',
-                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Filters.count > 0 ? C.lime : C.ink)),
+                                style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, color: Filters.count > 0 ? C.lime : C.ink)),
                           ]),
                         ),
                       ),
                       for (final c in _chips)
                         Padding(
-                          padding: const EdgeInsets.only(left: 8),
+                          padding: const EdgeInsets.only(left: Sp.sm),
                           child: GestureDetector(
                             onTap: () => setState(() => _on.contains(c) ? _on.remove(c) : _on.add(c)),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 150),
-                              padding: const EdgeInsets.symmetric(horizontal: 14),
+                              padding: const EdgeInsets.symmetric(horizontal: Sp.lg),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: _on.contains(c) ? C.limeBg : C.card,
-                                borderRadius: BorderRadius.circular(999),
+                                borderRadius: BorderRadius.circular(R.pill),
                                 border: Border.all(color: _on.contains(c) ? C.lime : C.border, width: 1.5),
                               ),
-                              child: Text(c, style: TextStyle(fontSize: 13, fontWeight: _on.contains(c) ? FontWeight.w800 : FontWeight.w600)),
+                              child: Text(c, style: TextStyle(fontSize: Fs.base, fontWeight: _on.contains(c) ? FontWeight.w800 : FontWeight.w600)),
                             ),
                           ),
                         ),
@@ -175,22 +175,22 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 load: _fetch,
                 cacheKey: 'results|${app.place}|${app.date.day}|${app.hour}|${app.rooms}',
                 skeleton: const SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(), padding: EdgeInsets.fromLTRB(20, 16, 20, 28), child: SkHotelList()),
+                    physics: NeverScrollableScrollPhysics(), padding: EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, Sp.x3), child: SkHotelList()),
                 builder: (context, _) => RefreshIndicator(
                   color: C.ink,
                   onRefresh: _refresh,
-                  child: ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 28), children: [
+                  child: ListView(padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, Sp.x3), children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.xs),
                   child: Row(children: [
                     Expanded(
                         child: Text('${list.length} ${list.length == 1 ? 'stay' : 'stays'} near $place',
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
-                    Text('Prices for ${app.slot} hrs', style: TextStyle(fontSize: 12.5, color: C.muted)),
+                            style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700))),
+                    Text('Prices for ${app.slot} hrs', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                   ]),
                 ),
-                const SizedBox(height: 14),
-                for (final h in list) ...[_HotelCard(h), const SizedBox(height: 16)],
+                const SizedBox(height: Sp.lg),
+                for (final h in list) ...[_HotelCard(h), const SizedBox(height: Sp.lg)],
                 if (list.isEmpty)
                   EmptyState(
                     icon: Icons.search_off_rounded,
@@ -229,7 +229,7 @@ class _HotelCard extends StatelessWidget {
 
     return Material(
       color: C.card,
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(R.xl),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: open,
@@ -241,7 +241,7 @@ class _HotelCard extends StatelessWidget {
               top: 12,
               child: Row(children: [
                 RatingBadge(h.rating, reviews: h.reviews, dark: false),
-                if (h.topRated) ...[const SizedBox(width: 6), Tag('Top rated', bg: C.limeBg, fg: C.ink)],
+                if (h.topRated) ...[const SizedBox(width: Sp.sm), Tag('Top rated', bg: C.limeBg, fg: C.ink)],
               ]),
             ),
             Positioned(
@@ -249,7 +249,7 @@ class _HotelCard extends StatelessWidget {
               top: 12,
               child: CircleBtn(
                 icon: saved ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                iconColor: saved ? const Color(0xFFE5484D) : C.ink,
+                iconColor: saved ? P.redBright : C.ink,
                 size: 38,
                 shadow: false,
                 tooltip: 'Save',
@@ -258,24 +258,24 @@ class _HotelCard extends StatelessWidget {
             ),
           ]),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(Sp.lg),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(h.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
-              const SizedBox(height: 3),
-              Text('${h.area} · ${kmLabel(h)}', style: TextStyle(fontSize: 13, color: C.muted)),
-              const SizedBox(height: 10),
+              Text(h.name, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800, letterSpacing: -0.4)),
+              const SizedBox(height: Sp.xs),
+              Text('${h.area} · ${kmLabel(h)}', style: TextStyle(fontSize: Fs.base, color: C.muted)),
+              const SizedBox(height: Sp.md),
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
                 children: h.tags
                     .map((t) => Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                          decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(8)),
-                          child: Text(t, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: C.tx(Color(0xFF3F3F38)))),
+                          padding: const EdgeInsets.symmetric(horizontal: Sp.sm, vertical: Sp.xs),
+                          decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.circular(R.sm)),
+                          child: Text(t, style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, color: C.tx(P.ink2))),
                         ))
                     .toList(),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: Sp.lg),
               Row(
                 children: [3, 6, 9, 12].map((hrs) {
                   final p = h.priceFor(hrs);
@@ -283,7 +283,7 @@ class _HotelCard extends StatelessWidget {
                   final sel = hrs == app.slot && !off;
                   return Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(right: hrs == 12 ? 0 : 6),
+                      padding: EdgeInsets.only(right: hrs == Sp.md ? 0 : Sp.sm),
                       child: GestureDetector(
                         onTap: off
                             ? null
@@ -295,13 +295,13 @@ class _HotelCard extends StatelessWidget {
                           height: 56,
                           decoration: BoxDecoration(
                             color: sel ? C.limeBg : (off ? C.bg : C.white),
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(R.lg),
                             border: Border.all(color: sel ? C.lime : (off ? C.bg : C.border), width: 1.5),
                           ),
                           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                            Text(off ? 'Full' : inr(p ?? 0), style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: off ? C.faint : C.ink)),
+                            Text(off ? 'Full' : inr(p ?? 0), style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: off ? C.faint : C.ink)),
                             Text('$hrs hrs',
-                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: sel ? C.limeInk : (off ? const Color(0xFFC9C9C1) : C.muted2))),
+                                style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w600, color: sel ? C.limeInk : (off ? P.disabled : C.muted2))),
                           ]),
                         ),
                       ),

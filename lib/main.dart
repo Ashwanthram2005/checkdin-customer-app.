@@ -100,7 +100,7 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
       canvasColor: C.bg,
       dividerColor: C.line,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFFD1F148),
+        seedColor: P.lime,
         brightness: C.dark ? Brightness.dark : Brightness.light,
         primary: C.ink,
         onPrimary: C.bg,
@@ -121,7 +121,7 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
         textTheme: tabularDigits(GoogleFonts.plusJakartaSansTextTheme(base.textTheme).apply(bodyColor: C.ink, displayColor: C.ink)),
         textSelectionTheme: TextSelectionThemeData(cursorColor: C.ink, selectionColor: C.limeSoft, selectionHandleColor: C.ink),
       ),
-      builder: (context, child) => OfflineGate(child: child ?? const SizedBox()),
+      builder: (context, child) => TabletFrame(child: OfflineGate(child: child ?? const SizedBox())),
       navigatorKey: appNavigator,
       initialRoute: widget.initialRoute,
       routes: {
@@ -195,4 +195,35 @@ TextTheme tabularDigits(TextTheme t) {
     labelMedium: x(t.labelMedium),
     labelSmall: x(t.labelSmall),
   );
+}
+
+
+/// On tablets and wide screens, keep the phone layout in a centred column
+/// (max 600 px) instead of stretching it edge to edge.
+class TabletFrame extends StatelessWidget {
+  final Widget child;
+  const TabletFrame({super.key, required this.child});
+  static const maxWidth = 600.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    if (mq.size.width <= maxWidth) return child;
+    final side = (mq.size.width - maxWidth) / 2;
+    return ColoredBox(
+      color: C.bg,
+      child: Center(
+        child: SizedBox(
+          width: maxWidth,
+          child: MediaQuery(
+            data: mq.copyWith(
+              size: Size(maxWidth, mq.size.height),
+              padding: mq.padding.copyWith(left: (mq.padding.left - side).clamp(0, double.infinity), right: (mq.padding.right - side).clamp(0, double.infinity)),
+            ),
+            child: ClipRect(child: child),
+          ),
+        ),
+      ),
+    );
+  }
 }

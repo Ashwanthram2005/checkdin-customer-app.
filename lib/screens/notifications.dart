@@ -34,9 +34,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         'Yesterday', '/saved'),
     _Note(Icons.star_outline_rounded, 'How was Skyline Suites?', 'Rate your stay and help other guests pick the right room.', 'Yesterday',
         'Yesterday', '/rate'),
-    _Note(Icons.account_balance_wallet_outlined, 'Refund sent', '₹1,299 for Hotel Marina Inn is on its way to your UPI. 3–5 working days.',
+    _Note(Icons.account_balance_wallet_rounded, 'Refund sent', '₹1,299 for Hotel Marina Inn is on its way to your UPI. 3–5 working days.',
         '18 Nov', 'Earlier', '/bookings'),
-    _Note(Icons.local_offer_outlined, '25% off your next stay', 'Use NEWSTAY at checkout. Valid till Sunday.', '16 Nov', 'Earlier', '/offers'),
+    _Note(Icons.local_offer_rounded, '25% off your next stay', 'Use NEWSTAY at checkout. Valid till Sunday.', '16 Nov', 'Earlier', '/offers'),
   ];
 
   // Settings
@@ -69,14 +69,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   static const _icons = {
     'Check-in reminders': Icons.alarm_rounded,
     'Check-out & extend reminders': Icons.more_time_rounded,
-    'Refund updates': Icons.account_balance_wallet_outlined,
+    'Refund updates': Icons.account_balance_wallet_rounded,
     'Price drops on saved stays': Icons.trending_down_rounded,
-    'Offers & deals': Icons.local_offer_outlined,
-    'New stays near you': Icons.near_me_outlined,
+    'Offers & deals': Icons.local_offer_rounded,
+    'New stays near you': Icons.near_me_rounded,
     'Push notifications': Icons.notifications_none_rounded,
-    'WhatsApp': Icons.chat_outlined,
+    'WhatsApp': Icons.chat_rounded,
     'Email': Icons.mail_outline_rounded,
-    'Quiet hours': Icons.bedtime_outlined,
+    'Quiet hours': Icons.bedtime_rounded,
   };
 
   @override
@@ -90,10 +90,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   int get _unread => _inbox.where((n) => n.unread).length;
 
   Widget _noteTile(_Note n) => Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: Sp.md),
         child: WhiteCard(
-          radius: 20,
-          padding: const EdgeInsets.all(14),
+          radius: R.xl,
+          padding: const EdgeInsets.all(Sp.lg),
           border: Border.all(color: n.unread ? C.ink : C.white, width: 1.5),
           onTap: () {
             setState(() => n.unread = false);
@@ -104,26 +104,26 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           },
           child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             IconTile(n.icon, bg: n.lime ? C.limeBg : C.bg, size: 42),
-            const SizedBox(width: 12),
+            const SizedBox(width: Sp.md),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
                   Expanded(
                     child: Text(n.title,
-                        style: TextStyle(fontSize: 14.5, fontWeight: n.unread ? FontWeight.w800 : FontWeight.w700)),
+                        style: TextStyle(fontSize: Fs.md, fontWeight: n.unread ? FontWeight.w700 : FontWeight.w700)),
                   ),
-                  Text(n.time, style: TextStyle(fontSize: 11.5, color: C.muted2, fontWeight: FontWeight.w600)),
+                  Text(n.time, style: TextStyle(fontSize: Fs.xs, color: C.muted2, fontWeight: FontWeight.w600)),
                 ]),
-                const SizedBox(height: 3),
-                Text(n.body, style: TextStyle(fontSize: 13, color: C.muted, height: 1.4)),
+                const SizedBox(height: Sp.xs),
+                Text(n.body, style: TextStyle(fontSize: Fs.base, color: C.muted, height: 1.4)),
               ]),
             ),
             if (n.unread) ...[
-              const SizedBox(width: 8),
+              const SizedBox(width: Sp.sm),
               Container(
                 width: 9,
                 height: 9,
-                margin: const EdgeInsets.only(top: 5),
+                margin: const EdgeInsets.only(top: Sp.xs),
                 decoration: BoxDecoration(color: C.red, shape: BoxShape.circle),
               ),
             ],
@@ -137,10 +137,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         padding: const EdgeInsets.only(top: 60),
         child: Column(children: [
           IconTile(Icons.notifications_none_rounded, bg: C.limeBg, size: 72, radius: 24),
-          const SizedBox(height: 16),
-          const Text("You're all caught up", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
-          Text('Booking updates and deals will show up here.', style: TextStyle(fontSize: 13.5, color: C.muted)),
+          const SizedBox(height: Sp.lg),
+          const Text("You're all caught up", style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+          const SizedBox(height: Sp.sm),
+          Text('Booking updates and deals will show up here.', style: TextStyle(fontSize: Fs.base, color: C.muted)),
         ]),
       );
     }
@@ -173,9 +173,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     },
                     behavior: HitTestBehavior.opaque,
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 6),
+                      padding: EdgeInsets.symmetric(vertical: Sp.lg, horizontal: Sp.sm),
                       child: Text('Mark all read',
-                          style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
+                          style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, decoration: TextDecoration.underline)),
                     ),
                   )
                 : null),
@@ -185,17 +185,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             direction: DismissDirection.endToStart,
             background: Container(
               alignment: Alignment.centerRight,
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.only(right: 20),
-              decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(20)),
+              margin: const EdgeInsets.only(bottom: Sp.md),
+              padding: const EdgeInsets.only(right: Sp.xl),
+              decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(R.xl)),
               child: Icon(Icons.delete_outline_rounded, color: C.red),
             ),
             onDismissed: (_) => setState(() => _inbox.remove(n)),
             child: _noteTile(n),
           ),
       ],
-      const SizedBox(height: 6),
-      Center(child: Text('Swipe left to delete', style: TextStyle(fontSize: 12, color: C.muted2))),
+      const SizedBox(height: Sp.sm),
+      Center(child: Text('Swipe left to delete', style: TextStyle(fontSize: Fs.sm, color: C.muted2))),
     ]);
   }
 
@@ -204,26 +204,26 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         children: [
           SectionLabel(title),
           WhiteCard(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.xs),
             child: Column(children: [
               if (top != null) top,
               for (var i = 0; i < keys.length; i++)
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Sp.md),
                   decoration: BoxDecoration(
                     border: i == keys.length - 1 ? null : Border(bottom: BorderSide(color: C.line)),
                   ),
                   child: Row(children: [
                     IconTile(_icons[keys[i]]!, size: 38),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: Sp.md),
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(keys[i], style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-                        const SizedBox(height: 2),
-                        Text(_subs[keys[i]]!, style: TextStyle(fontSize: 12.5, color: C.muted)),
+                        Text(keys[i], style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: Sp.xxs),
+                        Text(_subs[keys[i]]!, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                       ]),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Sp.sm),
                     BrandSwitch(
                         value: _on[keys[i]]!,
                         onChanged: (v) => optimistic(context,
@@ -241,16 +241,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Widget _settingsView() {
     final always = Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: Sp.md),
       decoration: BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
       child: Row(children: [
-        IconTile(Icons.receipt_long_outlined, bg: C.limeBg, size: 38),
-        SizedBox(width: 12),
+        IconTile(Icons.receipt_long_rounded, bg: C.limeBg, size: 38),
+        SizedBox(width: Sp.md),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Booking confirmations', style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700)),
-            SizedBox(height: 2),
-            Text('Receipts and booking changes', style: TextStyle(fontSize: 12.5, color: C.muted)),
+            Text('Booking confirmations', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+            SizedBox(height: Sp.xxs),
+            Text('Receipts and booking changes', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
           ]),
         ),
         Tag('Always on'),
@@ -263,15 +263,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       _group('Send them on', const ['Push notifications', 'WhatsApp', 'Email']),
       if (noChannel)
         Container(
-          margin: const EdgeInsets.only(top: 10),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(14)),
+          margin: const EdgeInsets.only(top: Sp.md),
+          padding: const EdgeInsets.all(Sp.md),
+          decoration: BoxDecoration(color: C.redSoft, borderRadius: BorderRadius.circular(R.lg)),
           child: Row(children: [
-            Icon(Icons.info_outline_rounded, size: 18, color: C.red),
-            SizedBox(width: 8),
+            Icon(Icons.info_outline_rounded, size: Ic.md, color: C.red),
+            SizedBox(width: Sp.sm),
             Expanded(
               child: Text("You won't get check-in reminders. Keep at least one channel on.",
-                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: C.tx(Color(0xFFA3241A)))),
+                  style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w600, color: C.tx(P.redDark))),
             ),
           ]),
         ),
@@ -290,7 +290,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         padding: EdgeInsets.fromLTRB(18, MediaQuery.of(context).padding.top + 14, 18, 32 + MediaQuery.of(context).padding.bottom),
         children: [
           const TitleBar(title: 'Notifications'),
-          const SizedBox(height: 18),
+          const SizedBox(height: Sp.lg),
           SegmentPill(
             options: [_unread > 0 ? 'Inbox · $_unread' : 'Inbox', 'Settings'],
             selected: _tab,

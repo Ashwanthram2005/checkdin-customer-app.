@@ -16,11 +16,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _offer = 0;
 
   Widget _title(String t, {String? link, VoidCallback? onLink}) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 28, 20, 12),
+        padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.x3, Sp.xl, Sp.md),
         child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-          Expanded(child: Text(t, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.4))),
+          Expanded(child: Text(t, style: const TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800, letterSpacing: -0.4))),
           if (link != null)
-            GestureDetector(onTap: onLink, child: Text(link, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: C.muted))),
+            GestureDetector(onTap: onLink, child: Text(link, style: TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700, color: C.muted))),
         ]),
       );
 
@@ -39,13 +39,13 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 64,
               decoration: BoxDecoration(
                 color: on ? C.limeBg : C.card,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(R.xl),
                 border: Border.all(color: on ? C.lime : C.border, width: 1.5),
               ),
               child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Icon(icon, size: 20),
-                const SizedBox(width: 10),
-                Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                Icon(icon, size: Ic.md),
+                const SizedBox(width: Sp.md),
+                Text(label, style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
               ]),
             ),
             if (forFull)
@@ -53,9 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 top: -10,
                 right: 14,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 2),
-                  decoration: BoxDecoration(color: C.gold, borderRadius: BorderRadius.circular(999)),
-                  child: const Text('NEW', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, letterSpacing: 0.5)),
+                  padding: const EdgeInsets.symmetric(horizontal: Sp.sm, vertical: Sp.xxs),
+                  decoration: BoxDecoration(color: C.gold, borderRadius: BorderRadius.circular(R.pill)),
+                  child: const Text('NEW', style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, letterSpacing: 0.5)),
                 ),
               ),
           ]),
@@ -65,8 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Row(children: [
       btn(false, Icons.bolt_rounded, 'Hourly stay'),
-      const SizedBox(width: 10),
-      btn(true, Icons.nightlight_outlined, 'Full-day stay'),
+      const SizedBox(width: Sp.md),
+      btn(true, Icons.nightlight_roundeded, 'Full-day stay'),
     ]);
   }
 
@@ -80,10 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _offerBody(bool lime, Color fg) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 6),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: Sp.sm),
+      padding: const EdgeInsets.all(Sp.xl),
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(color: lime ? C.limeBg : C.inkBg, borderRadius: BorderRadius.circular(24)),
+      decoration: BoxDecoration(color: lime ? C.limeBg : C.inkBg, borderRadius: BorderRadius.circular(R.xl)),
       child: Stack(clipBehavior: Clip.none, children: [
         Positioned(
           right: -60,
@@ -93,8 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 190,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: lime ? const Color(0x66FFFFFF) : Colors.transparent,
-              border: lime ? null : Border.all(color: const Color(0xFF222222), width: 22),
+              color: lime ? P.whiteA40 : Colors.transparent,
+              border: lime ? null : Border.all(color: P.grey13, width: 22),
             ),
           ),
         ),
@@ -108,8 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 92,
                 height: 60,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(12)),
-                child: Text('25%', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: C.lime)),
+                decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(R.md)),
+                child: Text('25%', style: TextStyle(fontSize: Fs.h2, fontWeight: FontWeight.w800, color: C.lime)),
               ),
             ),
           ),
@@ -117,16 +117,16 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 210,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(lime ? 'FIRST STAY OFFER' : 'COMING BACK?',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 0.8, color: lime ? C.limeInk : C.faint)),
-            const SizedBox(height: 6),
+                style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: lime ? C.limeInk : C.faint)),
+            const SizedBox(height: Sp.sm),
             Text(lime ? '25% off your first hourly stay' : 'Get 8% back on your next booking',
-                style: TextStyle(fontSize: 21, fontWeight: FontWeight.w800, letterSpacing: -0.6, height: 1.15, color: fg)),
+                style: TextStyle(fontSize: Fs.h2, fontWeight: FontWeight.w800, letterSpacing: -0.6, height: 1.15, color: fg)),
             const Spacer(),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(color: lime ? C.card : C.limeBg, borderRadius: BorderRadius.circular(999)),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.md, vertical: Sp.xs),
+              decoration: BoxDecoration(color: lime ? C.card : C.limeBg, borderRadius: BorderRadius.circular(R.pill)),
               child: Text(lime ? 'CODE · NEWSTAY' : 'CODE · BACK8',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 0.8, color: C.ink)),
+                  style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: C.ink)),
             ),
           ]),
         ),
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 14, bottom: 12),
             child: Column(children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: Sp.xl),
             child: Row(children: [
               Image.asset('assets/logo.png', height: 34),
               const Spacer(),
@@ -174,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ]),
-              const SizedBox(width: 8),
+              const SizedBox(width: Sp.sm),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/account'),
                 child: const Avatar(size: 44),
@@ -182,46 +182,46 @@ class _HomeScreenState extends State<HomeScreen> {
             ]),
           ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, 0),
                 child: _stayToggle(app.fullDay),
               ),
             ]),
           ),
           Expanded(
-            child: ListView(padding: const EdgeInsets.only(top: 6, bottom: 120), children: [
+            child: ListView(padding: const EdgeInsets.only(top: Sp.sm, bottom: 120), children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+            padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.sm, Sp.xl, 0),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Hi ${app.name.isEmpty ? 'there' : app.name},', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: C.muted)),
-              const SizedBox(height: 4),
+              Text('Hi ${app.name.isEmpty ? 'there' : app.name},', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w600, color: C.muted)),
+              const SizedBox(height: Sp.xs),
               const Highlight(before: 'Need a room for ', marked: 'a few hours?', size: 28, height: 1.2),
-              const SizedBox(height: 16),
+              const SizedBox(height: Sp.lg),
               Material(
                 color: C.card,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(R.lg),
                 elevation: 0,
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(R.lg),
                   onTap: () => Navigator.pushNamed(context, app.fullDay ? '/fullday' : '/search'),
                   child: Container(
                     height: 58,
-                    padding: const EdgeInsets.fromLTRB(18, 8, 8, 8),
+                    padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.sm, Sp.sm, Sp.sm),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: const [BoxShadow(color: Color(0x12111111), blurRadius: 24, offset: Offset(0, 8))],
+                      borderRadius: BorderRadius.circular(R.lg),
+                      boxShadow: const [BoxShadow(color: P.inkA7, blurRadius: 24, offset: Offset(0, 8))],
                     ),
                     child: Row(children: [
                       const Icon(Icons.search_rounded),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: Sp.md),
                       Expanded(
                         child: Text(app.fullDay ? 'Search full-day hotels…' : 'Search hourly hotels…',
-                            style: TextStyle(fontSize: 15.5, color: C.muted)),
+                            style: TextStyle(fontSize: Fs.lg, color: C.muted)),
                       ),
                       Container(
                         width: 42,
                         height: 42,
-                        decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(14)),
-                        child: Icon(Icons.arrow_forward_rounded, color: C.lime, size: 20),
+                        decoration: BoxDecoration(color: C.inkBg, borderRadius: BorderRadius.circular(R.lg)),
+                        child: Icon(Icons.arrow_forward_rounded, color: C.lime, size: Ic.md),
                       ),
                     ]),
                   ),
@@ -231,28 +231,28 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           if (app.checkedIn)
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.xl, 0),
               child: Material(
                 color: C.inkBg,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(R.xl),
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(R.xl),
                   onTap: () => Navigator.pushNamed(context, '/live'),
                   child: Padding(
-                    padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(Sp.lg),
                     child: Row(children: [
                       Container(
                         width: 42,
                         height: 42,
-                        decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(14)),
+                        decoration: BoxDecoration(color: C.limeBg, borderRadius: BorderRadius.circular(R.lg)),
                         child: const Icon(Icons.hotel_rounded),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: Sp.md),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('Staying at ${app.hotel.name}', style: TextStyle(color: C.white, fontWeight: FontWeight.w800, fontSize: 14.5)),
-                          const SizedBox(height: 2),
-                          Text('Check-out ${hourLabel(app.stayEnd.hour)} · tap to extend', style: TextStyle(color: C.faint, fontSize: 12.5)),
+                          Text('Staying at ${app.hotel.name}', style: TextStyle(color: C.white, fontWeight: FontWeight.w700, fontSize: Fs.md)),
+                          const SizedBox(height: Sp.xxs),
+                          Text('Check-out ${hourLabel(app.stayEnd.hour)} · tap to extend', style: TextStyle(color: C.faint, fontSize: Fs.sm)),
                         ]),
                       ),
                       Icon(Icons.chevron_right_rounded, color: C.lime),
@@ -273,13 +273,13 @@ class _HomeScreenState extends State<HomeScreen> {
               maxScaleFactor: 1.1,
               child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.xl),
               itemCount: recent.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 10),
+              separatorBuilder: (_, __) => const SizedBox(width: Sp.md),
               itemBuilder: (_, i) => WhiteCard(
                 expand: false,
-                radius: 16,
-                padding: const EdgeInsets.fromLTRB(10, 10, 14, 10),
+                radius: R.lg,
+                padding: const EdgeInsets.fromLTRB(Sp.md, Sp.md, Sp.lg, Sp.md),
                 onTap: () {
                   app.set(() {
                     app.place = recent[i][0] as String;
@@ -290,17 +290,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   const IconTile(Icons.schedule_rounded, size: 36),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: Sp.md),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text(recent[i][0] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-                    Text(recent[i][1] as String, style: TextStyle(fontSize: 12, color: C.muted)),
+                    Text(recent[i][0] as String, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                    Text(recent[i][1] as String, style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                   ]),
                 ]),
               ),
             ),
             ),
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: Sp.xxl),
           SizedBox(
             height: 160,
             child: MediaQuery.withClampedTextScaling(
@@ -312,17 +312,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: Sp.md),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               2,
               (i) => AnimatedContainer(
                 duration: const Duration(milliseconds: 150),
-                margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                margin: const EdgeInsets.symmetric(horizontal: Sp.xxs),
                 width: i == _offer ? 18 : 6,
                 height: 6,
-                decoration: BoxDecoration(color: i == _offer ? C.inkBg : C.tint(Color(0xFFCFCFC7)), borderRadius: BorderRadius.circular(999)),
+                decoration: BoxDecoration(color: i == _offer ? C.inkBg : C.tint(P.dotIdle), borderRadius: BorderRadius.circular(R.pill)),
               ),
             ),
           ),
@@ -331,26 +331,26 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 104,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.xl),
               itemCount: areaInfo.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 10),
+              separatorBuilder: (_, __) => const SizedBox(width: Sp.md),
               itemBuilder: (_, i) => SizedBox(
                 width: 140,
                 child: WhiteCard(
-                  radius: 20,
-                  padding: const EdgeInsets.all(14),
+                  radius: R.xl,
+                  padding: const EdgeInsets.all(Sp.lg),
                   onTap: () {
                     app.set(() => app.place = areaInfo[i][0]);
                     Navigator.pushNamed(context, '/search');
                   },
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Expanded(child: Text(areaInfo[i][0], style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, height: 1.2))),
+                      Expanded(child: Text(areaInfo[i][0], style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, height: 1.2))),
                       const IconTile(Icons.north_east_rounded, size: 26, radius: 13),
                     ]),
                     const Spacer(),
-                    Text(areaInfo[i][1], style: TextStyle(fontSize: 12, color: C.muted)),
-                    Text('from ${areaInfo[i][2]}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                    Text(areaInfo[i][1], style: TextStyle(fontSize: Fs.sm, color: C.muted)),
+                    Text('from ${areaInfo[i][2]}', style: const TextStyle(fontSize: Fs.base, fontWeight: FontWeight.w700)),
                   ]),
                 ),
               ),
@@ -363,16 +363,16 @@ class _HomeScreenState extends State<HomeScreen> {
               maxScaleFactor: 1.1,
               child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: Sp.xl),
               itemCount: hotels.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              separatorBuilder: (_, __) => const SizedBox(width: Sp.md),
               itemBuilder: (_, i) {
                 final h = hotels[i];
                 return SizedBox(
                   width: 230,
                   child: Material(
                     color: C.card,
-                    borderRadius: BorderRadius.circular(22),
+                    borderRadius: BorderRadius.circular(R.xl),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
                       onTap: () {
@@ -385,14 +385,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           Positioned(left: 10, top: 10, child: RatingBadge(h.rating, dark: false)),
                         ]),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
+                          padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.md, Sp.lg, 0),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text(h.name, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                            Text('${h.area} · ${h.distanceKm} km', style: TextStyle(fontSize: 12.5, color: C.muted)),
-                            const SizedBox(height: 8),
+                            Text(h.name, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                            Text('${h.area} · ${h.distanceKm} km', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
+                            const SizedBox(height: Sp.sm),
                             Text.rich(TextSpan(children: [
-                              TextSpan(text: inr(h.prices.first ?? 0), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                              TextSpan(text: ' / 3 hrs', style: TextStyle(fontSize: 12, color: C.muted)),
+                              TextSpan(text: inr(h.prices.first ?? 0), style: const TextStyle(fontSize: Fs.lg, fontWeight: FontWeight.w800)),
+                              TextSpan(text: ' / 3 hrs', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                             ])),
                           ]),
                         ),
@@ -405,18 +405,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+            padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.xxl, Sp.xl, 0),
             child: WhiteCard(
-              radius: 20,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              radius: R.xl,
+              padding: const EdgeInsets.symmetric(horizontal: Sp.lg, vertical: Sp.lg),
               onTap: () => Navigator.pushNamed(context, '/refer'),
               child: Row(children: [
-                IconTile(Icons.card_giftcard_rounded, bg: C.tint(Color(0xFFFFF1C7))),
-                SizedBox(width: 12),
+                IconTile(Icons.card_giftcard_rounded, bg: C.tint(P.amberSoft)),
+                SizedBox(width: Sp.md),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('Invite friends, earn ₹100', style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800)),
-                    Text('When they book their first stay', style: TextStyle(fontSize: 12, color: C.muted)),
+                    Text('Invite friends, earn ₹100', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                    Text('When they book their first stay', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
                   ]),
                 ),
                 Icon(Icons.chevron_right_rounded),

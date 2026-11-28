@@ -62,53 +62,53 @@ Future<void> showCouponSheet(BuildContext context) async {
         final dim = problem != null;
         final on = app.couponCode == c.code;
         return Container(
-          margin: const EdgeInsets.only(bottom: 10),
+          margin: const EdgeInsets.only(bottom: Sp.md),
           decoration: BoxDecoration(
-            color: dim ? C.tint(Color(0xFFF5F5F0)) : C.card,
-            borderRadius: BorderRadius.circular(18),
+            color: dim ? C.tint(P.grey95) : C.card,
+            borderRadius: BorderRadius.circular(R.lg),
             border: Border.all(color: on ? C.ink : C.border, width: 1.5),
           ),
           child: Row(children: [
             Container(
               width: 74,
-              padding: const EdgeInsets.symmetric(vertical: 18),
+              padding: const EdgeInsets.symmetric(vertical: Sp.lg),
               decoration: BoxDecoration(
-                color: dim ? C.tint(Color(0xFFE8E8E0)) : C.limeBg,
-                borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
+                color: dim ? C.tint(P.grey89) : C.limeBg,
+                borderRadius: const BorderRadius.horizontal(left: Radius.circular(R.lg)),
               ),
               child: Column(children: [
-                Icon(c.code == 'BACK8' ? Icons.savings_outlined : Icons.local_offer_outlined, size: 22, color: dim ? C.muted2 : C.ink),
-                const SizedBox(height: 4),
-                Text(c.code, style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: dim ? C.muted2 : C.ink)),
+                Icon(c.code == 'BACK8' ? Icons.savings_rounded : Icons.local_offer_rounded, size: Ic.md, color: dim ? C.muted2 : C.ink),
+                const SizedBox(height: Sp.xs),
+                Text(c.code, style: TextStyle(fontSize: Fs.xs, fontWeight: FontWeight.w700, letterSpacing: 0.6, color: dim ? C.muted2 : C.ink)),
               ]),
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+                padding: const EdgeInsets.fromLTRB(Sp.md, Sp.md, Sp.sm, Sp.md),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Row(children: [
                     Flexible(
                       child: Text(c.title,
-                          style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800, color: dim ? C.muted : C.ink)),
+                          style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, color: dim ? C.muted : C.ink)),
                     ),
                     if (!dim && c.code == best) ...[
-                      const SizedBox(width: 6),
+                      const SizedBox(width: Sp.sm),
                       Tag('Best', bg: C.inkBg, fg: C.lime),
                     ],
                   ]),
-                  const SizedBox(height: 2),
-                  Text(c.desc, style: TextStyle(fontSize: 12, color: C.muted, height: 1.35)),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: Sp.xxs),
+                  Text(c.desc, style: TextStyle(fontSize: Fs.sm, color: C.muted, height: 1.35)),
+                  const SizedBox(height: Sp.xs),
                   Text(dim ? problem : couponSaving(c.code),
-                      style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: dim ? C.red : C.green)),
+                      style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: dim ? C.red : C.green)),
                 ]),
               ),
             ),
             if (!dim)
               Padding(
-                padding: const EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.only(right: Sp.md),
                 child: PillBtn(on ? 'Applied' : 'Apply',
-                    kind: on ? BtnKind.soft : BtnKind.dark, height: 36, fontSize: 13, onTap: on ? null : () => Navigator.pop(ctx, c.code)),
+                    kind: on ? BtnKind.soft : BtnKind.dark, height: 36, fontSize: Fs.base, onTap: on ? null : () => Navigator.pop(ctx, c.code)),
               ),
           ]),
         );
@@ -118,24 +118,24 @@ Future<void> showCouponSheet(BuildContext context) async {
         padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
         child: Container(
           constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.88),
-          decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          decoration: BoxDecoration(color: C.bg, borderRadius: BorderRadius.vertical(top: Radius.circular(R.xl))),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const SizedBox(height: 10),
-            Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(2))),
+            const SizedBox(height: Sp.md),
+            Container(width: 40, height: 4, decoration: BoxDecoration(color: C.faint, borderRadius: BorderRadius.circular(R.xs))),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 14, 12, 4),
+              padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.lg, Sp.md, Sp.xs),
               child: Row(children: [
-                const Expanded(child: Text('Apply coupon', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
+                const Expanded(child: Text('Apply coupon', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800))),
                 CircleBtn(icon: Icons.close_rounded, size: 38, bg: C.card, shadow: false, tooltip: 'Close', onTap: () => Navigator.pop(ctx)),
               ]),
             ),
             Flexible(
-              child: ListView(shrinkWrap: true, padding: const EdgeInsets.fromLTRB(20, 8, 20, 24), children: [
+              child: ListView(shrinkWrap: true, padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.sm, Sp.xl, Sp.xxl), children: [
                 Shake(key: shake, child: Container(
-                  padding: const EdgeInsets.fromLTRB(14, 4, 6, 4),
+                  padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.xs, Sp.sm, Sp.xs),
                   decoration: BoxDecoration(
                     color: C.card,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(R.lg),
                     border: Border.all(color: error != null ? C.red : C.border, width: 1.5),
                   ),
                   child: Row(children: [
@@ -145,21 +145,21 @@ Future<void> showCouponSheet(BuildContext context) async {
                         textCapitalization: TextCapitalization.characters,
                         onChanged: (_) => set(() => error = null),
                         onSubmitted: tryCode,
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 1.2),
+                        style: const TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700, letterSpacing: 1.2),
                         decoration: const InputDecoration(
                           hintText: 'Enter coupon code',
-                          hintStyle: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w400, letterSpacing: 0, color: Color(0xFF8A8A82)),
+                          hintStyle: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w400, letterSpacing: 0, color: P.hint),
                           border: InputBorder.none,
                         ),
                       ),
                     ),
-                    PillBtn('Apply', kind: BtnKind.dark, height: 40, fontSize: 13.5, loading: checking, onTap: () => tryCode(ctrl.text)),
+                    PillBtn('Apply', kind: BtnKind.dark, height: 40, fontSize: Fs.base, loading: checking, onTap: () => tryCode(ctrl.text)),
                   ]),
                 )),
                 if (error != null)
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
-                    child: Text(error!, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: C.red)),
+                    padding: const EdgeInsets.fromLTRB(Sp.xs, Sp.sm, Sp.xs, 0),
+                    child: Text(error!, style: TextStyle(fontSize: Fs.sm, fontWeight: FontWeight.w700, color: C.red)),
                   ),
                 Loader<void>(
                   load: api.offers,
@@ -174,8 +174,8 @@ Future<void> showCouponSheet(BuildContext context) async {
                 ],
                   ]),
                 ),
-                const SizedBox(height: 4),
-                Text('One coupon per booking.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: C.muted2)),
+                const SizedBox(height: Sp.xs),
+                Text('One coupon per booking.', textAlign: TextAlign.center, style: TextStyle(fontSize: Fs.sm, color: C.muted2)),
               ]),
             ),
           ]),
