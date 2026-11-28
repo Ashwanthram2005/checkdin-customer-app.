@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(children: [
       btn(false, Icons.bolt_rounded, 'Hourly stay'),
       const SizedBox(width: Sp.md),
-      btn(true, Icons.nightlight_roundeded, 'Full-day stay'),
+      btn(true, Icons.nightlight_rounded, 'Full-day stay'),
     ]);
   }
 
