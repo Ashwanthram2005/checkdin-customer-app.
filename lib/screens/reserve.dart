@@ -138,7 +138,11 @@ class _ReserveScreenState extends State<ReserveScreen> {
     );
   }
 
-  Widget _switchRow(IconData icon, String title, String sub, bool v, ValueChanged<bool> on, {bool last = false}) => Container(
+  // The whole row toggles, not just the small switch.
+  Widget _switchRow(IconData icon, String title, String sub, bool v, ValueChanged<bool> on, {bool last = false}) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => on(!v),
+        child: Container(
         padding: const EdgeInsets.symmetric(vertical: Sp.lg),
         decoration: BoxDecoration(border: last ? null : Border(bottom: BorderSide(color: C.line))),
         child: Row(children: [
@@ -152,6 +156,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
           ),
           BrandSwitch(value: v, onChanged: on),
         ]),
+      ),
       );
 
   @override

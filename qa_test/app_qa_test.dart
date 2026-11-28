@@ -326,8 +326,13 @@ void main() {
       if (fields.evaluate().length > 1) await t.enterText(fields.at(1), 'ash@gmail.com');
       await tapText(t, 'Start exploring stays');
       await wait(t, 2500);
+      // New users see the notification ask once, then Home.
+      if (has('Don\'t miss your check-in')) {
+        await tapText(t, 'Not now');
+        await wait(t, 1500);
+      }
       final home = has('Hourly stay');
-      ok(12, nameErr && mailErr && home, 'Empty name error: $nameErr; bad email error: $mailErr; goes Home: $home');
+      ok(12, nameErr && mailErr && home, 'Empty name error: $nameErr; bad email error: $mailErr; goes Home (after notification ask): $home');
     });
   });
 
@@ -956,7 +961,7 @@ void main() {
       await t.drag(vScroll().first, const Offset(0, -900));
       await wait(t, 600);
       await shot(t, '71_account_bottom');
-      final ver = find.textContaining('Checkdin · v1.0.0');
+      final ver = find.textContaining('Checkdin · v');
       if (ver.evaluate().isNotEmpty) {
         await t.ensureVisible(ver.first);
         await t.longPress(ver.first, warnIfMissed: false);
@@ -1098,8 +1103,10 @@ void main() {
       await tapText(t, 'Log in');
       await wait(t, 1200);
       r['backToLogin'] = has('Get OTP on WhatsApp');
-      // booking links
+      // booking links (logged in)
       resetState();
+      app.name = 'Ashwanth';
+      app.phone = '9876543210';
       await boot(t, '/home');
       await wait(t, 1200);
       appNavigator.currentState!.pushNamed('/b/${app.bookingId}');
