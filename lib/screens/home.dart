@@ -279,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (_, i) => WhiteCard(
                 expand: false,
                 radius: R.lg,
-                padding: const EdgeInsets.fromLTRB(Sp.md, Sp.md, Sp.lg, Sp.md),
+                padding: const EdgeInsets.fromLTRB(Sp.md, Sp.sm, Sp.lg, Sp.sm),
                 onTap: () {
                   app.set(() {
                     app.place = recent[i][0] as String;
