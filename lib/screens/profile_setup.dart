@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import 'system_screens.dart';
 import '../loading.dart';
 import '../api/api.dart';
 
@@ -137,7 +138,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                                 app.email = _email.text.trim();
                                 app.whatsappUpdates = _wa;
                               });
-                              Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+                              Navigator.pushNamedAndRemoveUntil(context, afterLoginRoute, (_) => false);
                             }
                           : () {
                               setState(() => _tried = true);

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'appearance.dart';
+import 'state.dart';
 import 'theme.dart';
 import 'screens/location_settings.dart';
 import 'screens/refunds.dart';
@@ -50,6 +51,9 @@ import 'screens/stay.dart';
 import 'screens/support_chat.dart';
 import 'screens/coming_soon.dart';
 import 'screens/refer.dart';
+import 'screens/system_screens.dart';
+import 'screens/invoice.dart';
+import 'api/api.dart' show Sim;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +67,8 @@ Future<void> setUpApp() async {
   await Appearance.load();
   await loadLocationChoice();
   await loadOnboarded();
+  await loadSystemPrefs(firstLaunch: !app.onboarded);
+  Sim.onSessionExpired = showSessionExpired;
 }
 
 /// Lets tests (and later deep links) open any screen.
@@ -171,7 +177,16 @@ class _CheckdinAppState extends State<CheckdinApp> with WidgetsBindingObserver {
         '/fullday': (_) => const FullDaySearchScreen(),
         '/fullday-results': (_) => const FullDayResultsScreen(),
         '/payment-failed': (_) => const PaymentFailedScreen(),
+        '/force-update': (_) => const ForceUpdateScreen(),
+        '/maintenance': (_) => const MaintenanceScreen(),
+        '/notify-permission': (_) => const NotifyPermissionScreen(),
+        '/sold-out': (_) => const SoldOutScreen(),
+        '/invoice': (_) => const InvoiceScreen(),
+        '/hotel-unavailable': (_) => const HotelUnavailableScreen(),
+        '/missed-checkin': (_) => const MissedCheckinScreen(),
       },
+      // Booking and hotel links (checkdin.in/b/<id>, checkdin.in/hotel/<id>).
+      onGenerateRoute: (s) => isAppLink(s.name) ? MaterialPageRoute<void>(settings: s, builder: (_) => LinkScreen(path: s.name!)) : null,
     );
   }
 }

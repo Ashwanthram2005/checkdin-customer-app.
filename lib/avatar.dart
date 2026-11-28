@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'state.dart';
 import 'theme.dart';
+import 'screens/system_screens.dart';
 
 /// The guest's profile photo, or their initial on lime.
 class Avatar extends StatelessWidget {
@@ -72,7 +73,7 @@ Future<void> changePhoto(BuildContext context) async {
     if (f == null) return;
     app.set(() => app.photoPath = f.path);
     if (context.mounted) toast(context, 'Profile photo updated');
-  } catch (_) {
-    if (context.mounted) toast(context, 'Couldn\'t open the camera or gallery. Check app permissions.');
+  } catch (e) {
+    if (context.mounted) await photoAccessProblem(context, e, camera: choice == 'camera');
   }
 }

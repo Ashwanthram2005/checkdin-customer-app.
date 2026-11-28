@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   static const double _total = 1.85; // seconds
   late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1850));
   bool _left = false, _ready = false, _loggedIn = false, _waiting = false, _showSpin = false;
+  String _status = 'ok';
 
   @override
   void initState() {
@@ -41,7 +42,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       if (s == AnimationStatus.completed) _leave();
     });
     _c.forward();
-    api.restoreSession().then((v) => _loggedIn = v, onError: (_) => _loggedIn = false).whenComplete(() {
+    Future.wait([
+      api.restoreSession().then((v) => _loggedIn = v, onError: (_) => _loggedIn = false),
+      api.appStatus().then((v) => _status = v, onError: (_) => _status = 'ok'),
+    ]).whenComplete(() {
       if (!mounted) return;
       setState(() {
         _ready = true;
@@ -60,6 +64,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void _leave() {
     if (_left || !mounted || !_ready) return;
     _left = true;
+    if (_status != 'ok') {
+      Navigator.of(context).pushReplacementNamed(_status == 'update' ? '/force-update' : '/maintenance');
+      return;
+    }
     if (_loggedIn) {
       Navigator.of(context).pushReplacementNamed('/home');
       return;

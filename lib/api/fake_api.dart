@@ -22,6 +22,12 @@ class FakeApi implements CheckdinApi {
   }
 
   Future<void> _wait([int fastMs = 650]) async {
+    if (Sim.expireSession) {
+      Sim.expireSession = false;
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      Sim.onSessionExpired?.call();
+      throw const ApiError('session_expired', 'Please log in again.');
+    }
     switch (mode) {
       case NetMode.fast:
         await Future<void>.delayed(Duration(milliseconds: fastMs + rng.nextInt(350)));
@@ -33,6 +39,15 @@ class FakeApi implements CheckdinApi {
         await Future<void>.delayed(Duration(milliseconds: 900 + rng.nextInt(500)));
         throw const ApiError('network', 'We couldn\'t reach Checkdin. Check your internet and try again.');
     }
+  }
+
+  // ---------------------------------------------------------------- app
+  @override
+  Future<String> appStatus() async {
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    if (Sim.forceUpdate) return 'update';
+    if (Sim.maintenance) return 'maintenance';
+    return 'ok';
   }
 
   // ---------------------------------------------------------------- auth
@@ -83,7 +98,10 @@ class FakeApi implements CheckdinApi {
   @override
   Future<int?> quote(String hotelId) async {
     await _wait(450);
-    return app.unitPrice;
+    final p = app.unitPrice;
+    // Simulate: the hotel raised its price while the guest was deciding.
+    if (Sim.priceChange && p != null && app.priceBump == 0) return p + 50;
+    return p == null ? null : p + app.priceBump;
   }
 
   // ---------------------------------------------------------------- booking
@@ -91,6 +109,7 @@ class FakeApi implements CheckdinApi {
   Future<String> pay({required String method, required int amount, required String idempotencyKey, bool simulateFailure = false}) =>
       _once(idempotencyKey, () async {
         await _wait(1600);
+        if (Sim.soldOut) throw const ApiError('slot_taken', 'Someone just booked the last room for this slot. You haven\'t been charged.');
         if (simulateFailure) throw const ApiError('payment_failed', 'Your bank declined this payment.');
         return newBookingId(DateTime.now());
       });

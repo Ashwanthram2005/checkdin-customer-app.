@@ -4,6 +4,7 @@ import '../state.dart';
 import '../avatar.dart';
 import '../photos.dart';
 import '../theme.dart';
+import 'system_screens.dart';
 import '../loading.dart';
 import '../api/api.dart';
 
@@ -15,6 +16,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _offer = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) maybeShowWhatsNew(context);
+    });
+  }
 
   Widget _title(String t, {String? link, VoidCallback? onLink}) => Padding(
         padding: const EdgeInsets.fromLTRB(Sp.xl, Sp.x3, Sp.xl, Sp.md),

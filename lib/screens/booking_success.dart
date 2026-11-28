@@ -202,7 +202,8 @@ class BookingSuccessScreen extends StatelessWidget {
                       : action(Icons.download_rounded, 'Voucher', false, () => shareVoucher(context)),
                 ),
               ]),
-              const SizedBox(height: Sp.md),
+              const SizedBox(height: Sp.xs),
+              Center(child: TapLink('View tax invoice', onTap: () => Navigator.pushNamed(context, '/invoice'))),
               Center(
                 child: GestureDetector(
                   onTap: () async {

@@ -5,6 +5,7 @@ import '../coupons.dart';
 import '../shake.dart';
 import '../photos.dart';
 import '../theme.dart';
+import 'system_screens.dart';
 import '../api/api.dart';
 import '../optimistic.dart';
 import 'coupon_sheet.dart';
@@ -22,7 +23,16 @@ class _ReserveScreenState extends State<ReserveScreen> {
   late final _email = TextEditingController(text: app.email);
   late final _gName = TextEditingController(text: app.guestName);
   late final _gPhone = TextEditingController(text: app.guestPhone);
-  bool _biz = false;
+  late bool _biz = app.gstin.isNotEmpty;
+  late final _gCo = TextEditingController(text: app.gstCompany);
+  late final _gst = TextEditingController(text: app.gstin);
+  bool _checking = false;
+  final _kCo = GlobalKey<ShakeState>(), _kGst = GlobalKey<ShakeState>();
+
+  String? get _coErr => _gCo.text.trim().length < 2 ? 'Enter the company name' : null;
+  String? get _gstErr => RegExp(r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$').hasMatch(_gst.text.trim().toUpperCase())
+      ? null
+      : 'Enter a valid 15-character GSTIN, like 33ABCDE1234F1Z5';
   bool _tried = false;
   final _kMe = GlobalKey<ShakeState>(), _kGName = GlobalKey<ShakeState>(), _kGPhone = GlobalKey<ShakeState>();
 
@@ -41,12 +51,15 @@ class _ReserveScreenState extends State<ReserveScreen> {
     return null;
   }
 
-  void _proceed() {
+  Future<void> _proceed() async {
+    if (_checking) return;
     final other = app.forSomeoneElse;
     final bad = [
       if (_meErr != null) _kMe,
       if (other && _gNameErr != null) _kGName,
       if (other && _gPhoneErr != null) _kGPhone,
+      if (_biz && _coErr != null) _kCo,
+      if (_biz && _gstErr != null) _kGst,
     ];
     if (bad.isNotEmpty) {
       setState(() => _tried = true);
@@ -58,7 +71,26 @@ class _ReserveScreenState extends State<ReserveScreen> {
       app.email = _email.text.trim();
       app.guestName = other ? _gName.text.trim() : '';
       app.guestPhone = other ? _gPhone.text.replaceAll(RegExp(r'\D'), '') : '';
+      app.gstCompany = _biz ? _gCo.text.trim() : '';
+      app.gstin = _biz ? _gst.text.trim().toUpperCase() : '';
     });
+    // Check the price is still the same before taking the guest to payment.
+    setState(() => _checking = true);
+    int? q;
+    try {
+      q = await api.quote(app.hotel.id);
+    } on ApiError catch (_) {
+      q = null;
+    }
+    if (!mounted) return;
+    setState(() => _checking = false);
+    final now = (app.unitPrice ?? 0) + app.priceBump;
+    if (q != null && q != now) {
+      final ok = await showPriceChangedSheet(context, now, q);
+      if (!ok || !mounted) return;
+      app.set(() => app.priceBump = q! - (app.unitPrice ?? 0));
+    }
+    if (!mounted) return;
     Navigator.pushNamed(context, '/payment');
   }
 
@@ -69,6 +101,8 @@ class _ReserveScreenState extends State<ReserveScreen> {
     _email.dispose();
     _gName.dispose();
     _gPhone.dispose();
+    _gCo.dispose();
+    _gst.dispose();
     super.dispose();
   }
 
@@ -307,12 +341,30 @@ class _ReserveScreenState extends State<ReserveScreen> {
                   child: Column(children: [
                     _switchRow(Icons.work_outline_rounded, 'Business booking', 'Add GST details to your invoice', _biz, (v) => setState(() => _biz = v)),
                     if (_biz)
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: Sp.md),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: Sp.md),
                         child: Column(children: [
-                          BrandField(label: 'Company name'),
-                          SizedBox(height: Sp.md),
-                          BrandField(label: 'GSTIN'),
+                          Shake(
+                            key: _kCo,
+                            child: BrandField(
+                                label: 'Company name (as on GST certificate)',
+                                controller: _gCo,
+                                errorText: _tried ? _coErr : null,
+                                onChanged: (_) => setState(() {})),
+                          ),
+                          const SizedBox(height: Sp.md),
+                          Shake(
+                            key: _kGst,
+                            child: BrandField(
+                                label: 'GSTIN',
+                                hint: '33ABCDE1234F1Z5',
+                                controller: _gst,
+                                errorText: _tried ? _gstErr : null,
+                                onChanged: (_) => setState(() {})),
+                          ),
+                          const SizedBox(height: Sp.sm),
+                          Text('Your tax invoice will show these details, so you can claim GST input credit.',
+                              style: TextStyle(fontSize: Fs.sm, color: C.muted, height: 1.4)),
                         ]),
                       ),
                     _switchRow(Icons.chat_bubble_outline_rounded, 'Booking details on WhatsApp', 'Confirmation, directions & reminders', app.whatsappUpdates,
@@ -393,6 +445,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 PillBtn('Proceed to pay',
                     height: 54,
                     icon: Icons.arrow_forward_rounded,
+                    loading: _checking,
                     onTap: _proceed),
               ]),
             ),

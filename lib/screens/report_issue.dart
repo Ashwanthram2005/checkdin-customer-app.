@@ -7,6 +7,7 @@ import '../state.dart';
 import '../shake.dart';
 import '../photos.dart';
 import '../theme.dart';
+import 'system_screens.dart';
 import '../loading.dart';
 import '../api/api.dart';
 
@@ -56,8 +57,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
     try {
       final fs = await ImagePicker().pickMultiImage(imageQuality: 75, maxWidth: 1600);
       if (fs.isNotEmpty) setState(() => _photos.addAll(fs.take(4 - _photos.length)));
-    } catch (_) {
-      if (mounted) toast(context, 'Couldn\'t open photos. Check app permissions.');
+    } catch (e) {
+      if (mounted) await photoAccessProblem(context, e, camera: false);
     }
   }
 

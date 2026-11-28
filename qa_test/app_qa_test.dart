@@ -14,6 +14,7 @@ import 'package:checkdin/api/fake_api.dart';
 import 'package:checkdin/coupons.dart';
 import 'package:checkdin/loading.dart';
 import 'package:checkdin/main.dart';
+import 'package:checkdin/screens/system_screens.dart';
 import 'package:checkdin/state.dart';
 import 'package:checkdin/theme.dart';
 import 'package:flutter/material.dart';
@@ -1050,6 +1051,105 @@ void main() {
     });
   });
 
+  testWidgets('new system screens', (t) async {
+    phone(t);
+    final r = <String, bool>{};
+    void info() => layoutIssues.add({'where': 'system', 'issue': 'INFO ${r.entries.map((e) => '${e.key}=${e.value}').join(' ')}'});
+    await run(t, 'system', [], () async {
+      resetState();
+      await boot(t, '/home');
+      await wait(t, 1500);
+      // price changed at checkout
+      Sim.priceChange = true;
+      await openRoute(t, '/reserve');
+      await tapText(t, 'Proceed to pay');
+      await wait(t, 1500);
+      r['priceSheet'] = has('The price just changed');
+      await shot(t, '90_price_changed');
+      await tapText(t, 'Continue at');
+      await wait(t, 1500);
+      r['priceAccepted'] = app.priceBump == 50;
+      Sim.priceChange = false;
+      app.priceBump = 0;
+      // GST validation
+      appNavigator.currentState!.pushNamedAndRemoveUntil('/home', (_) => false);
+      await wait(t, 800);
+      await openRoute(t, '/reserve');
+      await tapText(t, 'Business booking');
+      await wait(t, 400);
+      final gst = find.byWidgetPredicate((w) => w is TextField && w.decoration?.hintText == '33ABCDE1234F1Z5', skipOffstage: false);
+      if (gst.evaluate().isNotEmpty) {
+        await t.ensureVisible(gst.first);
+        await t.enterText(gst.first, '12345');
+      }
+      await tapText(t, 'Proceed to pay');
+      await wait(t, 700);
+      r['gstError'] = has('Enter a valid 15-character GSTIN');
+      r['companyError'] = has('Enter the company name');
+      await shot(t, '91_gst_errors');
+      // session expired
+      appNavigator.currentState!.pushNamedAndRemoveUntil('/home', (_) => false);
+      await wait(t, 800);
+      Sim.expireSession = true;
+      api.account().catchError((_) {});
+      await wait(t, 1200);
+      r['sessionExpired'] = has('Please log in again');
+      await shot(t, '92_session_expired');
+      await tapText(t, 'Log in');
+      await wait(t, 1200);
+      r['backToLogin'] = has('Get OTP on WhatsApp');
+      // booking links
+      resetState();
+      await boot(t, '/home');
+      await wait(t, 1200);
+      appNavigator.currentState!.pushNamed('/b/${app.bookingId}');
+      await wait(t, 2500);
+      r['myBookingLink'] = has('Bill summary');
+      appNavigator.currentState!.pushNamed('/b/CKD-MAA-000000-ZZZZ');
+      await wait(t, 2500);
+      r['wrongBookingLink'] = has('couldn\'t find this booking');
+      await shot(t, '93_link_not_found');
+      appNavigator.currentState!.pushNamed('/hotel/${hotels[1].id}');
+      await wait(t, 3000);
+      r['hotelLink'] = app.hotel.id == hotels[1].id;
+      // hotel unavailable
+      Sim.hotelUnavailable = true;
+      appNavigator.currentState!.pushNamed('/hotel');
+      await wait(t, 2000);
+      r['hotelUnavailable'] = has('isn\'t taking bookings');
+      Sim.hotelUnavailable = false;
+      // missed check-in banner
+      Sim.missedCheckin = true;
+      appNavigator.currentState!.pushNamedAndRemoveUntil('/home', (_) => false);
+      await wait(t, 800);
+      await openRoute(t, '/bookings', 2500);
+      r['missedBanner'] = has('Check-in time has passed');
+      await shot(t, '94_missed_banner');
+      Sim.missedCheckin = false;
+      // sheets
+      final ctx = appNavigator.currentContext!;
+      showRateAppSheet(ctx);
+      await wait(t, 800);
+      r['rateSheet'] = has('Enjoying Checkdin?');
+      await shot(t, '95_rate_app');
+      appNavigator.currentState!.pop();
+      await wait(t, 600);
+      showWhatsNew(appNavigator.currentContext!);
+      await wait(t, 900);
+      r['whatsNew'] = has('What\'s new in Checkdin');
+      await shot(t, '96_whats_new');
+      appNavigator.currentState!.pop();
+      await wait(t, 600);
+      showPermissionHelp(appNavigator.currentContext!, icon: Icons.no_photography_rounded, title: 'Camera access is off', body: 'Allow camera in Settings.');
+      await wait(t, 800);
+      r['permissionHelp'] = has('Open settings');
+      await shot(t, '97_permission_help');
+      appNavigator.currentState!.pop();
+      await wait(t, 500);
+      info();
+    });
+  });
+
   testWidgets('always-fail actions', (t) async {
     phone(t);
     await run(t, 'fail-actions', [98], () async {
@@ -1094,6 +1194,7 @@ void main() {
     '/reserve', '/payment', '/add-card', '/success', '/payment-failed', '/bookings', '/booking-detail', '/checkin', '/live', '/rate',
     '/report', '/chat', '/account', '/edit-profile', '/saved', '/payment-methods', '/refunds', '/credits', '/offers', '/refer',
     '/notifications', '/location', '/help', '/cancel-policy', '/legal', '/delete-account', '/coming-soon', '/profile-setup', '/otp', '/onboarding',
+    '/force-update', '/maintenance', '/notify-permission', '/sold-out', '/invoice', '/hotel-unavailable', '/missed-checkin',
   ];
 
   for (final size in const [

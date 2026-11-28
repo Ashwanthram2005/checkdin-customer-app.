@@ -63,6 +63,26 @@ class _BookingsScreenState extends State<BookingsScreen> {
     final h = app.hotel;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SectionLabel('Today'),
+      if (Sim.missedCheckin && !app.checkedIn)
+        Padding(
+          padding: const EdgeInsets.only(bottom: Sp.sm),
+          child: WhiteCard(
+            color: P.amberSoft,
+            padding: const EdgeInsets.all(Sp.md),
+            onTap: () => Navigator.pushNamed(context, '/missed-checkin'),
+            child: Row(children: [
+              const Icon(Icons.schedule_rounded, color: P.ink),
+              const SizedBox(width: Sp.md),
+              const Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('Check-in time has passed', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w800, color: P.ink)),
+                  Text('See what happens now', style: TextStyle(fontSize: Fs.sm, color: P.ink2)),
+                ]),
+              ),
+              const Icon(Icons.chevron_right_rounded, color: P.ink),
+            ]),
+          ),
+        ),
       WhiteCard(
         radius: R.xl,
         padding: const EdgeInsets.all(Sp.lg),

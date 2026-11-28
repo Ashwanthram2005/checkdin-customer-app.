@@ -118,14 +118,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
     var ok = true;
+    var soldOut = false;
     String? id;
     try {
       id = await api.pay(method: _sel, amount: app.total, idempotencyKey: newIdempotencyKey(), simulateFailure: _willFail);
-    } on ApiError {
+    } on ApiError catch (e) {
       ok = false;
+      soldOut = e.code == 'slot_taken';
     }
     if (!mounted) return;
     Navigator.of(context).pop();
+    if (soldOut) {
+      Navigator.pushNamed(context, '/sold-out');
+      return;
+    }
     if (ok) {
       app.set(() {
         app.bookingCancelled = false;

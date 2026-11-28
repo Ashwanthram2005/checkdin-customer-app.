@@ -244,6 +244,14 @@ class AppState extends ChangeNotifier {
   bool useLocation = true;
   /// Onboarding carousel seen (shown on first launch only).
   bool onboarded = false;
+  /// Asked once for notification permission.
+  bool notifyAsked = false;
+  /// Asked once to rate the app on Play Store.
+  bool rateAsked = false;
+  /// Extra per unit when the hotel changed its price during checkout (accepted by the guest).
+  int priceBump = 0;
+  /// Business booking: GST details for the tax invoice.
+  String gstin = '', gstCompany = '';
   // during the stay
   final String checkinOtp = '4827';
   bool checkedIn = false;
@@ -304,14 +312,17 @@ class AppState extends ChangeNotifier {
   String get whenShort => fullDay ? '${dateLabel(inDate)} – ${dateLabel(outDate)}' : '${dateLabel(date)} · ${hourLabel(checkInHour, short: true)}';
 
   int get gross => fullDay
-      ? hotel.night * nights * rooms
-      : (hotel.priceFor(slot) ?? hotel.prices.whereType<int>().first) * rooms;
+      ? (hotel.night + priceBump) * nights * rooms
+      : ((hotel.priceFor(slot) ?? hotel.prices.whereType<int>().first) + priceBump) * rooms;
   int get fees => (gross * 0.106).round();
   int get total => gross - discount;
 
   String get guestsLabel =>
       '$adults ${adults > 1 ? 'guests' : 'guest'}${kids > 0 ? ', $kids ${kids > 1 ? 'kids' : 'kid'}' : ''}';
 }
+
+/// Shown on Account and used for the one-time "What's new" sheet.
+const kAppVersion = '1.1.0';
 
 final app = AppState();
 

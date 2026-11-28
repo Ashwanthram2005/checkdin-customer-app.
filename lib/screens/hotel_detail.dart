@@ -25,6 +25,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   @override
   void initState() {
     super.initState();
+    app.priceBump = 0;
+    if (Sim.hotelUnavailable) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) Navigator.pushReplacementNamed(context, '/hotel-unavailable');
+      });
+    }
     _scroll.addListener(() {
       final c = _scroll.offset > 250;
       if (c != _compact) setState(() => _compact = c);

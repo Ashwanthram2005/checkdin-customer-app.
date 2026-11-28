@@ -9,6 +9,10 @@ import 'fake_api.dart';
 /// realistic delays). When the real server is ready, write `HttpApi implements
 /// CheckdinApi` and change the one line at the bottom of this file.
 abstract class CheckdinApi {
+  // app
+  /// 'ok', 'update' (this version is too old) or 'maintenance' (server down for work).
+  Future<String> appStatus();
+
   // auth
   /// Checks the saved login on this phone. True = go straight to Home.
   Future<bool> restoreSession();
@@ -86,3 +90,21 @@ String newIdempotencyKey() {
 
 /// The one line to change when the real backend is ready.
 final CheckdinApi api = FakeApi();
+
+/// Test switches for situations that are hard to cause on purpose
+/// (Account → long-press the version line → Simulate). The real server
+/// produces these on its own; only the fake backend reads them.
+class Sim {
+  static bool forceUpdate = false;
+  static bool maintenance = false;
+  static bool priceChange = false;
+  static bool soldOut = false;
+  static bool hotelUnavailable = false;
+  static bool missedCheckin = false;
+  /// The next request answers "logged out".
+  static bool expireSession = false;
+
+  /// Called when the server says the login is no longer valid.
+  /// The app shows "Please log in again".
+  static void Function()? onSessionExpired;
+}

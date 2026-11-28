@@ -214,6 +214,21 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                     infoRow('Email', app.email.isEmpty ? '—' : app.email, last: true),
                   ]),
                 ),
+                WhiteCard(
+                  padding: const EdgeInsets.all(Sp.md),
+                  onTap: () => Navigator.pushNamed(context, '/invoice'),
+                  child: Row(children: [
+                    const IconTile(Icons.receipt_long_rounded),
+                    const SizedBox(width: Sp.md),
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        const Text('Tax invoice', style: TextStyle(fontSize: Fs.md, fontWeight: FontWeight.w700)),
+                        Text(app.gstin.isEmpty ? 'GST bill for this stay' : 'GST bill for ${app.gstCompany}', style: TextStyle(fontSize: Fs.sm, color: C.muted)),
+                      ]),
+                    ),
+                    Icon(Icons.chevron_right_rounded, color: C.muted),
+                  ]),
+                ),
                 const SectionLabel('Bill summary'),
                 WhiteCard(
                   padding: const EdgeInsets.fromLTRB(Sp.lg, Sp.lg, Sp.lg, Sp.md),

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import '../state.dart';
 import '../shake.dart';
 import '../theme.dart';
+import 'system_screens.dart';
 import '../loading.dart';
 import '../api/api.dart';
 import 'login.dart';
@@ -136,7 +137,7 @@ class _OtpScreenState extends State<OtpScreen> {
       if (_tries > 0) _nodes[0].requestFocus();
       return;
     }
-    Navigator.pushNamedAndRemoveUntil(context, isNew ? '/profile-setup' : '/home', (_) => false);
+    Navigator.pushNamedAndRemoveUntil(context, isNew ? '/profile-setup' : afterLoginRoute, (_) => false);
   }
 
   @override

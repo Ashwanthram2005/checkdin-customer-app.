@@ -5,7 +5,9 @@ import 'package:image_picker/image_picker.dart';
 
 import '../state.dart';
 import '../photos.dart';
+import '../main.dart' show appNavigator;
 import '../theme.dart';
+import 'system_screens.dart';
 import '../loading.dart';
 import '../api/api.dart';
 
@@ -95,8 +97,8 @@ class _RateStayScreenState extends State<RateStayScreen> {
         if (fs.isNotEmpty) setState(() => _photos.addAll(fs.take(left)));
         if (fs.length > left && mounted) toast(context, 'You can add up to 6 photos');
       }
-    } catch (_) {
-      if (mounted) toast(context, 'Couldn\'t open photos. Check app permissions.');
+    } catch (e) {
+      if (mounted) await photoAccessProblem(context, e, camera: src == ImageSource.camera);
     }
   }
 
@@ -323,6 +325,12 @@ class _RateStayScreenState extends State<RateStayScreen> {
                         _tags.toList(), _photos.length, _anon, 'Just now'));
                     toast(context, 'Review posted. Thanks for helping other guests!');
                     Navigator.pop(context, _overall);
+                    if (_overall >= 4 && !app.rateAsked) {
+                      Future<void>.delayed(const Duration(milliseconds: 900), () {
+                        final c = appNavigator.currentContext;
+                        if (c != null && c.mounted) showRateAppSheet(c);
+                      });
+                    }
                   }
                 : null,
           ),

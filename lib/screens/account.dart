@@ -5,6 +5,7 @@ import '../avatar.dart';
 import '../api/api.dart';
 import '../api/fake_api.dart';
 import '../theme.dart';
+import 'system_screens.dart';
 import '../optimistic.dart';
 import '../loading.dart';
 import 'refunds.dart';
@@ -153,7 +154,7 @@ class AccountScreen extends StatelessWidget {
             const SizedBox(height: Sp.lg),
             WhiteCard(
               color: C.limeBg,
-              onTap: () => toast(context, 'Thanks! Opening Play Store…'),
+              onTap: () => showRateAppSheet(context),
               child: Row(children: [
                 const Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -177,7 +178,7 @@ class AccountScreen extends StatelessWidget {
               child: GestureDetector(
                 // Hidden test switch for the fake backend: long-press the version line.
                 onLongPress: () => _netSheet(context),
-                child: Text('Checkdin · v1.0.0${FakeApi.mode == NetMode.fast ? '' : ' · ${FakeApi.mode.label}'}',
+                child: Text('Checkdin · v$kAppVersion${FakeApi.mode == NetMode.fast ? '' : ' · ${FakeApi.mode.label}'}',
                     style: const TextStyle(fontSize: Fs.sm, color: P.hint)),
               ),
             ),
@@ -189,42 +190,94 @@ class AccountScreen extends StatelessWidget {
 }
 
 
-/// Test-only: choose how the fake backend behaves.
+/// Test-only: choose how the fake backend behaves, and simulate rare situations.
 void _netSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
+    isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (ctx) => StatefulBuilder(
-      builder: (ctx, set) => Container(
-        padding: EdgeInsets.fromLTRB(20, 14, 20, 20 + MediaQuery.of(ctx).padding.bottom),
-        decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(R.xl))),
-        child: Material(
-          type: MaterialType.transparency,
-          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Test network', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
-          const SizedBox(height: Sp.xs),
-          Text('For testing only. Changes how fast the sample backend answers, so you can see loading and error screens.',
-              style: TextStyle(fontSize: Fs.base, color: C.muted, height: 1.4)),
-          const SizedBox(height: Sp.md),
-          for (final m in NetMode.values)
-            ListTile(
+      builder: (ctx, set) {
+        Widget sw(String title, String sub, bool v, void Function(bool) on) => SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              leading: Icon(FakeApi.mode == m ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded, color: C.ink),
-              title: Text(m.label, style: const TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: Text(switch (m) {
-                NetMode.fast => 'About 0.6–1 s, like good 4G',
-                NetMode.slow => 'About 2–3 s per request',
-                NetMode.fail => 'Every request fails, to see error screens',
-              }),
-              onTap: () {
-                FakeApi.mode = m;
+              activeColor: C.ink,
+              title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+              subtitle: Text(sub),
+              value: v,
+              onChanged: (x) {
+                on(x);
                 set(() {});
                 app.set(() {});
               },
+            );
+        Widget go(String title, VoidCallback run) => ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+              trailing: const Icon(Icons.chevron_right_rounded),
+              onTap: () {
+                Navigator.pop(ctx);
+                run();
+              },
+            );
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.88),
+          child: Container(
+            decoration: BoxDecoration(color: C.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(R.xl))),
+            child: Material(
+              type: MaterialType.transparency,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(20, 14, 20, 20 + MediaQuery.of(ctx).padding.bottom),
+                child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  const Text('Test network', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: Sp.xs),
+                  Text('For testing only. Changes how fast the sample backend answers, so you can see loading and error screens.',
+                      style: TextStyle(fontSize: Fs.base, color: C.muted, height: 1.4)),
+                  const SizedBox(height: Sp.md),
+                  for (final m in NetMode.values)
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(FakeApi.mode == m ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded, color: C.ink),
+                      title: Text(m.label, style: const TextStyle(fontWeight: FontWeight.w700)),
+                      subtitle: Text(switch (m) {
+                        NetMode.fast => 'About 0.6–1 s, like good 4G',
+                        NetMode.slow => 'About 2–3 s per request',
+                        NetMode.fail => 'Every request fails, to see error screens',
+                      }),
+                      onTap: () {
+                        FakeApi.mode = m;
+                        set(() {});
+                        app.set(() {});
+                      },
+                    ),
+                  const SizedBox(height: Sp.lg),
+                  const Text('Simulate', style: TextStyle(fontSize: Fs.xl, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: Sp.xs),
+                  Text('Turn one on, then go through the flow to see the screen.', style: TextStyle(fontSize: Fs.base, color: C.muted, height: 1.4)),
+                  sw('Price changes at checkout', 'Review & reserve › Proceed to pay', Sim.priceChange, (x) => Sim.priceChange = x),
+                  sw('Slot sold out at payment', 'Pay on the payment screen', Sim.soldOut, (x) => Sim.soldOut = x),
+                  sw('Hotel not taking bookings', 'Open any hotel', Sim.hotelUnavailable, (x) => Sim.hotelUnavailable = x),
+                  sw('Missed check-in', 'My bookings › upcoming stay', Sim.missedCheckin, (x) => Sim.missedCheckin = x),
+                  sw('App too old (force update)', 'Shown on next app start', Sim.forceUpdate, (x) => Sim.forceUpdate = x),
+                  sw('Server maintenance', 'Shown on next app start', Sim.maintenance, (x) => Sim.maintenance = x),
+                  const SizedBox(height: Sp.sm),
+                  go('Show force update now', () => Navigator.pushNamed(context, '/force-update', arguments: 'preview')),
+                  go('Show maintenance now', () => Navigator.pushNamed(context, '/maintenance', arguments: 'preview')),
+                  go('Expire my login', () {
+                    Sim.expireSession = true;
+                    api.account().catchError((_) {});
+                  }),
+                  go('Show notification ask', () => Navigator.pushNamed(context, '/notify-permission')),
+                  go('Show "What\'s new"', () => showWhatsNew(context)),
+                  go('Show "Rate the app"', () => showRateAppSheet(context)),
+                  go('Open my booking link', () => Navigator.pushNamed(context, '/b/${app.bookingId}')),
+                  go('Open someone else\'s booking link', () => Navigator.pushNamed(context, '/b/CKD-MAA-000000-ZZZZ')),
+                  go('Open a hotel link', () => Navigator.pushNamed(context, '/hotel/${hotels[1].id}')),
+                ]),
+              ),
             ),
-        ]),
-        ),
-      ),
+          ),
+        );
+      },
     ),
   );
 }

@@ -35,6 +35,32 @@ jobs:
           # Android 14+ predictive back gesture (peek at the previous screen)
           grep -q 'enableOnBackInvokedCallback' "$MANIFEST" || \
             sed -i '0,/<application/s#<application#<application android:enableOnBackInvokedCallback="true"#' "$MANIFEST"
+          # Android 13+ notification permission, and booking / hotel links (checkdin.in/b/..., checkdin.in/hotel/...)
+          python3 - "$MANIFEST" <<'PY'
+          import sys
+          p = sys.argv[1]; s = open(p).read()
+          if 'POST_NOTIFICATIONS' not in s:
+              s = s.replace('<application', '<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>\n    <application', 1)
+          if 'checkdin.in' not in s:
+              links = (
+                  '<meta-data android:name="flutter_deeplinking_enabled" android:value="true"/>\n'
+                  '            <intent-filter android:autoVerify="true">\n'
+                  '                <action android:name="android.intent.action.VIEW"/>\n'
+                  '                <category android:name="android.intent.category.DEFAULT"/>\n'
+                  '                <category android:name="android.intent.category.BROWSABLE"/>\n'
+                  '                <data android:scheme="https" android:host="checkdin.in" android:pathPrefix="/b/"/>\n'
+                  '                <data android:scheme="https" android:host="checkdin.in" android:pathPrefix="/hotel/"/>\n'
+                  '            </intent-filter>\n'
+                  '            <intent-filter>\n'
+                  '                <action android:name="android.intent.action.VIEW"/>\n'
+                  '                <category android:name="android.intent.category.DEFAULT"/>\n'
+                  '                <category android:name="android.intent.category.BROWSABLE"/>\n'
+                  '                <data android:scheme="checkdin" android:host="checkdin.in"/>\n'
+                  '            </intent-filter>\n'
+                  '        </activity>')
+              s = s.replace('</activity>', links, 1)
+          open(p, 'w').write(s)
+          PY
           # Checkdin app icon (adaptive + legacy)
           cp -r android_res/. android/app/src/main/res/
           # Native launch screen: brand cream instead of white, so it flows into the logo animation
